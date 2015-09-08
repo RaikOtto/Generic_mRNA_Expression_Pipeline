@@ -1,0 +1,94 @@
+library("WriteXLS")
+print("Step 9: Exporting data")
+
+if ( chip_type == "hgu133plus2" ){
+  
+  library("hgu133plus2.db")
+  
+  hgnc_genes  = as.character(mget( rownames( topall ) ,hgu133plus2SYMBOL))
+  hgnc_names  = as.character(mget( rownames( topall ) ,hgu133plus2GENENAME))
+  entrez_genes= as.character(mget( rownames( topall ) ,hgu133plus2ENTREZID))
+  pathway     = as.character(mget( rownames( topall  ) ,hgu133plus2PATH))
+  
+  topall_res = data.frame(
+    
+    "logFC"               = topall$logFC,
+    "P_Value"             = topall$P.Val,
+    "HGNC_symb"           = hgnc_genes,
+    "HGNC_name"           = str_replace_all(hgnc_names,",",";"),
+    "entrez"              = entrez_genes,
+    "pathway"             = pathway
+  )
+  
+  topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
+  
+} else if ( chip_type == "hgu133a" ) {
+
+  library("hgu133a.db")
+  
+  hgnc_genes  = as.character(mget( rownames( topall ) ,hgu133aSYMBOL))
+  hgnc_names  = as.character(mget( rownames( topall ) ,hgu133aGENENAME))
+  entrez_genes= as.character(mget( rownames( topall ) ,hgu133aENTREZID))
+  pathway     = as.character(mget( rownames( topall  ) ,hgu133aPATH))
+  
+  topall_res = data.frame(
+    
+    "logFC"               = topall$logFC,
+    "P_Value"             = topall$P.Val,
+    "HGNC_symb"           = hgnc_genes,
+    "HGNC_name"           = str_replace_all(hgnc_names,",",";"),
+    "entrez"              = entrez_genes,
+    "pathway"             = pathway
+  )
+  
+  topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
+  
+} else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
+  
+  if ( ! exists("index_case"))
+    source("annotation.r")
+  
+  probe_ids = rownames( topall )
+  
+  index_probes = match( rownames( topall ), rownames(eset), nomatch = 0 )
+  exprs_case = rowMeans( exprs( eset )[ index_probes, index_case ] )
+  exprs_ctrl = rowMeans( exprs( eset )[ index_probes, index_ctrl ] )
+  
+  split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
+  #map=which( rownames(eset) %in% topall$probesetid )
+  hgnc_symbols = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 2 ) ) )
+  hgnc_names = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 3 ) ) )
+  
+  library("biomaRt")
+
+  #ensembl     = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+  #entrez  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols), filters = "hgnc_symbol" , mart = ensembl)[1]
+
+  #hgnc_map    = match( hgnc_symbols, entrez_ids$hgnc_symbol  , nomatch = 0 )
+  #entrez      = hgnc_symbols
+  #entrez[ entrez != ""  ] = ""
+  #entrez[ which( hgnc_symbols %in%  entrez_ids$hgnc_symbol ) ] = entrez_ids$entrezgene[ hgnc_map ]
+  #entrez[ is.na(entrez) ] = ""
+    
+  topall_res = data.frame(
+    "logFC"               = round( topall$logFC,2 ),
+    "expr_ctrl"           = round( exprs_ctrl, 2  ),
+    "expr_case"           = round( exprs_case, 2  ),
+    "P_Value"             = topall$P.Value,
+    "HGNC_symb"           = hgnc_symbols,
+    "HGNC_names"          = hgnc_names,
+    "Probe_ids"           = probe_ids,
+    #"entrez"              = entrez,
+    "gene_information"    = topall$geneassignment
+  )
+  
+  topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
+  topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
+}
+
+dir.create( results_file_path, showWarnings = F)
+write.xlsx( topall_res, str_replace(str_replace(name_res_file,"~",user_folder),".csv",".xls"), row.names=F )
+
+# 
+print( c( "Amount genes higher in Case cohort:", sum( topall_res$logFC >= lfc_exp ) ) )
+print( c( "Amount genes lower in Case cohort:" , sum( topall_res$logFC <= lfc_exp ) ) )
