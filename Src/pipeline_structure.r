@@ -6,18 +6,18 @@ run_analysis = function(){
     source("set_generic_initial_parameters.r")
   }
   
-  ### Part Parse Cel Files
-  
-  if ( parse_files ){
-    
-    source("parse_cel_files.r")
-  }
-  
   ### Part cohort creation
   
   if ( create_cohorts ){
     
     source("cohort_creation.r")
+  }
+  
+  ### Part Parse Cel Files
+  
+  if ( parse_files ){
+    
+    source("parse_cel_files.r")
   }
   
   ### Part Normalization

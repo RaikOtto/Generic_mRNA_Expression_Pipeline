@@ -12,8 +12,8 @@ eDatSet = eset[ not_absent_index, ]  #filtered expression matrix
 probes_included = rownames( eset[ not_absent_index, ] )
 probes_excluded = rownames( eset[ !not_absent_index, ] )
 
-gene_list = unlist( str_split( as.character(keggdata$HSA_ID.Kegg_name), "\t" ) )
-#gene_list = unlist( str_split( as.character(keggdata$Gene_id_hgnc ), "," ) )
+#gene_list = unlist( str_split( as.character(keggdata$HSA_ID.Kegg_name), "\t" ) )
+gene_list = unlist( str_split( as.character(keggdata$Gene_id_hgnc ), "," ) )
 #gene_list = unique( c( genes_of_interest,gene_list ) )
 
 genes_included = gene_list[ not_absent_index ]

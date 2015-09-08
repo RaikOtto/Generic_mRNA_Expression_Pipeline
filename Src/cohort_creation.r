@@ -44,7 +44,7 @@ if ( !( quality_control_only )  ){
 index_ctrl = as.integer( which( design[ ,colnames(design) == "CTRL" ] == 1 ) )
 index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
 
-#if (exists("raw_data")){
+if (exists("raw_data")){
   if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
   
     raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
@@ -54,4 +54,4 @@ index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
     colnames(pData(raw_data))[-1] = "Group"
     #raw_data = raw_data[,pData(raw_data)$Group!=""]
   }
-#}
+}
