@@ -74,4 +74,4 @@ for (id in Kegg_id  ){
 system("rm *.xml")
 system("ls | grep -v 'pathview.png$' | xargs rm")
 
-setwd(pipeline_loc)
+setwd( paste(pipeline_loc, "Src", sep="/") )
