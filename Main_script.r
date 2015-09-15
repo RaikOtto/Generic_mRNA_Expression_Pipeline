@@ -37,4 +37,4 @@ stat_design = "contrast"
 
 setwd( paste(pipeline_loc, "Src", sep="/") )
 
-source( "pipeline_structure.r" );run_analysis();save.image();print( "Finished" )
+source( "pipeline_structure.r" );run_analysis();save.image("/home/janniklas/ovarian.Rdata");print( "Finished" )
