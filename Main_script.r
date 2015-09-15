@@ -1,4 +1,4 @@
-pipeline_loc = paste( /usr/Generic_mRNA_Expression_Pipeline ) #server path
+pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
 #pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" ) #local path
 setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
 
