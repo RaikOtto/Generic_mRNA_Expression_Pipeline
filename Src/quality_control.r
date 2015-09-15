@@ -26,5 +26,4 @@ if ( !( quality_control_only )  ){
 pData( raw_data ) = pData( eset )
 
 print("Running Quality Metrics"  )
-arrayQualityMetrics( expressionset = raw_data, outdir = quality_report_path, force = T, do.logtransform = T)
-#intgroup = "Cohort"
+arrayQualityMetrics( expressionset = raw_data, outdir = quality_report_path, intgroup = "Cohort", force = T)

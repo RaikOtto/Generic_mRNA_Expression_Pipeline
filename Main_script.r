@@ -13,7 +13,7 @@ source("project_files.r")
 create_cohorts    = T # 2
 parse_files       = T # 3
 normalize         = T # 4
-qc_control        = T # 5
+qc_control        = F # 5
 annotate          = F # 6
 absent_analysis   = F # 7
 dif_exp_ana       = F # 8
@@ -37,4 +37,4 @@ stat_design = "contrast"
 
 setwd( paste(pipeline_loc, "Src", sep="/") )
 
-source( "pipeline_structure.r" );run_analysis();print( "Finished" )
+source( "pipeline_structure.r" );run_analysis();save.image();print( "Finished" )
