@@ -12,10 +12,10 @@ source("project_files.r")
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = F # 4
-qc_control        = F # 5
-annotate          = F # 6
-absent_analysis   = F # 7
+normalize         = T # 4
+qc_control        = T # 5
+annotate          = T # 6
+absent_analysis   = T # 7
 dif_exp_ana       = F # 8
 export_results    = F # 9
 create_pathways   = F # 10
