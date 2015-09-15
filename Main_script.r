@@ -1,17 +1,18 @@
-pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
+pipeline_loc = paste( /usr/Generic_mRNA_Expression_Pipeline ) #server path
+#pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" ) #local path
 setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
 
 source( "pipeline_structure.r" )
 
 default_parameters = T
 which_project = "ovarian"
-source( paste(system("echo $HOME", intern = T), "project_files.r", sep="/"))
+source("project_files.r")
 
 ###
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = T # 4
+normalize         = F # 4
 qc_control        = F # 5
 annotate          = T # 6
 absent_analysis   = T # 7

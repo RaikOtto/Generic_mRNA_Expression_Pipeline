@@ -8,11 +8,12 @@ library("KEGG.db")
 library("pathview")
 library("stringr")
 
+dir.create = ( paste( cel_files_path, "Results", sep = "/") )
 cel_files_path = sub( x = cel_files_path, "/$", "")
 cpdb_file                   = "CPDB_pathways_genes.tab"
 tissue_norm_exprs_file      = "GSE1133-GPL96_series_matrix.txt"
 tissue_norm_exprs_file_path = paste( pipeline_loc , paste( "Misc" ,tissue_norm_exprs_file, sep ="/" ) , sep ="/" )
-quality_report_path         = paste( cel_files_path, "QC_report" , sep = "/" )
+quality_report_path         = paste( cel_files_path, "Results/QC_report" , sep = "/" )
 results_file_path           = paste( cel_files_path, paste( "Results", project_name, sep ="_"), sep = "/" )
 name_res_file               = paste( results_file_path, paste( "dif_exp_results", "csv", sep ="."), sep = "/" )
 pathway_maps_path           = paste( cel_files_path, paste( "Results", project_name, sep ="_")  , "pathway_maps_dif_exp", sep ="/" )
