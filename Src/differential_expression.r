@@ -31,8 +31,10 @@ if (stat_design == "contrast"){
     fit = eBayes( fit )
     volc_all = topTable( fit, number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
 }
-  
+
+png( paste( cel_files_path, "Results/logFC_vs_1-PValue.png", sep ="/" )  )
 plot( volc_all$logFC,   1-( volc_all$P.Value ))
+dev.off()
 
 topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  ="none", p.value = p_val, lfc = lfc_exp)
 
