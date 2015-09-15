@@ -8,7 +8,7 @@ library("KEGG.db")
 library("pathview")
 library("stringr")
 
-dir.create = ( paste( cel_files_path, "Results", sep = "/") )
+dir.create( paste( cel_files_path, "Results", sep = "/") )
 cel_files_path = sub( x = cel_files_path, "/$", "")
 cpdb_file                   = "CPDB_pathways_genes.tab"
 tissue_norm_exprs_file      = "GSE1133-GPL96_series_matrix.txt"
