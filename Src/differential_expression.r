@@ -32,7 +32,7 @@ if (stat_design == "contrast"){
     volc_all = topTable( fit, number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
 }
 
-png( paste( cel_files_path, "Results/logFC_vs_1-PValue.png", sep ="/" ), width = 800, height = 800, res = 150  )
+png( paste( cel_files_path, "Output/logFC_vs_1-PValue.png", sep ="/" ), width = 800, height = 800, res = 150  )
 plot( volc_all$logFC,   1-( volc_all$P.Value ))
 dev.off()
 
