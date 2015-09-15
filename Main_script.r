@@ -18,8 +18,8 @@ annotate          = T # 6
 absent_analysis   = T # 7
 dif_exp_ana       = T # 8
 export_results    = T # 9
-create_pathways   = F # 10
-extract_interest  = F # 11
+create_pathways   = T # 10
+extract_interest  = T # 11
 annotate_tissue_abbundance = F # 12
 
 ## Misc

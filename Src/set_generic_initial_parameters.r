@@ -16,7 +16,7 @@ tissue_norm_exprs_file_path = paste( pipeline_loc , paste( "Misc" ,tissue_norm_e
 quality_report_path         = paste( cel_files_path, "Results/QC_report" , sep = "/" )
 results_file_path           = paste( cel_files_path, "Results", paste( "Results", project_name, sep ="_"), sep = "/" )
 name_res_file               = paste( results_file_path, paste( "dif_exp_results", "csv", sep ="."), sep = "/" )
-pathway_maps_path           = paste( cel_files_path, paste( "Results", project_name, sep ="_")  , "pathway_maps_dif_exp", sep ="/" )
+pathway_maps_path           = paste( cel_files_path, "Results", paste( "Results", project_name, sep ="_")  , "pathway_maps_dif_exp", sep ="/" )
 body_exprs_maps_path        = paste( pipeline_loc, "Misc/HPM_gene_level_epxression_matrix_Kim_et_al_052914.csv", sep ="/" )
 absent_gene_file_path       = paste( cel_files_path, absent_genes_file, sep ="/" )
 tissue_abbundance_res_file  = paste( cel_files_path, "Tissue_abundance_results.csv", sep ="/" )
