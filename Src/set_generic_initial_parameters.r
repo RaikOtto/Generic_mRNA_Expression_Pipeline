@@ -8,7 +8,7 @@ library("KEGG.db")
 library("pathview")
 library("stringr")
 
-dir.create( paste( cel_files_path, "Results", sep = "/") )
+dir.create( paste( cel_files_path, "Results", sep = "/"), showWarnings = F )
 cel_files_path = sub( x = cel_files_path, "/$", "")
 cpdb_file                   = "CPDB_pathways_genes.tab"
 tissue_norm_exprs_file      = "GSE1133-GPL96_series_matrix.txt"
@@ -23,7 +23,7 @@ tissue_abbundance_res_file  = paste( cel_files_path, "Tissue_abundance_results.c
 kegg_file_path              = paste( cel_files_path , kegg_file, sep ="/")
 cpdb_file_path              = paste( pipeline_loc , paste( "Misc" ,cpdb_file, sep ="/" ) , sep ="/" )
 time_series_res_file_path   = paste( cel_files_path, time_series_res_file, sep ="/")
-entities_of_interest_path   = paste( cel_files_path, paste( "Results", project_name, sep ="_")  , "Entities_of_interest", sep ="/")
+entities_of_interest_path   = paste( cel_files_path, "Results", paste( "Results", project_name, sep ="_")  , "Entities_of_interest", sep ="/")
 genes_of_interest_file_path = paste( entities_of_interest_path, genes_of_interest_file, sep ="/") 
 user_folder                 = as.character( system("echo $HOME", intern = T) )
 vcf_folder                  = ""
