@@ -30,11 +30,11 @@ create_cohorts    = T # 2
 parse_files       = T # 3
 normalize         = T # 4
 qc_control        = F # 5
-annotate          = F # 6
+annotate          = T # 6
 absent_analysis   = F # 7
 dif_exp_ana       = T # 8
 export_results    = T # 9
-create_pathways   = F # 10
+create_pathways   = T # 10
 extract_interest  = T # 11
 annotate_tissue_abbundance = F # 12
 
@@ -76,6 +76,7 @@ set_case = c("ALL")
 #project_name = "Ovarian_Gse29156_Malign_Case_vs_Benign_Tumor_Ctrl_cut_off_0_5"
 #project_name = "Ovarian_Gse29156_Malign_Stroma_Case_vs_Benign_Stroma_Ctrl_cut_off_0_5"
 #project_name = "Ovarian_Gse29156_Malign_Stroma_Tumor_vs_Benign_Stroma_Tumor_cut_off_0_5"
+project_name = "test_run"
 
 chip_type = "pd.huex.1.0.st.v2"
 cel_files_path = "~/Dropbox/PhD/Ovarian_cancer/GSE29156_RAW/"
@@ -113,13 +114,13 @@ lfc_exp = 1
 
 project_name = "Immuno_MZ"
 chip_type = "pd.hugene.2.0.st"
-cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL/MZlike/"
+cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL/"
 cohorts_file = "cohorts.tab"
 set_ctrl = c("Blood")
 set_case = c("KM")
 time_series = F # to be changed later
 kegg_file = "kegg_pathways_of_interest_ag_na.csv"
-#use_logFc_only = T
+
 p_val = 1.0
 lfc_exp = 1
 
@@ -127,14 +128,13 @@ lfc_exp = 1
 
 project_name = "Immuno_sm"
 chip_type = "pd.hugene.2.0.st"
-cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL/sm/"
-#cel_files_path = "~/Desktop/Backup_work/ag_na_upload/CEL/sm/"
+cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL"
 cohorts_file = "cohorts.tab"
 set_ctrl = c("Blood")
 set_case = c("KM")
 time_series = F # to be changed later
 kegg_file = "kegg_pathways_of_interest_ag_na.csv"
-#use_logFc_only = T
+
 p_val = 1.0
 lfc_exp = 1
 
@@ -142,7 +142,7 @@ lfc_exp = 1
 
 project_name = "Immuno_sm_vs_mz_no_blood"
 chip_type = "pd.hugene.2.0.st"
-cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL/Marrow_vs_marrow_no_blood/"
+cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL"
 cohorts_file = "cohorts.tab"
 set_ctrl = c("Control")
 set_case = c("Case")
@@ -156,7 +156,7 @@ lfc_exp = 1
 
 project_name = "Immuno_sm_blood_only_vs_mz_blood_only"
 chip_type = "pd.hugene.2.0.st"
-cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL/sm_blood_only_vs_mz_blood_only/"
+cel_files_path = "~/Dropbox/PhD/ag_na_upload/CEL"
 cohorts_file = "cohorts.tab"
 set_ctrl = c("Control")
 set_case = c("Case")
@@ -194,8 +194,8 @@ p_val = .05
 
 ### klinghammer hnsc
 
-project_name = "Cetuximab_Group_5_high_5_low"
-project_name = "Docetaxel_Group_5_high_5_low"
+#project_name = "Cetuximab_Group_5_high_5_low"
+#project_name = "Docetaxel_Group_5_high_5_low"
 project_name = "cancer_type_classification"
 chip_type = "hgu133plus2"
 cel_files_path = "~/Dropbox/PhD/Klinghammer/upload/Cel_files"
@@ -221,6 +221,6 @@ frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
 # generic
 stat_design = "contrast"
 
-setwd( pipeline_loc )  
+setwd( pipeline_loc )
 
 source( "pipeline_structure.r" );run_analysis();print( "Finished" )

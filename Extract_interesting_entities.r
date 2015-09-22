@@ -89,7 +89,14 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   genes = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""  ]
   mapping = which( hgnc_symbols %in% genes )
   
-  res_int = cbind(res_gene,res_val,res_ctrl, res_case, round( exprs(eset)[ mapping ,], 2))
+  sample_expression = as.matrix( exprs(eset)[ mapping ,])
+  
+  if (dim(sample_expression)[2] == 1){
+    
+    sample_expression = t(sample_expression)
+  }
+  
+  res_int = cbind(res_gene,res_val,res_ctrl, res_case, round( sample_expression, 2))
   colnames(res_int) =  c( "hgnc_symbol", "logFC" , "expr_ctrl", "expr_case", colnames(eset))
   res_int = res_int[ order( as.double(res_int[,2]), decreasing = T  ),]
   
