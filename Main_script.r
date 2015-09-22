@@ -1,6 +1,8 @@
-pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
+#pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
 #pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" ) #local path for debug
-setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
+pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
+#setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
+setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 source( "pipeline_structure.r" )
 
