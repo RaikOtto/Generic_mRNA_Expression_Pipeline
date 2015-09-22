@@ -28,6 +28,8 @@ entities_of_interest_path   = paste( output_path, "Output", paste( "Results", pr
 genes_of_interest_file_path = paste( entities_of_interest_path, genes_of_interest_file, sep ="/") 
 user_folder                 = as.character( system("echo $HOME", intern = T) )
 vcf_folder                  = ""
+expression_data = "~/Dropbox/PhD/NAR_sub_june_2015/expression_all.txt"
+frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
 
 #if (time_series){ quality_control_only = T; qc_control = T }
 
