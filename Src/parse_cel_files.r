@@ -23,7 +23,7 @@ if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
 } else if ( chip_type %in% c( "pd.huex.1.0.st.v2", "pd.hugene.2.0.st" ) ){
   
   library("oligo")
-  celFiles = list.celfiles( cel_files_path, full = T)
+  celFiles = list.celfiles( cel_files_path, full = T, listGzipped = zipped)
   raw_data = read.celfiles( filenames = celFiles )
   
 } else {
