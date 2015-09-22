@@ -1,28 +1,12 @@
-pipeline_loc = paste( system("echo $HOME",intern = T), "Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/", sep ="/" )
-setwd( pipeline_loc ) # Set the path to where the pipeline is located
-source("pipeline_structure.r")
+pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
+#pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" ) #local path
+setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
 
-# defaults
+source( "pipeline_structure.r" )
 
-time_series           = F # to be changed later; 
-quality_control_only  = F; create_heatmaps_genes_of_interest = F
-dif_exp_experiment    = T; integrate_vcf_files = F
-multi_probe           = F
-var_filter            = F # variance based filtering of the expression data jsut before differential expression detection
-integrate_drug_data   = F
-use_frma_normalization = F
-heatmap_vis           = F; zipped = F
-use_logFc_only        = F
-run_generic           = T # 1
-annotage_tissue_abbundance = F
-cohorts_type          = "Group"
-stat_design           = "contrast"
-p_val = 0.1
-lfc_exp = 1
-absent_genes_file = "absent_genes.tab"
-res_file = "dif_exp_res_file.xlsx"
-time_series_res_file = "time_series_expression.csv"
-genes_of_interest_file = "genes_of_interest.csv"
+default_parameters = T
+which_project = "ovarian"
+source("project_files.r")
 
 ###
 
@@ -32,10 +16,17 @@ normalize         = T # 4
 qc_control        = F # 5
 annotate          = T # 6
 absent_analysis   = F # 7
+<<<<<<< HEAD
 dif_exp_ana       = T # 8
 export_results    = T # 9
 create_pathways   = T # 10
 extract_interest  = T # 11
+=======
+dif_exp_ana       = F # 8
+export_results    = F # 9
+create_pathways   = F # 10
+extract_interest  = F # 11
+>>>>>>> 82c786fe901faf165e3a48f55c7e748d7aad2f83
 annotate_tissue_abbundance = F # 12
 
 ## Misc
@@ -44,6 +35,7 @@ annotate_tissue_abbundance = F # 12
 
 expression_data = "~/Dropbox/PhD/NAR_sub_june_2015/expression_all.txt"
 
+<<<<<<< HEAD
 ### PROJECT FILE
 
 ## Characterization of Naive B-Cells
@@ -214,6 +206,8 @@ p_val = .05
 drug_type = "Docetaxel"
 cohorts_type = "Docetaxel_Group"
 
+=======
+>>>>>>> 82c786fe901faf165e3a48f55c7e748d7aad2f83
 ### frma test
 
 frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
@@ -221,6 +215,12 @@ frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
 # generic
 stat_design = "contrast"
 
+<<<<<<< HEAD
 setwd( pipeline_loc )
+=======
+setwd( paste(pipeline_loc, "Src", sep="/") )
+>>>>>>> 82c786fe901faf165e3a48f55c7e748d7aad2f83
 
 source( "pipeline_structure.r" );run_analysis();print( "Finished" )
+#save.image("~/ovarian.Rdata")
+~
