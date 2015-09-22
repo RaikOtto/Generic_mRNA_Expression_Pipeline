@@ -3,30 +3,30 @@ run_analysis = function(){
   
   if ( run_generic ){
     
-    source("set_generic_initial_parameters.r")
+    source("src/set_generic_initial_parameters.r")
   }
   
   ### Part Parse Cel Files
   
   if ( parse_files ){
     
-    source("parse_cel_files.r")
+    source("src/parse_cel_files.r")
   }
   
   ### Part cohort creation
   
   if ( create_cohorts ){
     
-    source("cohort_creation.r")
+    source("src/cohort_creation.r")
   }
   
   ### Part Normalization
   
   if ( normalize ){
     if ( use_frma_normalization ){
-      source("frma_normalization.r")
+      source("src/frma_normalization.r")
     }else{
-      source("normalization.r")
+      source("src/normalization.r")
     }
   }
   
@@ -34,51 +34,51 @@ run_analysis = function(){
   
   if ( qc_control ){
     
-    source("quality_control.r")
+    source("src/quality_control.r")
   }
   
   ### Part annotation
   
   if ( annotate )
     
-    source("annotation.r")
+    source("src/annotation.r")
   
   ### Part Excluding non-present Genes
   
   if (absent_analysis)
     
-    source("absent_genes_analysis.r")
+    source("src/absent_genes_analysis.r")
   
   ### Part Differential Expression
   
   if ( dif_exp_ana )
     
-    source("differential_expression.r")
+    source("src/differential_expression.r")
   
   ### Part Analysis
   
   #source("")
   
   if ( heatmap_vis  )
-    source( "heatmap_probes_of_interest.r" )
+    source( "src/heatmap_probes_of_interest.r" )
   
   ### Part Visualization
   
   if ( export_results )
     
-    source( "result_preparation.r" )
+    source( "src/result_preparation.r" )
   
   if ( create_pathways )
     
     if (! time_series  )
       
-      source("create_pathway_maps.r")
+      source("src/create_pathway_maps.r")
   
   if (extract_interest)
     
-    source("Extract_interesting_entities.r")
+    source("src/Extract_interesting_entities.r")
   
   if (annotate_tissue_abbundance)
     
-    source("annotate_tissue_abbundance.r")
+    source("src/annotate_tissue_abbundance.r")
 }

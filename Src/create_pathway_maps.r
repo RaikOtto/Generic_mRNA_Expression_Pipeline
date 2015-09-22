@@ -3,7 +3,7 @@ print("Step 10: Creating Pathway maps")
 
 if ( !dir.exists( pathway_maps_path )   ){ dir.create(pathway_maps_path) }
 if ( ! exists("eset")  )
-  source("normalization.r")
+  source("src/normalization.r")
 
 split_fun = function( entry,pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
 

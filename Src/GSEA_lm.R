@@ -260,7 +260,7 @@ boxplot(sqrt(BandCooks3Base)~col(BandCooks3Base),
 ###
 pipeline_loc = paste( system("echo $HOME",intern = T), "Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/", sep ="/" )
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
-source("pipeline_structure.r")
+source("src/pipeline_structure.r")
 
 time_series           = F # to be changed later; 
 quality_control_only  = F; create_heatmaps_genes_of_interest = F
@@ -305,7 +305,7 @@ kegg_file = "pathways.csv"
 zipped = T
 p_val = .05
 lfc_exp = 1
-source("pipeline_structure.r");run_analysis();print("Finished")
+source("src/pipeline_structure.r");run_analysis();print("Finished")
 
 featureData( eset  ) = getNetAffx( eset, type = "transcript" )
 split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }

@@ -15,7 +15,7 @@ if (var_filter ){
   exprs( eDatSet ) = exprs( varFilter( eDatSet  , var.cutoff = 0.6 ) )
 }
 
-source("cohort_creation.r")
+source("src/cohort_creation.r")
 
 if (stat_design == "contrast"){
     

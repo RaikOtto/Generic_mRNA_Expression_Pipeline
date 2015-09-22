@@ -3,16 +3,16 @@ print("Step 11: Extraction of interesting information")
 library("stringr")
 
 dir.create( entities_of_interest_path, showWarnings = F)
-source("cohort_creation.r")
+source("src/cohort_creation.r")
 
 if ( create_heatmaps_genes_of_interest  ){
   links_heatmaps = c()
-  source("create_heatmaps.r")
+  source("src/create_heatmaps.r")
 }
 
 
 if ( ! exists("hgnc_symbols"))
-  source("annotation.r")
+  source("src/annotation.r")
 
 topall     = exprs(eset)
 
