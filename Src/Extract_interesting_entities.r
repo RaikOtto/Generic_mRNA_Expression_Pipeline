@@ -9,7 +9,7 @@ if ( create_heatmaps_genes_of_interest  ){
   links_heatmaps = c()
   source("create_heatmaps.r")
 }
-  
+
 
 if ( ! exists("hgnc_symbols"))
   source("annotation.r")
@@ -42,7 +42,7 @@ if ( chip_type == "hgu133plus2" ){
 } else if ( chip_type == "hgu133a" ){
   
   hgnc_symbols = mget( rownames(eset), hgu133aSYMBOL ); hgnc_symbols[ is.na(hgnc_symbols)  ] = ""
-
+  
 } else {
   
   hgnc_symbols = str_trim( unlist( lapply( fData(eset)$geneassignment , FUN = split_fun ) ) )
@@ -70,7 +70,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     if ( gene != ""  ){ 
       
       mapping = which( hgnc_symbols %in% gene )
-    
+      
       for (map in mapping){
         
         exprs_case = round( mean( exprs(eset)[ map, index_case]),2 )
@@ -89,12 +89,19 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   genes = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""  ]
   mapping = which( hgnc_symbols %in% genes )
   
-  res_int = cbind(res_gene,res_val,res_ctrl, res_case, round( exprs(eset)[ mapping ,], 2))
+  sample_expression = as.matrix( exprs(eset)[ mapping ,])
+  
+  if (dim(sample_expression)[2] == 1){
+    
+    sample_expression = t(sample_expression)
+  }
+  
+  res_int = cbind(res_gene,res_val,res_ctrl, res_case, round( sample_expression, 2))
   colnames(res_int) =  c( "hgnc_symbol", "logFC" , "expr_ctrl", "expr_case", colnames(eset))
   res_int = res_int[ order( as.double(res_int[,2]), decreasing = T  ),]
   
   if ( integrate_drug_data  ){
-  
+    
     drug_vec = rep( "", length( res_int[1,] )  )
     drug_vec[1] = drug_type
     names( drug_vec ) = colnames( res_int )
@@ -157,7 +164,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
 ### pathways
 
 if ( ! is.null( kegg_t$Kegg_id ) ){
-
+  
   mapping = match( kegg_t$Kegg_id  ,cpdb_ident, nomatch = 0 )
   print(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) )  )
   
@@ -168,7 +175,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
   for ( i  in  mapping ){
     
     pathway_id    = as.character( kegg_t$Kegg_id[ i ] )
-
+    
     if (pathway_id != ""){
       
       pathway_name  = as.character( kegg_t$Kegg_name[ i ] )
@@ -217,7 +224,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
         drug_vec[ match( "expr_ctrl", names(drug_vec) ) ] = mean( res_ctrl )
         drug_vec[ match( "logFC", names(drug_vec) ) ]     = dif
         drug_vec[ match( "hgnc_symbol", names(drug_vec) ) ] = drug_type
-      
+        
         # corrs
         
         index = seq( 5, dim(exprs_genes)[2]  )
@@ -234,7 +241,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
         cor_spearman = round(cor_spearman, 2)
         
         # cohorts
-
+        
         case_ctrl = phenodata [, which( colnames(phenodata) == cohorts_type  )  ]
         case_ctrl = c( "Cohort", "" , "" , "", as.character(case_ctrl)  )
         
@@ -248,7 +255,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
       print(c(i,file_name))
       
       write.xlsx( exprs_genes, str_replace(str_replace(file_name,"~",user_folder),".csv",".xls"), row.names=F )
-
+      
     }
   }
 }
@@ -262,7 +269,7 @@ if ( F ){
   for ( i  in 1:length(kegg_t$Go_id)  ){
     
     go_id = str_trim(kegg_t$Go_id[i])
-
+    
     if( go_id != ""){
       
       go_name  = as.character( kegg_t$Go_name[ i ] )
@@ -272,16 +279,16 @@ if ( F ){
       gene_list = as.character(unlist(genes))
       
       mapping_gene  = match( gene_list, as.character( hgnc_symbols), nomatch = 0 )
-        
+      
       exprs_genes = exprs(eset)[ mapping_gene,]
       exprs_case = round( rowMeans( exprs_genes[,index_case]),2 )
       exprs_ctrl = round( rowMeans( exprs_genes[,index_ctrl]),2 )
       dif_exp = round( exprs_case - exprs_ctrl, 2)
-        
+      
       exprs_genes = cbind( as.double( dif_exp ), as.double( exprs_ctrl), as.double( exprs_case), hgnc_symbols[mapping_gene] , round(exprs(eset)[mapping_gene,],2) )
       colnames(exprs_genes) =  c( "logFC" , "expr_ctrl", "expr_case", "hgnc_symbol", colnames(eset))
       exprs_genes = exprs_genes[ order( as.double(exprs_genes[,1]), decreasing = T  ),]
-        
+      
       file_name = str_replace( genes_of_interest_file_path, "genes_of_interest", go_name  )
       print(c(i,file_name))
       

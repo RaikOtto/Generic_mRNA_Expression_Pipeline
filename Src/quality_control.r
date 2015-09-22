@@ -3,11 +3,11 @@ print( "Step 5: Quality Control" )
 library("arrayQualityMetrics")
 
 if ( !( quality_control_only )  ){
-
+  
   mapping = match( colnames(eset),  phenodata$ID )
   
   for ( elem in colnames( phenodata ) ){
-  
+    
     if ( (elem != "ID"  ) && ( ! ( elem %in% colnames( pData( eset ) ) )  ) ){ 
       
       index_elem = which( colnames( phenodata ) == elem )
@@ -16,9 +16,9 @@ if ( !( quality_control_only )  ){
     }
   }
   pData( eset )$Cohort = cohorts_vec[ match( rownames(pData( eset ) ), names(cohorts_vec) ) ]
-
+  
 } else {
-
+  
   mapping_eset_pheno = match( as.character( colnames( eset ) ), as.character( phenodata$ID ) )
   pData( eset  )$Group = phenodata$Group[ mapping_eset_pheno  ]
 }
@@ -26,4 +26,4 @@ if ( !( quality_control_only )  ){
 pData( raw_data ) = pData( eset )
 
 print("Running Quality Metrics"  )
-arrayQualityMetrics( expressionset = raw_data, outdir = quality_report_path, intgroup = "Cohort", force = T)
+arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T)

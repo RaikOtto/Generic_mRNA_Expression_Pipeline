@@ -20,7 +20,7 @@ if ( !( quality_control_only )  ){
   
   cohorts_vec[ cohorts_vec %in% set_ctrl ] = "CTRL"
   cohorts_vec[ cohorts_vec %in% set_case ] = "CASE"
-
+  
   index_cohorts_vec = which( cohorts_vec %in% c("CTRL","CASE") == T  )
   cohorts_vec = cohorts_vec[ cohorts_vec %in% c("CTRL","CASE") ]
   names( cohorts_vec ) = as.character( phenodata$ID[ index_cohorts_vec ] )
@@ -44,14 +44,14 @@ if ( !( quality_control_only )  ){
 index_ctrl = as.integer( which( design[ ,colnames(design) == "CTRL" ] == 1 ) )
 index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
 
-if (exists("raw_data")){
-  if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
+#if (exists("raw_data")){
+if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
   
-    raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
-    raw_data_group_vec[  index_ctrl ] = "CTRL"
-    raw_data_group_vec[  index_case ] = "CASE"
-    pData(raw_data) = cbind( pData(raw_data), raw_data_group_vec )
-    colnames(pData(raw_data))[-1] = "Group"
-    #raw_data = raw_data[,pData(raw_data)$Group!=""]
-  }
+  raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
+  raw_data_group_vec[  index_ctrl ] = "CTRL"
+  raw_data_group_vec[  index_case ] = "CASE"
+  pData(raw_data) = cbind( pData(raw_data), raw_data_group_vec )
+  colnames(pData(raw_data))[-1] = "Group"
+  #raw_data = raw_data[,pData(raw_data)$Group!=""]
 }
+#}

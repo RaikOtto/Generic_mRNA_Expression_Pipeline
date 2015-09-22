@@ -12,13 +12,13 @@ interesting_pathways_mapping = match( str_trim( kegg_t$HSA_ID ), str_trim( cpdb_
 interesting_pathways_table = cpdb_t[ interesting_pathways_mapping ,]
 
 if ( chip_type == "hgu133plus2" ){
-
-  if ( multi_probe ){
   
+  if ( multi_probe ){
+    
     ### yet to be done
     print("Multiprobe annotation not implemented yet, System aborting")
     quit()
-  
+    
   } else {
     
     hgnc_genes = mget( rownames(eset), hgu133plus2SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
@@ -31,17 +31,17 @@ if ( chip_type == "hgu133plus2" ){
     enzyme = mget( rownames(eset), hgu133plus2ENZYME ); enzyme[ is.na(enzyme)  ] = ""
     
   }
-
-} else if ( chip_type == "hgu133a" ){
-
-  if ( multi_probe ){
   
+} else if ( chip_type == "hgu133a" ){
+  
+  if ( multi_probe ){
+    
     mapWithMultiProbes_entrez = toggleProbes( hgu133aENTREZID, "all")
     mapWithMultiProbes_symbols = toggleProbes( hgu133aSYMBOL, "all")
     
     hgnc_genes = mget( rownames( eset ), mapWithMultiProbes_symbols )
     entrez_genes = mget( rownames( eset ), mapWithMultiProbes_entrez )
-
+    
   } else {
     
     hgnc_genes = mget( rownames(eset), hgu133aSYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
@@ -57,13 +57,17 @@ if ( chip_type == "hgu133plus2" ){
   omim = mget( rownames(eset), hgu133aOMIM ); go[ is.na(omim)  ] = ""
   enzyme = mget( rownames(eset), hgu133aENZYME ); enzyme[ is.na(enzyme)  ] = ""
   
-} else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
+} else if ( chip_type %in% c( "pd.hugene.2.0.st") ){
+  
+  featureData( eset  ) = getNetAffx( eset, type = "probeset" )
+  split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
+  hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
+  
+} else if ( chip_type %in% c( "pd.huex.1.0.st.v2" ) ){  
   
   featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
-  #hgnc_names = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 3 ) ) )
-  #probe_ids = featureData( eset  )$probesetid
   
 } else {
   
