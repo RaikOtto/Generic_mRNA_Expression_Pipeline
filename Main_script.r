@@ -4,7 +4,7 @@ pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
 #setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
-source( "src/pipeline_structure.r" )
+source( "Src/pipeline_structure.r" )
 
 default_parameters = T
 which_project = "hnsc"
