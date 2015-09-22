@@ -1,12 +1,19 @@
-#pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
-#pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" ) #local path for debug
-pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
-#setwd( paste(pipeline_loc, "Src", sep="/") ) # Set the path to where the pipeline is located
+debug_mode = F
+#user = "raik"
+user = "janniklas"
+
+if ( !debug_mode ){
+  pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
+} else if ( user == "raik" ){
+  pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
+} else{
+  pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
+}
+
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 source( "Src/pipeline_structure.r" )
 
-default_parameters = T
 which_project = "hnsc"
 source("project_files.r")
 
@@ -24,11 +31,7 @@ create_pathways   = T # 10
 extract_interest  = T # 11
 annotate_tissue_abbundance = F # 12
 
-## Misc
-
-### frma test
-
-# generic
+### generic
 stat_design = "contrast"
 
 run_analysis();print( "Finished" )
