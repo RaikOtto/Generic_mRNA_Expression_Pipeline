@@ -59,7 +59,7 @@ if ( chip_type == "hgu133plus2" ){
   hgnc_symbols = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 2 ) ) )
   hgnc_names = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 3 ) ) )
   
-  library("biomaRt")
+  #library("biomaRt")
 
   #ensembl     = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   #entrez  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols), filters = "hgnc_symbol" , mart = ensembl)[1]
@@ -83,7 +83,7 @@ if ( chip_type == "hgu133plus2" ){
   )
   
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
-  topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
+  #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
 }
 
 dir.create( results_file_path, showWarnings = F)

@@ -58,7 +58,11 @@ if ( chip_type == "hgu133plus2" ){
   enzyme = mget( rownames(eset), hgu133aENZYME ); enzyme[ is.na(enzyme)  ] = ""
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st") ){
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> a2a40bf3d6bb4ef8f5759b3604ff2db63403be55
   featureData( eset  ) = getNetAffx( eset, type = "probeset" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
@@ -68,7 +72,11 @@ if ( chip_type == "hgu133plus2" ){
   featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> a2a40bf3d6bb4ef8f5759b3604ff2db63403be55
 } else {
   
   print("Unknown Chip Type")

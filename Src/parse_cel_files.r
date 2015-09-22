@@ -19,13 +19,20 @@ if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
     raw_data = raw_data[ -( excluded_files )  ] # exclude bad samples
     phenodata = phenodata[ match( phenodata$ID, colnames(raw_data), nomatch = 0 ),]
   }
+
+} else if ( chip_type %in% c( "pd.huex.1.0.st.v2", "pd.hugene.2.0.st" ) ){
   
+<<<<<<< HEAD:parse_cel_files.r
+  library("oligo")
+  celFiles = list.celfiles( cel_files_path, full = T)
+=======
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
   
   library("oligoData")
   celFiles = list.celfiles( cel_files_path, full = T, listGzipped = zipped )
+>>>>>>> 82c786fe901faf165e3a48f55c7e748d7aad2f83:Src/parse_cel_files.r
   raw_data = read.celfiles( filenames = celFiles )
-  
+
 } else {
   
   print(c("Unknown Chip Type: ",chip_type))
