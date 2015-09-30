@@ -67,7 +67,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   
   for (gene in unique( kegg_t$Gene_id_hgnc )){
     
-    if ( gene != ""  ){ 
+    if ( (gene != "") & (! is.na(gene))  ){ 
       
       mapping = which( hgnc_symbols %in% gene )
       

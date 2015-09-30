@@ -13,7 +13,7 @@ if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st" ) ){
   
-  eset = oligo::rma( raw_data, target='probeset', normalize = T)
+  eset = oligo::rma( raw_data, target = "core", normalize = T)
   print("Normalization finished, loading annotation information")
   featureData( eset ) = getNetAffx( eset, 'transcript') 
   
@@ -41,4 +41,3 @@ mapping_cohort_c = match( base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_
 
 eset = eset[,rownames(pData(eset)) %in% base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_vec) )]
 pData(eset)$Cohort = cohorts_vec[ mapping_cohort_p ]
-phenodata$ID = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", phenodata$ID )

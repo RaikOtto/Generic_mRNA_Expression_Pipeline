@@ -59,7 +59,7 @@ if ( chip_type == "hgu133plus2" ){
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st") ){
   
-  featureData( eset  ) = getNetAffx( eset, type = "probeset" )
+  featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
   
