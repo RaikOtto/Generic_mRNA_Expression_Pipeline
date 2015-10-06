@@ -46,7 +46,7 @@ if ( chip_type == "hgu133plus2" ){
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
   
   if ( ! exists("index_case"))
-    source("src/annotation.r")
+    source("Src/annotation.r")
   
   probe_ids = rownames( topall )
   

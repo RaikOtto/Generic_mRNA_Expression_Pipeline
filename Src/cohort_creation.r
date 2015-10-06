@@ -2,7 +2,7 @@
 
 print( "Running step 2: Cohort construction"  )
 
-source("src/set_generic_initial_parameters.r")
+source("Src/set_generic_initial_parameters.r")
 
 if (exists("eset")){
   

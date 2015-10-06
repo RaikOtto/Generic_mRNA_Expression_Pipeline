@@ -3,7 +3,7 @@ print("Step 10: Creating Pathway maps")
 
 if ( !dir.exists( pathway_maps_path )   ){ dir.create(pathway_maps_path) }
 if ( ! exists("eset")  )
-  source("src/normalization.r")
+  source("Src/normalization.r")
 
 split_fun = function( entry,pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
 
@@ -74,4 +74,4 @@ for (id in Kegg_id  ){
 system("rm *.xml")
 system("ls | grep -v 'pathview.png$' | xargs rm")
 
-setwd( paste(pipeline_loc, "Src", sep="/") )
+setwd( pipeline_loc )
