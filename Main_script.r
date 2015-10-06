@@ -1,4 +1,4 @@
-debug_mode = F
+debug_mode = T
 #user = "raik"
 user = "janniklas"
 
@@ -14,6 +14,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 source( "Src/pipeline_structure.r" )
 
+computer_name = system('uname -n',intern=T)
 default_parameters = T
 which_project = "ovarian"
 source("project_files.r")
@@ -22,14 +23,14 @@ source("project_files.r")
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = T # 4
+normalize         = F # 4
 qc_control        = F # 5
-annotate          = T # 6
-absent_analysis   = T # 7
-dif_exp_ana       = T # 8
-export_results    = T # 9
-create_pathways   = T # 10
-extract_interest  = T # 11
+annotate          = F # 6
+absent_analysis   = F # 7
+dif_exp_ana       = F # 8
+export_results    = F # 9
+create_pathways   = F # 10
+extract_interest  = F # 11
 annotate_tissue_abbundance = F # 12
 
 ### generic
