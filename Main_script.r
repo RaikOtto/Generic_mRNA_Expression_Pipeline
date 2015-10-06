@@ -26,8 +26,8 @@ source("project_files.r")
 ###
 
 create_cohorts    = T # 2
-parse_files       = F # 3
-normalize         = F # 4
+parse_files       = T # 3
+normalize         = T # 4
 qc_control        = F # 5
 annotate          = F # 6
 absent_analysis   = F # 7
