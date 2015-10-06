@@ -1,27 +1,14 @@
-kocent = ( system('uname -n',intern=T) == "kocent" )
+kocent = ( system( 'uname -n',intern = T ) == "kocent" )
 
-if ( kocent ){
-  debug_mode = F
-} else {
-  debug_mode = T
-}
-
-if ( !debug_mode ){
-  pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
-} else if ( system('uname -n',intern=T) == "MacBook-Jan-Niklas.local" ){
-  pipeline_loc = paste( system("echo $HOME",intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
-  pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
-} else{
-  pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
-}
-
-setwd( pipeline_loc ) # Set the path to where the pipeline is located
-
-source( "Src/pipeline_structure.r" )
+debug_mode = F
 
 default_parameters = T
 which_project = "ovarian"
 source("project_files.r")
+
+setwd( pipeline_loc ) # Set the path to where the pipeline is located
+
+source( "Src/pipeline_structure.r" )
 
 ###
 
