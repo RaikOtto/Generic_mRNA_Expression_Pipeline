@@ -14,12 +14,8 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 source( "Src/pipeline_structure.r" )
 
-<<<<<<< HEAD
 default_parameters = T
-which_project = "immuno_all"
-=======
-which_project = "hnsc"
->>>>>>> 52530cf1e295546f46ffcc79cfb4e9aec7b8226f
+which_project = "ovarian"
 source("project_files.r")
 
 ###
@@ -29,10 +25,10 @@ parse_files       = T # 3
 normalize         = T # 4
 qc_control        = F # 5
 annotate          = T # 6
-absent_analysis   = F # 7
+absent_analysis   = T # 7
 dif_exp_ana       = T # 8
 export_results    = T # 9
-create_pathways   = F # 10
+create_pathways   = T # 10
 extract_interest  = T # 11
 annotate_tissue_abbundance = F # 12
 
