@@ -21,19 +21,19 @@ source("project_files.r")
 stat_design = "contrast"
 
 
-invisible(source( "Src/set_generic_initial_parameters.r" ))
+invisible(source( "Src/set_generic_initial_parameters.r" ) )
 message( "Set generic initial parameters - succesfull" )
 
-capture.output( suppressMessages( source( "Src/parse_cel_files.r" )), file = 'NUL' )
+capture.output( suppressMessages( source( "Src/parse_cel_files.r" ) ), file = 'NUL' )
 message( "Parsing cel files - successfull")
 
 capture.output( source( "Src/cohort_creation.r" ), file = 'NUL' )
 message( "Cohort creation - succesfull")
 
-capture.output( source( "Src/normalization.r" ), file = 'NUL' )
+capture.output( suppressMessages( source( "Src/normalization.r" ) ), file = 'NUL' )
 message ( "Normalization - successfull")
 
-#capture.output( suppressMessages( source( "Src/quality_control.r" )), file = 'NUL' )
+#capture.output( suppressMessages( source( "Src/quality_control.r" ) ), file = 'NUL' )
 #message( "Quality control - succesfull")
 
 capture.output( source( "Src/annotation.r" ), file = 'NUL' )
@@ -42,16 +42,16 @@ message( "Annotation - succesfull")
 capture.output( source( "Src/absent_genes_analysis.r" ), file = 'NUL' )
 message( "Absent genes analysis - succesfull" )
 
-capture.output( source( "Src/differential_expression.r" ), file = 'NUL' )
+capture.output( suppressMessages( source( "Src/differential_expression.r" ) ), file = 'NUL' )
 message( "Differential expression analysis - succesfull" )
 
-capture.output( source( "Src/result_preparation.r" ), file = 'NUL' )
+capture.output( suppressMessages( source( "Src/result_preparation.r" ) ), file = 'NUL' )
 message( "Result preparation - succesfull" )
 
 capture.output( suppressMessages( source( "Src/create_pathway_maps.r" )), file = 'NUL' )
 message( "Create pathway maps - succesfull" )
 
-capture.output( source( "Src/Extract_interesting_entities.r" ), file = 'NUL' )
+capture.output( suppressMessages( source( "Src/Extract_interesting_entities.r" )), file = 'NUL' )
 message( "Extract interesting entities - succesfull" )
 
 #capture.output( source( "Src/annotate_tissue_abbundance.r" ), file = 'NUL' )

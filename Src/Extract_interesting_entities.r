@@ -1,5 +1,5 @@
 library("WriteXLS")
-#print("Step 11: Extraction of interesting information")
+
 library("stringr")
 
 dir.create( entities_of_interest_path, showWarnings = F)
@@ -108,7 +108,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     
     if ( ! exists("drug_data") ){
       
-      print("Did not find drug data, but drug_response parameter was set")
+      message("Did not find drug data, but drug_response parameter was set")
       exit()
     }
     
@@ -116,7 +116,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     
     if ( ! (T %in% ( mapping != 0 ) ) ){
       
-      print("Problem mapping samplenames of genes of interest to drug data from cohorts file")
+      message("Problem mapping samplenames of genes of interest to drug data from cohorts file")
       exit()
     }
     
@@ -166,7 +166,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
 if ( ! is.null( kegg_t$Kegg_id ) ){
   
   mapping = match( kegg_t$Kegg_id  ,cpdb_ident, nomatch = 0 )
-  print(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) )  )
+  message(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) )  )
   
   mapping = match( cpdb_ident, kegg_t$Kegg_id, nomatch = 0 )
   mapping = mapping[mapping!=0]
@@ -201,7 +201,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
         
         if ( ! exists("drug_data") ){
           
-          print("Did not find drug data, but drug_response parameter was set")
+          message("Did not find drug data, but drug_response parameter was set")
           exit()
         }
         
@@ -209,7 +209,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
         
         if ( ! (T %in% ( mapping != 0 ) ) ){
           
-          print("Problem mapping samplenames of genes of interest to drug data from cohorts file")
+          message("Problem mapping samplenames of genes of interest to drug data from cohorts file")
           exit()
         }
         
@@ -252,7 +252,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
       }
       
       file_name = str_replace( genes_of_interest_file_path, "genes_of_interest", paste( pathway_id, pathway_name, sep ="_")  )
-      print(c(i,file_name))
+      message(c(i,file_name))
       
       write.xlsx( exprs_genes, str_replace(str_replace(file_name,"~",user_folder),".csv",".xls"), row.names=F )
       
@@ -263,7 +263,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
 #if ( ! is.null( kegg_t$Go_id ) ){
 if ( F ){
   
-  print( "Go ids"  )
+  message( "Go ids"  )
   ensembl     = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   
   for ( i  in 1:length(kegg_t$Go_id)  ){
@@ -290,7 +290,7 @@ if ( F ){
       exprs_genes = exprs_genes[ order( as.double(exprs_genes[,1]), decreasing = T  ),]
       
       file_name = str_replace( genes_of_interest_file_path, "genes_of_interest", go_name  )
-      print(c(i,file_name))
+      message(c(i,file_name))
       
       write.xlsx( exprs_genes, str_replace(str_replace(file_name,"~",user_folder),".csv",".xls"), row.names=F )
     }

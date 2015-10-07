@@ -1,4 +1,3 @@
-#print("Running step 8: Differential Expression")
 library("limma")
 
 if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
@@ -50,5 +49,5 @@ topall$B = round( topall$B, 2 )
 
 topall = topall[ abs(topall$logFC) >= lfc_exp  ,]
 
-print( c( "Amount probes higher in Case cohort:", sum( topall$logFC >= lfc_exp ) ) )
-print( c( "Amount probes lower in Case cohort:" , sum( topall$logFC <= lfc_exp ) ) )
+message( c( "Amount probes higher in Case cohort:", sum( topall$logFC >= lfc_exp ) ) )
+message( c( "Amount probes lower in Case cohort:" , sum( topall$logFC <= lfc_exp ) ) )

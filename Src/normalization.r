@@ -1,5 +1,3 @@
-#print("Running step 4: Normalizing"  )
-
 if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
   
   eset = threestep( raw_data, background.method = "GCRMA", normalize.method="quantile", summary.method="median.polish")
@@ -8,18 +6,18 @@ if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
 } else if ( chip_type %in% c( "pd.huex.1.0.st.v2" ) ){
   
   eset = oligo::rma( raw_data, target = 'extended', normalize = T)
-  print("Normalization finished, loading annotation information")
+  message("Normalization finished, loading annotation information")
   featureData( eset ) = getNetAffx( eset, 'transcript') 
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st" ) ){
   
   eset = oligo::rma( raw_data, target = "core", normalize = T)
-  print("Normalization finished, loading annotation information")
+  message("Normalization finished, loading annotation information")
   featureData( eset ) = getNetAffx( eset, 'transcript') 
   
 } else {
   
-  print(c("Unknown Chip Type: ",chip_type))
+  message(c("Unknown Chip Type: ",chip_type))
   stop()
 }
 

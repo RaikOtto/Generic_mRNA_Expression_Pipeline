@@ -1,5 +1,4 @@
 library("WriteXLS")
-#print("Step 9: Exporting data")
 
 if ( chip_type == "hgu133plus2" ){
   
@@ -90,5 +89,5 @@ dir.create( results_file_path, showWarnings = F)
 write.xlsx( topall_res, str_replace(str_replace(name_res_file,"~",user_folder),".csv",".xls"), row.names=F )
 
 # 
-print( c( "Amount genes higher in Case cohort:", sum( topall_res$logFC >= lfc_exp ) ) )
-print( c( "Amount genes lower in Case cohort:" , sum( topall_res$logFC <= lfc_exp ) ) )
+message( c( "Amount genes higher in Case cohort:", sum( topall_res$logFC >= lfc_exp ) ) )
+message( c( "Amount genes lower in Case cohort:" , sum( topall_res$logFC <= lfc_exp ) ) )

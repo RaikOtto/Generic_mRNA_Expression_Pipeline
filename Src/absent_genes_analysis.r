@@ -1,5 +1,3 @@
-#print("Step 7: Absent gene analysis")
-
 suppressMessages(library("genefilter"))
 
 f1 = pOverA( 1/3, log2( 100 ) )

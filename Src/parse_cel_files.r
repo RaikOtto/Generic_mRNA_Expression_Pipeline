@@ -1,5 +1,3 @@
-#print("Running step 3: Parsing raw CEL files"  )
-
 #celFiles = celFiles[ -( excluded_files )  ] # exclude bad samples
 #rawdata = ReadAffy( filenames = celFiles )
 
@@ -28,6 +26,6 @@ if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
   
 } else {
   
-  print(c("Unknown Chip Type: ",chip_type))
+  message(c("Unknown Chip Type: ",chip_type))
   stop()
 }

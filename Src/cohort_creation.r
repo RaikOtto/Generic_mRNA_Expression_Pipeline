@@ -1,7 +1,3 @@
-# redo this here
-
-#print( "Running step 2: Cohort construction"  )
-
 source("Src/set_generic_initial_parameters.r")
 
 if (exists("eset")){

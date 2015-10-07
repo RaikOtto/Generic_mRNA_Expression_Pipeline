@@ -1,5 +1,3 @@
-#message("Running step 1: Generic parameter init"  )
-
 suppressMessages(library("xlsx"))
 suppressMessages(library("gdata"))
 suppressMessages(library("RColorBrewer"))
@@ -93,7 +91,7 @@ if ( chip_type == "hgu133plus2" ){
   
 } else {
   
-  print(c("Unknown Chip Type: ",chip_type))
+  message(c("Unknown Chip Type: ",chip_type))
   stop()
 }
 

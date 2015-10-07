@@ -1,5 +1,3 @@
-#print("Step 6: Data annotation")
-
 ### pathway mapping
 
 library("stringr")
@@ -16,7 +14,7 @@ if ( chip_type == "hgu133plus2" ){
   if ( multi_probe ){
     
     ### yet to be done
-    print("Multiprobe annotation not implemented yet, System aborting")
+    message("Multiprobe annotation not implemented yet, System aborting")
     quit()
     
   } else {
@@ -71,7 +69,7 @@ if ( chip_type == "hgu133plus2" ){
   
 } else {
   
-  print("Unknown Chip Type")
+  message("Unknown Chip Type")
   stop()
 }
 
@@ -82,7 +80,7 @@ if (integrate_drug_data){
   
   if (index_drug == 0){
     
-    print("Could not find drug in cohorts file")
+    message("Could not find drug in cohorts file")
     quit()
   }
   
