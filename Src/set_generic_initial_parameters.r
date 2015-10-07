@@ -83,7 +83,7 @@ if ( chip_type == "hgu133plus2" ){
   library("simpleaffy", quietly = T)
   library("affyPLM", quietly = T)
   library("affycoretools", quietly = T)
-  library("affyQCReport", quietly = T
+  library("affyQCReport", quietly = T)
   library("annaffy", quietly = T)
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
