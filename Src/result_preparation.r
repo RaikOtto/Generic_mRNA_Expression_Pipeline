@@ -1,5 +1,5 @@
 library("WriteXLS")
-print("Step 9: Exporting data")
+#print("Step 9: Exporting data")
 
 if ( chip_type == "hgu133plus2" ){
   

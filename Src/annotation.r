@@ -1,4 +1,4 @@
-print("Step 6: Data annotation")
+#print("Step 6: Data annotation")
 
 ### pathway mapping
 

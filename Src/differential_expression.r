@@ -1,4 +1,4 @@
-print("Running step 8: Differential Expression")
+#print("Running step 8: Differential Expression")
 library("limma")
 
 if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){

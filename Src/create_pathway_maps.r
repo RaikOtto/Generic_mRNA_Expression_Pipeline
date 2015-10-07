@@ -1,5 +1,5 @@
 library("pathview")
-print("Step 10: Creating Pathway maps")
+#print("Step 10: Creating Pathway maps")
 
 if ( !dir.exists( pathway_maps_path )   ){ dir.create(pathway_maps_path) }
 if ( ! exists("eset")  )

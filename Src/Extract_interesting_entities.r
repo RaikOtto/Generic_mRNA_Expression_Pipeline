@@ -1,5 +1,5 @@
 library("WriteXLS")
-print("Step 11: Extraction of interesting information")
+#print("Step 11: Extraction of interesting information")
 library("stringr")
 
 dir.create( entities_of_interest_path, showWarnings = F)

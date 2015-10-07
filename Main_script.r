@@ -1,4 +1,4 @@
-kocent = ( system( 'uname -n',intern = T ) == "kocent" )
+kocent = ( system( 'uname -n', intern = T ) == "kocent" )
 
 debug_mode = F
 

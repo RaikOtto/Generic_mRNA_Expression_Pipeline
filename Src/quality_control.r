@@ -1,4 +1,4 @@
-print( "Step 5: Quality Control" )
+#print( "Step 5: Quality Control" )
 
 library("arrayQualityMetrics")
 
@@ -25,5 +25,5 @@ if ( !( quality_control_only )  ){
 
 pData( raw_data ) = pData( eset )
 
-print("Running Quality Metrics"  )
-arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T)
+print( "Running Quality Metrics"  )
+arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T, showWarnings = F)

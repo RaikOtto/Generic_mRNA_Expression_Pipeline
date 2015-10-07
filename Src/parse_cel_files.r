@@ -1,4 +1,4 @@
-print("Running step 3: Parsing raw CEL files"  )
+#print("Running step 3: Parsing raw CEL files"  )
 
 #celFiles = celFiles[ -( excluded_files )  ] # exclude bad samples
 #rawdata = ReadAffy( filenames = celFiles )

@@ -1,4 +1,4 @@
-print("Comparison to normal tissue expression")
+#print("Comparison to normal tissue expression")
 
 library("hgu133a.db")
 mapWithMultiProbes_symbols = toggleProbes( hgu133aSYMBOL, "all")

@@ -1,4 +1,4 @@
-print("Running step 4: Normalizing"  )
+#print("Running step 4: Normalizing"  )
 
 if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
   
