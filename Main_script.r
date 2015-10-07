@@ -10,11 +10,11 @@ if ( kocent ){
   pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
 }
 
+setwd( pipeline_loc ) # Set the path to where the pipeline is located
+
 default_parameters = T
 which_project = "ovarian"
 source("project_files.r")
-
-setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 source( "Src/pipeline_structure.r" )
 

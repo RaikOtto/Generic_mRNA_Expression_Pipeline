@@ -1,6 +1,6 @@
 #print("Step 7: Absent gene analysis")
 
-library("genefilter")
+suppressMessages(library("genefilter"))
 
 f1 = pOverA( 1/3, log2( 100 ) )
 f2 = function( x ) ( diff( range( x, na.rm = T ) ) > log2( 1.5 ) )

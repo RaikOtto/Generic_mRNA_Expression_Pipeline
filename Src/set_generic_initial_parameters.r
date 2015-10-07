@@ -1,12 +1,12 @@
 #message("Running step 1: Generic parameter init"  )
 
-library("xlsx", quietly = T)
-library("gdata", quietly = T)
-library("RColorBrewer", quietly = T)
-library("limma", quietly = T)
-library("KEGG.db", quietly = T)
-library("pathview", quietly = T)
-library("stringr", quietly = T)
+suppressMessages(library("xlsx"))
+suppressMessages(library("gdata"))
+suppressMessages(library("RColorBrewer"))
+suppressMessages(library("limma"))
+suppressMessages(library("KEGG.db"))
+suppressMessages(library("pathview"))
+suppressMessages(library("stringr"))
 
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
@@ -68,28 +68,28 @@ if (  strEndsWith( kegg_file_path, ".csv" ) ){
 
 if ( chip_type == "hgu133plus2" ){
   
-  library("hgu133plus2.db", quietly = T)
-  library("affy", quietly = T)
-  library("simpleaffy", quietly = T)
-  library("affyPLM", quietly = T)
-  library("affycoretools", quietly = T)
-  library("affyQCReport", quietly = T)
-  library("annaffy", quietly = T)
+  suppressMessages(library("hgu133plus2.db"))
+  suppressMessages(library("affy"))
+  suppressMessages(library("simpleaffy"))
+  suppressMessages(library("affyPLM"))
+  suppressMessages(library("affycoretools"))
+  suppressMessages(library("affyQCReport"))
+  suppressMessages(library("annaffy"))
   
 } else if ( chip_type == "hgu133a" ){
   
-  library("hgu133a.db", quietly = T)
-  library("affy", quietly = T)
-  library("simpleaffy", quietly = T)
-  library("affyPLM", quietly = T)
-  library("affycoretools", quietly = T)
-  library("affyQCReport", quietly = T)
-  library("annaffy", quietly = T)
+  suppressMessages(library("hgu133a.db"))
+  suppressMessages(library("affy"))
+  suppressMessages(library("simpleaffy"))
+  suppressMessages(library("affyPLM"))
+  suppressMessages(library("affycoretools"))
+  suppressMessages(library("affyQCReport"))
+  suppressMessages(library("annaffy"))
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
   
-  library("oligoData", quietly = T)
-  library("pd.huex.1.0.st.v2", quietly = T)
+  suppressMessages(library("oligoData"))
+  suppressMessages(library("pd.huex.1.0.st.v2"))
   
 } else {
   
