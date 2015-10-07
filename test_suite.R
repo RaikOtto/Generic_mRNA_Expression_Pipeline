@@ -22,7 +22,7 @@ stat_design = "contrast"
 
 
 invisible(source( "Src/set_generic_initial_parameters.r" ))
-message( "set generic initial parameters - succesfull" )
+message( "Set generic initial parameters - succesfull" )
 
 capture.output( suppressMessages( source( "Src/parse_cel_files.r" )), file = 'NUL' )
 message( "Parsing cel files - successfull")
@@ -54,7 +54,7 @@ message( "Create pathway maps - succesfull" )
 capture.output( source( "Src/Extract_interesting_entities.r" ), file = 'NUL' )
 message( "Extract interesting entities - succesfull" )
 
-capture.output( source( "Src/annotate_tissue_abbundance.r" ), file = 'NUL' )
-message( "Annotate tissue abbundance - succesfull" )
+#capture.output( source( "Src/annotate_tissue_abbundance.r" ), file = 'NUL' )
+#message( "Annotate tissue abbundance - succesfull" )
 
-message( "Pipeline is working.")
+message( "Pipeline is working." )
