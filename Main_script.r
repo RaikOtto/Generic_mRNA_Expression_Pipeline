@@ -13,7 +13,7 @@ if ( kocent ){
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 default_parameters = T
-which_project = "ovarian"
+which_project = "HNSC"
 source("project_files.r")
 
 source( "Src/pipeline_structure.r" )
