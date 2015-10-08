@@ -39,3 +39,9 @@ mapping_cohort_c = match( base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_
 
 eset = eset[,rownames(pData(eset)) %in% base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_vec) )]
 pData(eset)$Cohort = cohorts_vec[ mapping_cohort_p ]
+
+if( export_eset ){
+  
+  source("Src/annotation.r")
+  write.table(eset, file = paste( output_path, "Output/ExpressionSet.txt", sep = "/"))
+}
