@@ -3,10 +3,15 @@ kocent = ( system( 'uname -n', intern = T ) == "kocent" )
 debug_mode = F
 
 if ( kocent ){
+  
   pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
+  
 } else if ( system( 'uname -n', intern = T ) == "MacBook-Jan-Niklas.local" ){
+  
   pipeline_loc = paste( system( "echo $HOME", intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
+  
 } else{
+  
   pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
 }
 
@@ -22,7 +27,7 @@ source( "Src/pipeline_structure.r" )
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = T # 4
+normalize         = F # 4
 qc_control        = F # 5
 annotate          = F # 6
 absent_analysis   = F # 7
