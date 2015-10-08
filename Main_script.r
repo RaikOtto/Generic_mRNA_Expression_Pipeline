@@ -3,10 +3,15 @@ kocent = ( system( 'uname -n', intern = T ) == "kocent" )
 debug_mode = F
 
 if ( kocent ){
+  
   pipeline_loc = "/usr/Generic_mRNA_Expression_Pipeline" #server path
+  
 } else if ( system( 'uname -n', intern = T ) == "MacBook-Jan-Niklas.local" ){
+  
   pipeline_loc = paste( system( "echo $HOME", intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
+  
 } else{
+  
   pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
 }
 
