@@ -19,7 +19,7 @@ source("Src/cohort_creation.r")
 if (stat_design == "contrast"){
     
     fit = lmFit( eDatSet[ , c( index_ctrl, index_case )  ], design )
-    cont.matrix = makeContrasts(  contrast = CASE - CTRL,  levels = design)
+    cont.matrix = makeContrasts( contrast = CASE - CTRL,  levels = design )
     fit = contrasts.fit( fit, cont.matrix )
     fit = eBayes( fit )
     volc_all = topTable( fit, coef = "contrast", number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
@@ -50,4 +50,4 @@ topall$B = round( topall$B, 2 )
 topall = topall[ abs(topall$logFC) >= lfc_exp  ,]
 
 message( c( "Amount probes higher in Case cohort:", sum( topall$logFC >= lfc_exp ) ) )
-message( c( "Amount probes lower in Case cohort:" , sum( topall$logFC <= lfc_exp ) ) )
+message( c( "Amount probes lower in Case cohort:" , sum( topall$logFC < lfc_exp ) ) )
