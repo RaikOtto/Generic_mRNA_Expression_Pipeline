@@ -40,8 +40,32 @@ mapping_cohort_c = match( base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_
 eset = eset[,rownames(pData(eset)) %in% base::gsub( c(".gz|.CEL|.cel|.GZ"), "", names(cohorts_vec) )]
 pData(eset)$Cohort = cohorts_vec[ mapping_cohort_p ]
 
+
 if( export_eset ){
   
-  source("Src/annotation.r")
-  write.table(eset, file = paste( output_path, "Output/ExpressionSet.txt", sep = "/"))
+  ensembl_genes = as.character(mget( rownames(eset), hgu133plus2ENSEMBL ))
+  uniprot = as.character(mget( rownames(eset), hgu133plus2UNIPROT ))
+  omim = as.character(mget( rownames(eset), hgu133plus2OMIM ))
+  enzyme = as.character(mget( rownames(eset), hgu133plus2ENZYME ))
+  hgnc_genes  = as.character(mget( rownames( eset ) ,hgu133plus2SYMBOL))
+  entrez_genes= as.character(mget( rownames( eset ) ,hgu133plus2ENTREZID))
+  fdata = data.frame(fData(eset))
+  
+  exprs_values = data.frame(exprs(eset))
+  
+  expressionSet_out = data.frame(
+    
+    "Affy-ID" = fdata,
+    "HGNC" = hgnc_genes,
+    "Entrez" = entrez_genes,
+    "Ensembl" = ensembl_genes,
+    "Uniprot" = uniprot,
+    "Omim" = omim,
+    "Enzyme" = enzyme
+    
+    )
+  
+  expressionSet_out = cbind(expressionSet_out, exprs_values)
+  
+  write.table(expressionSet_out, file = paste( output_path, "Output/ExpressionSet.txt", sep = "/"), sep = "\t")
 }
