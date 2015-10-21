@@ -11,7 +11,7 @@ if (exists("eset")){
 }
 
 rownames( pData( raw_data ) ) = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", rownames( pData(raw_data) ) ) # the reason is to assure, that no .gz or .CEL ending is present when we add it
-colnames(raw_data) = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", colnames(raw_data) ) 
+sampleNames(raw_data) = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", sampleNames(raw_data) ) 
 phenodata$ID = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", phenodata$ID ) # the reason is to assure, that no .gz ending is present when we add it
 #print( paste( "Did not find following sampels in raw data, but in cohorts file: ", paste( !( phenodata$ID[phenodata$ID %in% rownames( pData( raw_data ) ) ] ) , sep =" " ) ) ) 
 phenodata = phenodata[ phenodata$ID %in% rownames( pData( raw_data ) ), ]
@@ -56,3 +56,4 @@ if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
   #raw_data = raw_data[,pData(raw_data)$Group!=""]
 }
 #}
+
