@@ -43,6 +43,7 @@ pData(eset)$Cohort = cohorts_vec[ mapping_cohort_p ]
 
 if( export_eset ){
   
+  source("Src/annotation.r")
   ensembl_genes = as.character(mget( rownames(eset), hgu133plus2ENSEMBL ))
   uniprot = as.character(mget( rownames(eset), hgu133plus2UNIPROT ))
   omim = as.character(mget( rownames(eset), hgu133plus2OMIM ))
