@@ -37,7 +37,7 @@ png( paste( output_path, "Output/logFC_vs_1-PValue.png", sep ="/" ), width = 800
 plot( volc_all$logFC,   1-( volc_all$P.Value ))
 dev.off()
 
-topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  ="none", p.value = p_val, lfc = lfc_exp )
+topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")

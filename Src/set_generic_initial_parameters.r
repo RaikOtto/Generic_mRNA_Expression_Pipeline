@@ -6,7 +6,7 @@ suppressMessages(library("KEGG.db"))
 suppressMessages(library("pathview"))
 suppressMessages(library("stringr"))
 
-export_eset = T
+export_eset = F
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
 cel_files_path = sub( x = cel_files_path, "/$", "")

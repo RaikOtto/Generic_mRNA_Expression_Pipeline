@@ -21,7 +21,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 default_parameters = T
 
-which_project = "GSE43795"
+which_project = "test_case"
 
 source("project_files.r")
 
