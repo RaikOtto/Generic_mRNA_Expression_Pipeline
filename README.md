@@ -5,3 +5,4 @@ This is the generic mRNA Analysis pipeline AG Leser, Institute for Computer Scie
 To-Do:
   - automatic test-suite (yet to be done)
   - removing batch effects with ComBat and integrate with fRMA (yet to be done)
+  - differential expression analysis with GSEA

@@ -21,20 +21,22 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 #options(error=traceback)
 default_parameters = T
-which_project = "immuMZ"
+
+which_project = "GSE43795"
+
 source("project_files.r")
 options(error=traceback)
 source( "Src/pipeline_structure.r" )
 
 ###
 
-create_cohorts    = T # 2
+create_cohorts    = F # 2
 parse_files       = T # 3
 normalize         = T # 4
 qc_control        = T # 5
 annotate          = T # 6
 absent_analysis   = F # 7
-dif_exp_ana       = F2 # 8
+dif_exp_ana       = F # 8
 export_results    = F # 9
 create_pathways   = F # 10
 extract_interest  = F # 11

@@ -90,6 +90,10 @@ if ( chip_type == "hgu133plus2" ){
   suppressMessages(library("oligoData"))
   suppressMessages(library("pd.huex.1.0.st.v2"))
   
+} else if ( chip_type == "HumanHT-12.v4" ){
+  
+  suppressMessages(library("lumi"))
+  
 } else {
   
   message(c("Unknown Chip Type: ",chip_type))

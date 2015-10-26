@@ -1,7 +1,16 @@
 #celFiles = celFiles[ -( excluded_files )  ] # exclude bad samples
 #rawdata = ReadAffy( filenames = celFiles )
 
-if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
+if ( chip_type == "HumanHT-12.v4" ){
+  
+  raw_data = getGEO(GEO_Id, GSEMatrix = T)
+  if ( length( raw_data ) > 1 )
+    idx = grep("GPL10558", attr(raw_data, "names"))
+  else
+    idx = 1
+  raw_data = raw_data[[idx]]
+  
+} else if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
   
   if ( zipped ){
     celFiles = list.celfiles( cel_files_path, full =T)

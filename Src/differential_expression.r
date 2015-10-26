@@ -18,11 +18,13 @@ source("Src/cohort_creation.r")
 
 if (stat_design == "contrast"){
     
-    fit = lmFit( eDatSet[ , c( index_ctrl, index_case )  ], design )
+    fit = lmFit( eDatSet[ ,c( index_ctrl, index_case )  ], design )
+  #fit = lmFit( eDatSet[ ,index_cohorts_vec  ], design )
     cont.matrix = makeContrasts( contrast = CASE - CTRL,  levels = design )
     fit = contrasts.fit( fit, cont.matrix )
     fit = eBayes( fit )
-    volc_all = topTable( fit, coef = "contrast", number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
+    #volc_all = topTable(fit, adjust="fdr", sort.by="B", number = 50000)
+    volc_all = topTable( fit, coef = "contrast", number  = nrow(eDatSet), adjust  ="fdr", p.value = 1, lfc = 0)
     
 } else {
     
@@ -35,7 +37,7 @@ png( paste( output_path, "Output/logFC_vs_1-PValue.png", sep ="/" ), width = 800
 plot( volc_all$logFC,   1-( volc_all$P.Value ))
 dev.off()
 
-topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  ="none", p.value = p_val, lfc = lfc_exp)
+topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  ="none", p.value = p_val, lfc = lfc_exp )
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")
