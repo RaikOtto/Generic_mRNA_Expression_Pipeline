@@ -52,8 +52,8 @@ index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
 if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
   
   raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
-  raw_data_group_vec[  index_ctrl2 ] = "CTRL"
-  raw_data_group_vec[  index_case2 ] = "CASE"
+  raw_data_group_vec[  index_ctrl ] = "CTRL"
+  raw_data_group_vec[  index_case ] = "CASE"
   raw_data_group_vec = raw_data_group_vec[which(raw_data_group_vec != "")]
   pData(raw_data) = cbind( pData(raw_data), raw_data_group_vec )
   colnames(pData(raw_data))[-1] = "Group"

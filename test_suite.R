@@ -20,6 +20,11 @@ source("project_files.r")
 ### generic
 stat_design = "contrast"
 
+message( "Checking if all required packages can be loaded:" )
+#testi = function(x) { library(x, logical.return = T, character.only = TRUE)}
+packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "pd.huex.1.0.st.v2", "lumi", "arrayQualityMetrics", "WriteXLS", "genefilter" )
+suppressMessages(sapply( packages, require, character.only=TRUE, quietly = TRUE ))
+
 
 invisible(source( "Src/set_generic_initial_parameters.r" ) )
 message( "Set generic initial parameters - succesfull" )
@@ -47,6 +52,17 @@ message( "Differential expression analysis - succesfull" )
 
 capture.output( suppressMessages( source( "Src/result_preparation.r" ) ), file = 'NUL' )
 message( "Result preparation - succesfull" )
+reference_results = read.table( reference_path, sep = "\t")
+compare_up = topall_res$Probe_ids[1:100] %in% reference_results$ID[1:100]
+compare_down = topall_res$Probe_ids[( length(topall_res$Probe_ids) - 99 ):( length(topall_res$Probe_ids) )] %in% reference_results$ID[( length(reference_results$ID) - 99 ):( length(reference_results$ID) )]
+if ( FALSE %in% c(compare_up, compare_down) ){
+  #pos_up = which( compare_up %in% FALSE )
+  #pos_down = which( compare_down %in% FALSE )
+  #pos_down = lapply( pos_down, function(x) x + ( length(topall_res$Probe_ids) - 99 ) ) 
+  message( "Calculated results differ from reference results" )
+} else{
+  message( "Calculated results are matching reference results." )
+}
 
 capture.output( suppressMessages( source( "Src/create_pathway_maps.r" )), file = 'NUL' )
 message( "Create pathway maps - succesfull" )
