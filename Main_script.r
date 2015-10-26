@@ -18,16 +18,16 @@ if ( kocent ){
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 default_parameters = T
-which_project = "HNSC"
+which_project = "GSE43795"
 source("project_files.r")
 
 source( "Src/pipeline_structure.r" )
 
 ###
 
-create_cohorts    = T # 2
+create_cohorts    = F # 2
 parse_files       = T # 3
-normalize         = T # 4
+normalize         = F # 4
 qc_control        = F # 5
 annotate          = F # 6
 absent_analysis   = F # 7
