@@ -15,6 +15,7 @@ if ( kocent ){
   pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
 }
 
+#pipeline_loc = paste( system( "echo $HOME", intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
 print(c("Kocent:",kocent ))
 
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
@@ -22,7 +23,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "test_case"
+which_project = "ovarian"
 
 source("project_files.r")
 options(error=traceback)
@@ -30,7 +31,7 @@ source( "Src/pipeline_structure.r" )
 
 ###
 
-create_cohorts    = F # 2
+create_cohorts    = T # 2
 parse_files       = T # 3
 normalize         = T # 4
 qc_control        = T # 5
