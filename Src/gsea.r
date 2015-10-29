@@ -39,8 +39,8 @@ mapGeneSet = function( mSigDB_vec, probe_map_hgnc, binaryGeneSet ){
 #identifier_mSigDB = mSigDB[,c(1,2)]
 #mSigDB = mSigDB[,c(-1,-2)]
 
-mSigDB = read.table("~/Downloads/c2.all.v5.0.symbols.gmt.txt",header = F, sep ="\t", fill = T)
-mSigDB = read.table("~/Downloads/c2.cp.v5.0.symbols.gmt.txt",header = F, sep ="\t", fill = T)
+mSigDB = read.table(c2.all.v5_gsea_file_path, header = F, sep ="\t", fill = T)
+#mSigDB = read.table("~/Downloads/c2.cp.v5.0.symbols.gmt.txt",header = F, sep ="\t", fill = T)
 
 mSigDB = mSigDB[,-2]
 identifier_mSigDB = rownames(mSigDB)
