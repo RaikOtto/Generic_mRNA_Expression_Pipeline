@@ -62,9 +62,12 @@ run_analysis = function(){
   ### Part Differential Expression
   
   if ( dif_exp_ana ){
-    
+    if ( use_gsea ){
+      source( "Src/gsea.r")
+    } else{
     message( "Running step 8: Differential Expression" )
     source("Src/differential_expression.r")
+    }
   }
   
   ### Part Analysis
