@@ -1,5 +1,3 @@
-message("Running Test-Suite.")
-
 kocent = ( system( 'uname -n', intern = T ) == "kocent" )
 
 if ( kocent ){
@@ -13,17 +11,28 @@ if ( kocent ){
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 default_parameters = T
-which_project = "test_case"
+which_project = "test_hgu133plus2"
 source("project_files.r")
 
 
 ### generic
 stat_design = "contrast"
 
-message( "Checking if all required packages can be loaded:" )
-packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "pd.huex.1.0.st.v2", "lumi", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
-suppressMessages(sapply( packages, require, character.only=TRUE, quietly = TRUE ))
-
+if ( which_project == "test_pd.huex.1.0.st.v2" ){
+  
+  message( "Running test-case for platform pd.huex.1.0.st.v2." )
+  message( "Checking if all required packages can be loaded:" )
+  packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "oligo", "oligoData", "pd.huex.1.0.st.v2", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
+  suppressMessages( sapply( packages, require, character.only=TRUE, quietly = TRUE ) )
+   
+} else if ( which_project == "test_hgu133plus2" ){
+  
+  message( "Running test-case for platform hgu133plus2." )
+  message( "Checking if all required packages can be loaded:" )
+  packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
+  suppressMessages( sapply( packages, require, character.only=TRUE, quietly = TRUE ) )
+  
+}
 
 invisible(source( "Src/set_generic_initial_parameters.r" ) )
 message( "Set generic initial parameters - succesfull" )

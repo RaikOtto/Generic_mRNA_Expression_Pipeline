@@ -4,6 +4,8 @@ if ( chip_type == "hgu133plus2" ){
   
   library("hgu133plus2.db")
   
+  probe_ids = row.names( topall )
+  
   hgnc_genes  = as.character(mget( rownames( topall ) ,hgu133plus2SYMBOL))
   hgnc_names  = as.character(mget( rownames( topall ) ,hgu133plus2GENENAME))
   entrez_genes= as.character(mget( rownames( topall ) ,hgu133plus2ENTREZID))
@@ -18,6 +20,8 @@ if ( chip_type == "hgu133plus2" ){
     "entrez"              = entrez_genes,
     "pathway"             = pathway
   )
+  
+  row.names( topall_res ) = probe_ids
   
   topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
   
