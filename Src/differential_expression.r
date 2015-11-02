@@ -33,8 +33,9 @@ if (stat_design == "contrast"){
     volc_all = topTable( fit, number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
 }
 
-png( paste( output_path, "Output/logFC_vs_1-PValue.png", sep ="/" ), width = 800, height = 800, res = 150  )
-plot( volc_all$logFC,   1-( volc_all$P.Value ))
+dir.create( results_file_path, showWarnings = F)
+png( paste( results_file_path, "logFC_vs_1-PValue.png", sep = "/" ), width = 800, height = 800, res = 150  )
+plot( volc_all$logFC,   1-( volc_all$P.Value ) )
 dev.off()
 
 topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )

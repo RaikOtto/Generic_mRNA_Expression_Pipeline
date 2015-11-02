@@ -21,8 +21,7 @@ source("project_files.r")
 stat_design = "contrast"
 
 message( "Checking if all required packages can be loaded:" )
-#testi = function(x) { library(x, logical.return = T, character.only = TRUE)}
-packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "pd.huex.1.0.st.v2", "lumi", "arrayQualityMetrics", "WriteXLS", "genefilter" )
+packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "pd.huex.1.0.st.v2", "lumi", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
 suppressMessages(sapply( packages, require, character.only=TRUE, quietly = TRUE ))
 
 
@@ -59,7 +58,7 @@ if ( FALSE %in% c(compare_up, compare_down) ){
   #pos_up = which( compare_up %in% FALSE )
   #pos_down = which( compare_down %in% FALSE )
   #pos_down = lapply( pos_down, function(x) x + ( length(topall_res$Probe_ids) - 99 ) ) 
-  message( "Calculated results differ from reference results!" )
+  message( "Calculated results differ from reference results." )
 } else{
   message( "Calculated results are matching reference results." )
 }
