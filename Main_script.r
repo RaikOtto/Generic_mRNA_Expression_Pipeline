@@ -23,7 +23,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "sm_vs_mz_bone"
+which_project = "sm_vs_mz_blood"
 
 source("project_files.r")
 options(error=traceback)
