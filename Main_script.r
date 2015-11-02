@@ -41,7 +41,7 @@ dif_exp_ana       = T # 8
 export_results    = T # 9
 create_pathways   = T # 10
 extract_interest  = T # 11
-annotate_tissue_abbundance = T # 12
+annotate_tissue_abbundance = F # 12
 
 ### generic
 stat_design = "contrast"
