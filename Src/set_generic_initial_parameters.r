@@ -8,11 +8,8 @@ suppressMessages(library("stringr"))
 
 use_gsea = F
 export_eset = F
-if( grepl( "Test_Case_", project_name ) ){
-  output_path = dirname(dirname(cel_files_path))
-} else{
-  output_path = dirname(cel_files_path)
-}
+
+output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
 cel_files_path = sub( x = cel_files_path, "/$", "")
 cpdb_file                   = "CPDB_pathways_genes.tab"
