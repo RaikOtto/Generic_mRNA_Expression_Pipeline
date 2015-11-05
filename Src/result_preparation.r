@@ -88,6 +88,11 @@ if ( chip_type == "hgu133plus2" ){
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
   #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
   
+  if ( filter_topall_res ){
+    topall_res = topall_res[which( topall_res$HGNC_symb != "" ), ]
+    topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
+  }
+
   
   if ( create_heatmaps_genes_of_interest ){
     
@@ -121,7 +126,6 @@ if ( chip_type == "hgu133plus2" ){
       library("gplots")
       heatmap.3( eset_selection, col = m)
     dev.off()
-    
   }
 }
 
