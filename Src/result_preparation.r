@@ -91,6 +91,7 @@ if ( chip_type == "hgu133plus2" ){
   if ( filter_topall_res ){
     topall_res = topall_res[which( topall_res$HGNC_symb != "" ), ]
     topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
+  }
 
   
   if ( create_heatmaps_genes_of_interest ){
