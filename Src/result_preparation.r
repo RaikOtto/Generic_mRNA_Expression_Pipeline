@@ -111,11 +111,15 @@ if ( chip_type == "hgu133plus2" ){
       sep = "/"
     )
     
+    # heatmap.3 
     
-    
+    library("devtools")
+    source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
+    m=colorRampPalette(colors = c("green","black","red"))( 20 )
+
     pdf(pdf_name)
-    library("gplots")
-    heatmap.2( eset_selection )
+      library("gplots")
+      heatmap.3( eset_selection, col = m)
     dev.off()
     
   }

@@ -24,14 +24,14 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "bm_vs_blood_SiCi"
+which_project = "MZ_no_sici"
 
 source("project_files.r")
 options(error=traceback)
 source( "Src/pipeline_structure.r" )
 
 ###
-
+var_filter = T
 create_cohorts    = T # 2
 parse_files       = T # 3
 normalize         = T # 4

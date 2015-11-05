@@ -9,9 +9,10 @@ index = which( colnames(phenodata) == cohorts_type )
 pData( eset )$Group = phenodata[ match( colnames( eset ), phenodata$ID, nomatch = 0 ), index  ]
 eDatSet = eset
 
-if (var_filter ){
-  
-  exprs( eDatSet ) = exprs( varFilter( eDatSet  , var.cutoff = 0.6 ) )
+if ( var_filter ){
+
+  library("genefilter")
+  exprs( eDatSet ) = exprs( varFilter( eDatSet  , var.cutoff = .6 ) )
 }
 
 source("Src/cohort_creation.r")
