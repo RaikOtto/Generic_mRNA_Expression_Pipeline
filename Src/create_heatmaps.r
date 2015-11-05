@@ -1,53 +1,34 @@
 print("Creating heatmaps")
-
-create_heatmap = function( res_int ){
+if ( create_heatmaps_genes_of_interest ){
   
-  library("plotly")
-  res_heat = res_int[,2:dim(res_int)[2]]
+  heatmap_eset = topall_res[, which(colnames(topall_res) %in% c("logFC","HGNC_symb")  )  ]
+  heatmap_eset = heatmap_eset[ heatmap_eset$HGNC_symb != ""  ,]
+  heatmap_eset = heatmap_eset[ order( abs( heatmap_eset$logFC ), decreasing = T ), ]
   
-  #data[ dim(res_int)[1] , data[dim(res_int)[1],] == "Non_Responder" ] = "0"
-  res_heat[ dim(res_int)[1] , res_heat[dim(res_int)[1],] == "Non_Responder" ] = "0"
-  res_heat[ dim(res_int)[1] , res_heat[dim(res_int)[1],] == "Responder" ] = "1"
+  selected_genes = unique(as.character(heatmap_eset$HGNC_symb))[1:heatmap_list_genes_count]
+  eset_selection = exprs(eset)[ which( hgnc_symbols %in% selected_genes)  ,]
+  rownames(eset_selection) = hgnc_symbols[which( hgnc_symbols %in% selected_genes)  ]
   
-  info_row = as.character( res_int[,1 ] )
-  info_col = colnames(res_int)[2:dim(res_int)[2]]
-  
-  res_heat = matrix( as.double( res_heat ), ncol = dim(res_int)[2]-1, nrow = dim(res_int)[1])
-  
-  trace1 = list(
-  
-    z = res_heat,
-    x = info_col,
-    y = info_row,
-    type = "heatmap",
-    showscale = F
+  pdf_name = paste(
+    output_path, 
+    paste0(
+      paste0(
+        "Output/ExpressionSet_",
+        project_name
+      ),
+      "_map.pdf"
+    ),
+    sep = "/"
   )
   
-  data = list( trace1 )
+  # heatmap.3 
   
-  layout = list(
-    
-    title = "test",
-    showlegend = T,
-    autosize = F,
-    showGrid = T,
-    
-    xaxis = list(
-      title = "x"
-    ),
-    yaxis = list(
-      title = "y"
-    ),
-    zaxis = list(
-      title = "z"
-    )
-  )
+  library("devtools")
+  source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
+  m=colorRampPalette(colors = c("green","black","red"))( 20 )
   
-  py <- plotly(username='bioinf', key='azet3sehsg')
-  response <- py$plotly(data, kwargs=list(layout=layout))
-  
-  url <- response$url
-  print(url)
-  system(paste("firefox", url))
-  remove(url)
+  pdf(pdf_name)
+  library("gplots")
+  heatmap.3( eset_selection, col = m)
+  dev.off()
 }
