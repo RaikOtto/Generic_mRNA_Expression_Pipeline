@@ -6,7 +6,9 @@ suppressMessages(library("KEGG.db"))
 suppressMessages(library("pathview"))
 suppressMessages(library("stringr"))
 
-export_eset = T
+use_gsea = F
+export_eset = F
+
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
 cel_files_path = sub( x = cel_files_path, "/$", "")
@@ -16,14 +18,15 @@ tissue_norm_exprs_file_path = paste( pipeline_loc , paste( "Misc" ,tissue_norm_e
 quality_report_path         = paste( output_path, "Output/QC_report" , sep = "/" )
 results_file_path           = paste( output_path, "Output", paste( "Results", project_name, sep ="_"), sep = "/" )
 name_res_file               = paste( results_file_path, paste( "dif_exp_results", "csv", sep ="."), sep = "/" )
-pathway_maps_path           = paste( output_path, "Output", paste( "Results", project_name, sep ="_")  , "pathway_maps_dif_exp", sep ="/" )
+pathway_maps_path           = paste( results_file_path  , "pathway_maps_dif_exp", sep ="/" )
 body_exprs_maps_path        = paste( pipeline_loc, "Misc/HPM_gene_level_epxression_matrix_Kim_et_al_052914.csv", sep ="/" )
 absent_gene_file_path       = paste( cel_files_path, absent_genes_file, sep ="/" )
 tissue_abbundance_res_file  = paste( cel_files_path, "Tissue_abundance_results.csv", sep ="/" )
 kegg_file_path              = paste( cel_files_path , kegg_file, sep ="/")
 cpdb_file_path              = paste( pipeline_loc , paste( "Misc" ,cpdb_file, sep ="/" ) , sep ="/" )
+c2.all.v5_gsea_file_path    = paste( cel_files_path, "c2.all.v5.0.symbols.gmt.txt", sep = "/")
 time_series_res_file_path   = paste( cel_files_path, time_series_res_file, sep ="/")
-entities_of_interest_path   = paste( output_path, "Output", paste( "Results", project_name, sep ="_")  , "Entities_of_interest", sep ="/")
+entities_of_interest_path   = paste( results_file_path, "Entities_of_interest", sep ="/")
 genes_of_interest_file_path = paste( entities_of_interest_path, genes_of_interest_file, sep ="/") 
 user_folder                 = as.character( system("echo $HOME", intern = T) )
 vcf_folder                  = ""
@@ -89,6 +92,10 @@ if ( chip_type == "hgu133plus2" ){
   
   suppressMessages(library("oligoData"))
   suppressMessages(library("pd.huex.1.0.st.v2"))
+  
+} else if ( chip_type == "HumanHT-12.v4" ){
+  
+  suppressMessages(library("lumi"))
   
 } else {
   

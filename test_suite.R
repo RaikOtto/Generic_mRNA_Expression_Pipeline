@@ -1,5 +1,3 @@
-message("Running Test-Suite.")
-
 kocent = ( system( 'uname -n', intern = T ) == "kocent" )
 
 if ( kocent ){
@@ -13,13 +11,28 @@ if ( kocent ){
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
 
 default_parameters = T
-which_project = "test_case"
+which_project = "test_hgu133plus2"
 source("project_files.r")
 
 
 ### generic
 stat_design = "contrast"
 
+if ( which_project == "test_pd.huex.1.0.st.v2" ){
+  
+  message( "Running test-case for platform pd.huex.1.0.st.v2." )
+  message( "Checking if all required packages can be loaded:" )
+  packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "oligo", "oligoData", "pd.huex.1.0.st.v2", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
+  suppressMessages( sapply( packages, require, character.only=TRUE, quietly = TRUE ) )
+   
+} else if ( which_project == "test_hgu133plus2" ){
+  
+  message( "Running test-case for platform hgu133plus2." )
+  message( "Checking if all required packages can be loaded:" )
+  packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly" )
+  suppressMessages( sapply( packages, require, character.only=TRUE, quietly = TRUE ) )
+  
+}
 
 invisible(source( "Src/set_generic_initial_parameters.r" ) )
 message( "Set generic initial parameters - succesfull" )
@@ -47,6 +60,17 @@ message( "Differential expression analysis - succesfull" )
 
 capture.output( suppressMessages( source( "Src/result_preparation.r" ) ), file = 'NUL' )
 message( "Result preparation - succesfull" )
+reference_results = read.table( reference_path, sep = "\t", header = T)
+compare_up = topall_res$Probe_ids[1:100] %in% reference_results$ID[1:100]
+compare_down = topall_res$Probe_ids[( length(topall_res$Probe_ids) - 99 ):( length(topall_res$Probe_ids) )] %in% reference_results$ID[( length(reference_results$ID) - 99 ):( length(reference_results$ID) )]
+if ( FALSE %in% c(compare_up, compare_down) ){
+  #pos_up = which( compare_up %in% FALSE )
+  #pos_down = which( compare_down %in% FALSE )
+  #pos_down = lapply( pos_down, function(x) x + ( length(topall_res$Probe_ids) - 99 ) ) 
+  message( "Calculated results differ from reference results." )
+} else{
+  message( "Calculated results are matching reference results." )
+}
 
 capture.output( suppressMessages( source( "Src/create_pathway_maps.r" )), file = 'NUL' )
 message( "Create pathway maps - succesfull" )
