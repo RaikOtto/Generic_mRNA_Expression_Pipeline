@@ -83,6 +83,38 @@ if ( chip_type == "hgu133plus2" ){
   
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
   #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
+  
+  
+  if ( create_heatmaps_genes_of_interest ){
+    
+    heatmap_eset = topall_res[, which(colnames(topall_res) %in% c("logFC","HGNC_symb")  )  ]
+    heatmap_eset = heatmap_eset[ heatmap_eset$HGNC_symb != ""  ,]
+    heatmap_eset = heatmap_eset[ order( abs( heatmap_eset$logFC ), decreasing = T ), ]
+    
+    selected_genes = unique(as.character(heatmap_eset$HGNC_symb))[1:heatmap_list_genes_count]
+    eset_selection = exprs(eset)[ which( hgnc_symbols %in% selected_genes)  ,]
+    rownames(eset_selection) = hgnc_symbols[which( hgnc_symbols %in% selected_genes)  ]
+    
+    pdf_name = paste(
+      output_path, 
+      paste0(
+        paste0(
+          "Output/ExpressionSet_",
+          project_name
+        ),
+        "_map.pdf"
+      ),
+      sep = "/"
+    )
+    
+    
+    
+    pdf(pdf_name)
+    library("gplots")
+    heatmap.2( eset_selection )
+    dev.off()
+    
+  }
 }
 
 dir.create( results_file_path, showWarnings = F)
@@ -91,3 +123,4 @@ write.xlsx( topall_res, str_replace(str_replace(name_res_file,"~",user_folder),"
 # 
 message( c( "Amount genes higher in Case cohort:", sum( topall_res$logFC >= lfc_exp ) ) )
 message( c( "Amount genes lower in Case cohort:" , sum( topall_res$logFC <= lfc_exp ) ) )
+

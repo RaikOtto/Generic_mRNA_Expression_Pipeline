@@ -60,6 +60,9 @@ if ( chip_type == "hgu133plus2" ){
   featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
+  hgnc_genes = hgnc_symbols
+  hgnc_names = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 3 ) ) )
+  ensembl_genes = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 1 ) ) )
   
 } else if ( chip_type %in% c( "pd.huex.1.0.st.v2" ) ){  
   

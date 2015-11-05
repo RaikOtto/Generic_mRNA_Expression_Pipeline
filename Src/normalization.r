@@ -43,30 +43,28 @@ pData(eset)$Cohort = cohorts_vec[ mapping_cohort_p ]
 
 if( export_eset ){
   
+  print("Exporting eset data")
   source("Src/annotation.r")
-  ensembl_genes = as.character(mget( rownames(eset), hgu133plus2ENSEMBL ))
-  uniprot = as.character(mget( rownames(eset), hgu133plus2UNIPROT ))
-  omim = as.character(mget( rownames(eset), hgu133plus2OMIM ))
-  enzyme = as.character(mget( rownames(eset), hgu133plus2ENZYME ))
-  hgnc_genes  = as.character(mget( rownames( eset ) ,hgu133plus2SYMBOL))
-  entrez_genes= as.character(mget( rownames( eset ) ,hgu133plus2ENTREZID))
-  fdata = data.frame(fData(eset))
-  
-  exprs_values = data.frame(exprs(eset))
   
   expressionSet_out = data.frame(
     
-    "Affy-ID" = fdata,
-    "HGNC" = hgnc_genes,
-    "Entrez" = entrez_genes,
-    "Ensembl" = ensembl_genes,
-    "Uniprot" = uniprot,
-    "Omim" = omim,
-    "Enzyme" = enzyme
+    "Exprs" = as.character(exprs(eset)),
+    "HGNC" = hgnc_genes
     
-    )
+  )
   
-  expressionSet_out = cbind(expressionSet_out, exprs_values)
+  expressionSet_out = expressionSet_out[ expressionSet_out$HGNC!=""  ,]
   
-  write.table(expressionSet_out, file = paste( output_path, "Output/ExpressionSet.txt", sep = "/"), sep = "\t")
+  write.table(
+    expressionSet_out, 
+    file = paste( 
+      output_path, 
+      paste0(
+        paste0
+          ("Output/ExpressionSet_",
+          project_name),".txt"
+      ), 
+    sep = "/"),
+  sep = "\t", row.names = F, quote = F)
+  
 }
