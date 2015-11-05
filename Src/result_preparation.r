@@ -87,6 +87,10 @@ if ( chip_type == "hgu133plus2" ){
   
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
   #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
+  if ( filter_topall_res ){
+    topall_res = topall_res[which( topall_res$HGNC_symb != "" ), ]
+    topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
+  }
 }
 
 dir.create( results_file_path, showWarnings = F)
