@@ -24,7 +24,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "MZ_no_sici"
+which_project = "immuMZ"
 
 source("project_files.r")
 options(error=traceback)
