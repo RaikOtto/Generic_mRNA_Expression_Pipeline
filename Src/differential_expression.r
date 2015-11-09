@@ -4,6 +4,7 @@ if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
   eset = eset[ ! startsWith( rownames(eset), "AFFX-" ), ]
 }
 
+#eset = raw_data
 eset = eset[ , which( colnames(eset) %in% phenodata$ID  ) ]  
 index = which( colnames(phenodata) == cohorts_type )
 pData( eset )$Group = phenodata[ match( colnames( eset ), phenodata$ID, nomatch = 0 ), index  ]
@@ -12,20 +13,20 @@ eDatSet = eset
 if ( var_filter ){
 
   library("genefilter")
-  exprs( eDatSet ) = exprs( varFilter( eDatSet  , var.cutoff = .6 ) )
+  exprs( eDatSet ) = exprs( varFilter( eDatSet ) )
 }
 
 source("Src/cohort_creation.r")
 
 if (stat_design == "contrast"){
     
-    fit = lmFit( eDatSet[ ,c( index_ctrl, index_case )  ], design )
+    fit = lmFit( eDatSet[ ,c( index_case, index_ctrl )  ], design )
   #fit = lmFit( eDatSet[ ,index_cohorts_vec  ], design )
     cont.matrix = makeContrasts( contrast = CASE - CTRL,  levels = design )
     fit = contrasts.fit( fit, cont.matrix )
     fit = eBayes( fit )
     #volc_all = topTable(fit, adjust="fdr", sort.by="B", number = 50000)
-    volc_all = topTable( fit, coef = "contrast", number  = nrow(eDatSet), adjust  ="fdr", p.value = 1, lfc = 0)
+    volc_all = topTable( fit, coef = "contrast", number  = nrow(eDatSet), adjust  ="BH", p.value = 1, lfc = 0)
     
 } else {
     

@@ -82,19 +82,47 @@ if ( chip_type == "hgu133plus2" ){
     "HGNC_names"          = hgnc_names,
     "Probe_ids"           = probe_ids,
     #"entrez"              = entrez,
-    "gene_information"    = topall$geneassignment
+    #"gene_information"    = topall$geneassignment
   )
   
+  row.names( topall_res ) = probe_ids
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
-  #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
   
   if ( filter_topall_res ){
     topall_res = topall_res[which( topall_res$HGNC_symb != "" ), ]
     topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
   }
 
-}
+} else if ( chip_type == "HumanHT-12.v4" ){
+  
+  probe_ids = rownames( topall )
+  
+  index_probes = match( rownames( topall ), rownames(eset), nomatch = 0 )
+  exprs_case = rowMeans( exprs( eset )[ index_probes, index_case ] )
+  exprs_ctrl = rowMeans( exprs( eset )[ index_probes, index_ctrl ] )
+  
+  hgnc_symbols = topall$Symbol
+  
+  topall_res = data.frame(
+    
+    "ID"                  = probe_ids
+    "logFC"               = round( topall$logFC,2 ),
+    "expr_ctrl"           = round( exprs_ctrl, 2  ),
+    "expr_case"           = round( exprs_case, 2  ),
+    "P_Value"             = topall$P.Value,
+    "adj.P.Value"         = topall$adj.P.Value,
+    "HGNC_symb"           = hgnc_symbols,
+    "entrez"              = topall$Entrez_Gene_ID,
+    "AveExpr"             = topall$AveExpr,
+    "t"                   = topall$t,
+    "B"                   = topall$B
+  )
+  
+  row.names( topall_res ) = probe_ids
+  topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
 
+}
+  
 dir.create( results_file_path, showWarnings = F)
 write.xlsx( topall_res, str_replace(str_replace(name_res_file,"~",user_folder),".csv",".xls"), row.names=F )
 

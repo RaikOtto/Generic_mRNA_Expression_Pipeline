@@ -14,7 +14,7 @@ if ( create_heatmaps_genes_of_interest  ){
 if ( ! exists("hgnc_symbols"))
   source("Src/annotation.r")
 
-topall     = exprs(eset)
+topall     = exprs(eDatSet)
 
 exprs_case = rowMeans(topall[,index_case])
 exprs_ctrl = rowMeans(topall[,index_ctrl])
@@ -24,7 +24,7 @@ topall = cbind(
   round( dif_exp, 2 ),
   round( exprs_case, 2),
   round( exprs_ctrl, 2),
-  exprs(eset)
+  exprs(eDatSet)
 )
 
 colnames(topall)[1] = "logFC"
@@ -73,8 +73,8 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
       
       for (map in mapping){
         
-        exprs_case = round( mean( exprs(eset)[ map, index_case]),2 )
-        exprs_ctrl = round( mean( exprs(eset)[ map, index_ctrl]),2 )
+        exprs_case = round( mean( exprs(eDatSet)[ map, index_case]),2 )
+        exprs_ctrl = round( mean( exprs(eDatSet)[ map, index_ctrl]),2 )
         dif_exp = round( exprs_case - exprs_ctrl, 2)
         
         res_ctrl = c( res_ctrl, exprs_ctrl )
@@ -184,13 +184,13 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
       gene_list     = unlist( str_split( genes, "," ) )
       mapping_gene  = match( gene_list, as.character( hgnc_symbols), nomatch = 0 )
       
-      exprs_genes = exprs(eset)[mapping_gene,]
+      exprs_genes = exprs(eDatSet)[mapping_gene,]
       exprs_case = round( rowMeans( exprs_genes[,index_case]),2 )
       exprs_ctrl = round( rowMeans( exprs_genes[,index_ctrl]),2 )
       dif_exp = round( exprs_case - exprs_ctrl, 2)
       
-      exprs_genes = cbind( as.double( dif_exp ), as.double( exprs_ctrl), as.double( exprs_case), hgnc_symbols[mapping_gene] , round(exprs(eset)[mapping_gene,],2) )
-      colnames(exprs_genes) =  c( "logFC" , "expr_ctrl", "expr_case", "hgnc_symbol", colnames(eset))
+      exprs_genes = cbind( as.double( dif_exp ), as.double( exprs_ctrl), as.double( exprs_case), hgnc_symbols[mapping_gene] , round(exprs(eDatSet)[mapping_gene,],2) )
+      colnames(exprs_genes) =  c( "logFC" , "expr_ctrl", "expr_case", "hgnc_symbol", colnames(eDatSet))
       exprs_genes = exprs_genes[ order( as.double(exprs_genes[,1]), decreasing = T  ),]
       
       if ( integrate_drug_data  ){
