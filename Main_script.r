@@ -30,12 +30,13 @@ source("project_files.r")
 options(error=traceback)
 source( "Src/pipeline_structure.r" )
 
-###
+
+### MZ_SM_all, MZlike_all, SM_all, SM_MZ_no_sici, MZ_no_sici, SM_no_sici
 var_filter = F
-create_cohorts    = F # 2
+create_cohorts    = T # 2
 parse_files       = T # 3
 normalize         = F # 4
-qc_control        = F # 5
+qc_control        = T # 5
 annotate          = F # 6
 absent_analysis   = F # 7
 dif_exp_ana       = F # 8

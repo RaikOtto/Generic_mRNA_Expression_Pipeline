@@ -1,34 +1,104 @@
 print("Creating heatmaps")
 if ( create_heatmaps_genes_of_interest ){
   
-  heatmap_eset = topall_res[, which(colnames(topall_res) %in% c("logFC","HGNC_symb")  )  ]
-  heatmap_eset = heatmap_eset[ heatmap_eset$HGNC_symb != ""  ,]
-  heatmap_eset = heatmap_eset[ order( abs( heatmap_eset$logFC ), decreasing = T ), ]
+  cutoff = sort(abs( topall_res$logFC ), decreasing = T)[heatmap_list_genes_count]
+  probe_ids = rownames(topall_res)[ abs( topall_res$logFC ) >= cutoff ]
+  hgnc_ids  = topall_res$HGNC_symb[ abs( topall_res$logFC ) >= cutoff ]
+  eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
   
-  selected_genes = unique(as.character(heatmap_eset$HGNC_symb))[1:heatmap_list_genes_count]
-  eset_selection = exprs(eset)[ which( hgnc_symbols %in% selected_genes)  ,]
-  rownames(eset_selection) = hgnc_symbols[which( hgnc_symbols %in% selected_genes)  ]
+  dif = as.double(rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
+  
+  rownames( eset_selection) = hgnc_ids
+  eset_selection = eset_selection[,  order(order(c(index_ctrl,index_case))) ]
+  eset_selection_dif = eset_selection - rowMeans( eset_selection )
+  
+  eset_selection_dif = eset_selection_dif[ order(dif, decreasing = F), ]
   
   pdf_name = paste(
     output_path, 
     paste0(
       paste0(
-        "Output/ExpressionSet_",
-        project_name
+        "Output/",
+        paste0( "Results_",project_name)
       ),
-      "_map.pdf"
+      "/heatmap.pdf"
     ),
     sep = "/"
   )
   
   # heatmap.3 
   
+  logFC_side_bar = t(
+    c(
+      colorRampPalette(colors = c("red"))( length( dif[ dif < 0 ]) ),
+      colorRampPalette(colors = c("green"))( length( dif[ dif > 0 ]) )
+    )
+  )
+  rownames(logFC_side_bar) = c("FoldChange")
   library("devtools")
   source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
-  m=colorRampPalette(colors = c("green","black","red"))( 20 )
+  m=colorRampPalette(colors = c("green","black","red"))( 75 )
   
   pdf(pdf_name)
-  library("gplots")
-  heatmap.3( eset_selection, col = m)
+    
+    heatmap.3( 
+      eset_selection,
+      main = paste0( "Sample exprs and logFC ", project_name ),
+      #main = paste0( "Dif sample to avg expr all ", project_name ),
+      RowSideColors = logFC_side_bar,
+      col = m,
+      trace = NULL,
+      Colv = F,
+      Rowv = F,
+      dendrogram = "none" ,
+      margins = c(9,7),
+      cexCol = .75,
+      cexRow = .75
+    )
+  dev.off()
+  
+  ### dif darstellung
+  
+  pdf_name = paste(
+    output_path, 
+    paste0(
+      paste0(
+        "Output/",
+        paste0( "Results_",project_name)
+      ),
+      "/heatmap_difference_overall_expression.pdf"
+    ),
+    sep = "/"
+  )
+  
+  # heatmap.3 
+  
+  logFC_side_bar = t(
+    c(
+      colorRampPalette(colors = c("red"))( length( dif[ dif < 0 ]) ),
+      colorRampPalette(colors = c("green"))( length( dif[ dif > 0 ]) )
+    )
+  )
+  rownames(logFC_side_bar) = c("FoldChange")
+  library("devtools")
+  source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
+  m=colorRampPalette(colors = c("green","black","red"))( 75 )
+  
+  pdf(pdf_name)
+  
+  heatmap.3( 
+    eset_selection_dif,
+    main = paste0( "Sample exprs and logFC ", project_name ),
+    #main = paste0( "Dif sample to avg expr all ", project_name ),
+    RowSideColors = logFC_side_bar,
+    col = m,
+    trace = NULL,
+    Colv = F,
+    Rowv = F,
+    dendrogram = "none" ,
+    margins = c(9,7),
+    cexCol = .75,
+    cexRow = .75
+  )
   dev.off()
 }

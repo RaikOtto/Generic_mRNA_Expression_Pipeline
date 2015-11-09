@@ -1,12 +1,11 @@
 library("WriteXLS")
-
 library("stringr")
-
+hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
 dir.create( entities_of_interest_path, showWarnings = F)
 source("Src/cohort_creation.r")
 
 if ( create_heatmaps_genes_of_interest  ){
-  links_heatmaps = c()
+
   source("Src/create_heatmaps.r")
 }
 
@@ -14,40 +13,26 @@ if ( create_heatmaps_genes_of_interest  ){
 if ( ! exists("hgnc_symbols"))
   source("Src/annotation.r")
 
-topall     = exprs(eDatSet)
 
-exprs_case = rowMeans(topall[,index_case])
-exprs_ctrl = rowMeans(topall[,index_ctrl])
+expr_data  = exprs(eset)
+
+
+exprs_case = rowMeans( expr_data[,index_case] )
+exprs_ctrl = rowMeans( expr_data[,index_ctrl] )
 dif_exp    = exprs_case - exprs_ctrl
 
-topall = cbind(
+expr_data = cbind(
   round( dif_exp, 2 ),
   round( exprs_case, 2),
   round( exprs_ctrl, 2),
-  exprs(eDatSet)
+  expr_data
+
 )
 
-colnames(topall)[1] = "logFC"
-colnames(topall)[2] = "Expr_case"
-colnames(topall)[3] = "Expr_ctrl"
-topall = as.data.frame(topall)
-
-split_fun = function( entry ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[2] ) } else{ return( "" ) } }
-split_fun_ensembl = function( entry ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[1] ) } else{ return( "" ) } }
-
-if ( chip_type == "hgu133plus2" ){
-  
-  hgnc_symbols = mget( rownames(eset), hgu133plus2SYMBOL ); hgnc_symbols[ is.na(hgnc_symbols)  ] = ""
-  
-} else if ( chip_type == "hgu133a" ){
-  
-  hgnc_symbols = mget( rownames(eset), hgu133aSYMBOL ); hgnc_symbols[ is.na(hgnc_symbols)  ] = ""
-  
-} else {
-  
-  hgnc_symbols = str_trim( unlist( lapply( fData(eset)$geneassignment , FUN = split_fun ) ) )
-  ensembl_list = str_trim( unlist( lapply( fData(eset)$geneassignment , FUN = split_fun_ensembl ) ) )
-}
+colnames(expr_data)[1] = "logFC"
+colnames(expr_data)[2] = "Expr_case"
+colnames(expr_data)[3] = "Expr_ctrl"
+expr_data = as.data.frame(expr_data)
 
 kegg_t = read.table( kegg_file_path, header =T , sep ="," )
 cpdb_t = read.table( cpdb_file_path, header =T , sep ="\t", fill = T )
@@ -60,44 +45,46 @@ interesting_pathways_table_kegg_id = cpdb_t[ interesting_pathways_mapping ,]
 
 if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   
-  res_gene = c()
-  res_ctrl = c()
-  res_case = c()
-  res_val  = c()
+  selection = as.character( unique( kegg_t$Gene_id_hgnc ) )
+  selection = selection[ selection != ""  ]
   
-  for (gene in unique( kegg_t$Gene_id_hgnc )){
-    
-    if ( (gene != "") & (! is.na(gene))  ){ 
-      
-      mapping = which( hgnc_symbols %in% gene )
-      
-      for (map in mapping){
+  mapping = which( hgnc_symbols %in% selection)
+  gene_ids = hgnc_symbols[hgnc_symbols %in% selection]
         
-        exprs_case = round( mean( exprs(eDatSet)[ map, index_case]),2 )
-        exprs_ctrl = round( mean( exprs(eDatSet)[ map, index_ctrl]),2 )
-        dif_exp = round( exprs_case - exprs_ctrl, 2)
-        
-        res_ctrl = c( res_ctrl, exprs_ctrl )
-        res_case = c( res_case, exprs_case )
-        res_gene = c(res_gene, gene)
-        res_val = c( res_val, dif_exp)
-      }
-    }
-    
-  }
+  exprs_case = exprs(eset)[mapping,index_case]
+  exprs_ctrl = exprs(eset)[mapping,index_ctrl]
+  dif = rowMeans( exprs_case ) - rowMeans(exprs_ctrl)
   
-  genes = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""  ]
-  mapping = which( hgnc_symbols %in% genes )
+  exprs_case = round( exprs_case,2 )
+  exprs_ctrl = round( exprs_ctrl,2 )
+  dif = round( dif,2 )
   
-  sample_expression = as.matrix( exprs(eset)[ mapping ,])
+  sample_expression = cbind(exprs_ctrl,exprs_case)
   
   if (dim(sample_expression)[2] == 1){
     
     sample_expression = t(sample_expression)
   }
   
-  res_int = cbind(res_gene,res_val,res_ctrl, res_case, round( sample_expression, 2))
-  colnames(res_int) =  c( "hgnc_symbol", "logFC" , "expr_ctrl", "expr_case", colnames(eset))
+  res_int = cbind(
+    as.double( dif),
+    as.double( round( rowMeans(exprs_ctrl),2 )), 
+    as.double( round( rowMeans( exprs_case ), 2 )), 
+    sample_expression
+  )
+  
+  colnames(res_int) =  c( 
+    "logFC", 
+    "expr_ctrl",
+    "expr_case", 
+    c(
+      colnames(eset)[index_ctrl],
+      colnames(eset)[index_case]
+    )
+  )
+
+  res_int = cbind(  gene_ids,res_int)
+  colnames( res_int )[1] = "HGNC_symbol"
   res_int = res_int[ order( as.double(res_int[,2]), decreasing = T  ),]
   
   if ( integrate_drug_data  ){
@@ -156,9 +143,6 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     res_int = cbind( res_int[ ,1:4], cor_pearson, cor_spearman, res_int[ , 5:dim(res_int)[2]  ] )
   }
   
-  if (exists("links_heatmaps"))
-    links_heatmaps = c( links_heatmaps, create_heatmap(res_int)  )
-  
   write.xlsx( res_int, str_replace(str_replace(genes_of_interest_file_path,"~",user_folder),".csv",".xls"), row.names=F )
 }
 ### pathways
@@ -179,7 +163,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
     if (pathway_id != ""){
       
       pathway_name  = as.character( kegg_t$Kegg_name[ i ] )
-      pathway_name = str_replace(pathway_name,"/","and")
+      pathway_name  = str_replace(pathway_name,"/","and")
       genes         = cpdb_t$hgnc_symbol_ids[ i ]
       gene_list     = unlist( str_split( genes, "," ) )
       mapping_gene  = match( gene_list, as.character( hgnc_symbols), nomatch = 0 )

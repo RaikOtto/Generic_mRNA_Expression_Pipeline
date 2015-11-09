@@ -7,7 +7,6 @@ if (exists("eset")){
   } else {
     p_data = phenodata$ID
   }
-  
 }
 
 rownames( pData( raw_data ) ) = base::gsub( c(".gz|.CEL|.cel|.GZ"), "", rownames( pData(raw_data) ) ) # the reason is to assure, that no .gz or .CEL ending is present when we add it
