@@ -58,27 +58,15 @@ if ( chip_type == "hgu133plus2" ){
   exprs_ctrl = rowMeans( exprs( eset )[ index_probes, index_ctrl ] )
   
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
-  #map=which( rownames(eset) %in% topall$probesetid )
-  hgnc_symbols = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 2 ) ) )
+  hgnc_ids = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 2 ) ) )
   hgnc_names = str_trim( unlist( lapply( topall$geneassignment, FUN=split_fun, 3 ) ) )
-  
-  #library("biomaRt")
-
-  #ensembl     = useMart("ensembl",dataset="hsapiens_gene_ensembl")
-  #entrez  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols), filters = "hgnc_symbol" , mart = ensembl)[1]
-
-  #hgnc_map    = match( hgnc_symbols, entrez_ids$hgnc_symbol  , nomatch = 0 )
-  #entrez      = hgnc_symbols
-  #entrez[ entrez != ""  ] = ""
-  #entrez[ which( hgnc_symbols %in%  entrez_ids$hgnc_symbol ) ] = entrez_ids$entrezgene[ hgnc_map ]
-  #entrez[ is.na(entrez) ] = ""
     
   topall_res = data.frame(
     "logFC"               = round( topall$logFC,2 ),
     "expr_ctrl"           = round( exprs_ctrl, 2  ),
     "expr_case"           = round( exprs_case, 2  ),
-    "P_Value"             = topall$P.Value,
-    "HGNC_symb"           = hgnc_symbols,
+    "P_Value"      = topall$P.Value,
+    "HGNC_symb"           = hgnc_ids,
     "HGNC_names"          = hgnc_names,
     "Probe_ids"           = probe_ids,
     #"entrez"              = entrez,
@@ -89,7 +77,7 @@ if ( chip_type == "hgu133plus2" ){
   #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
   
   if ( filter_topall_res ){
-    topall_res = topall_res[which( topall_res$HGNC_symb != "" ), ]
+    topall_res = topall_res[ which( topall_res$HGNC_symb != "" ), ]
     topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
   }
 
