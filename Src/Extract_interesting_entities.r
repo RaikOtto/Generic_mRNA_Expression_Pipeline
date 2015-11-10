@@ -13,19 +13,21 @@ if ( create_heatmaps_genes_of_interest  ){
 if ( ! exists("hgnc_symbols"))
   source("Src/annotation.r")
 
+if( chip_type == "HumanHT-12.v4" ){
+  expr_data_fix = eset_select
+} else{
+  expr_data_fix  = exprs(eset)
+}
 
-expr_data  = exprs(eset)
-
-
-exprs_case = rowMeans( expr_data[,index_case] )
-exprs_ctrl = rowMeans( expr_data[,index_ctrl] )
+exprs_case = rowMeans( expr_data_fix[,index_case] )
+exprs_ctrl = rowMeans( expr_data_fix[,index_ctrl] )
 dif_exp    = exprs_case - exprs_ctrl
 
 expr_data = cbind(
   round( dif_exp, 2 ),
   round( exprs_case, 2),
   round( exprs_ctrl, 2),
-  expr_data
+  expr_data_fix
 
 )
 
@@ -51,8 +53,8 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   mapping = which( hgnc_symbols %in% selection)
   gene_ids = hgnc_symbols[hgnc_symbols %in% selection]
         
-  exprs_case = exprs(eset)[mapping,index_case]
-  exprs_ctrl = exprs(eset)[mapping,index_ctrl]
+  exprs_case = expr_data_fix[mapping,index_case]
+  exprs_ctrl = expr_data_fix[mapping,index_ctrl]
   dif = rowMeans( exprs_case ) - rowMeans(exprs_ctrl)
   
   exprs_case = round( exprs_case,2 )
@@ -83,7 +85,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     )
   )
 
-  res_int = cbind(  gene_ids,res_int)
+  res_int = cbind.data.frame(  gene_ids,res_int)
   colnames( res_int )[1] = "HGNC_symbol"
   res_int = res_int[ order( as.double(res_int[,2]), decreasing = T  ),]
   
@@ -143,7 +145,7 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
     res_int = cbind( res_int[ ,1:4], cor_pearson, cor_spearman, res_int[ , 5:dim(res_int)[2]  ] )
   }
   
-  write.xlsx( res_int, str_replace(str_replace(genes_of_interest_file_path,"~",user_folder),".csv",".xls"), row.names=F )
+  write.xlsx( res_int, str_replace(str_replace(genes_of_interest_file_path,"~",user_folder),".csv",".xls"), row.names=T )
 }
 ### pathways
 
@@ -168,13 +170,13 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
       gene_list     = unlist( str_split( genes, "," ) )
       mapping_gene  = match( gene_list, as.character( hgnc_symbols), nomatch = 0 )
       
-      exprs_genes = exprs(eDatSet)[mapping_gene,]
+      exprs_genes = expr_data_fix[mapping_gene,]
       exprs_case = round( rowMeans( exprs_genes[,index_case]),2 )
       exprs_ctrl = round( rowMeans( exprs_genes[,index_ctrl]),2 )
       dif_exp = round( exprs_case - exprs_ctrl, 2)
       
-      exprs_genes = cbind( as.double( dif_exp ), as.double( exprs_ctrl), as.double( exprs_case), hgnc_symbols[mapping_gene] , round(exprs(eDatSet)[mapping_gene,],2) )
-      colnames(exprs_genes) =  c( "logFC" , "expr_ctrl", "expr_case", "hgnc_symbol", colnames(eDatSet))
+      exprs_genes = cbind.data.frame( as.double( dif_exp ), as.double( exprs_ctrl ), as.double( exprs_case ), hgnc_symbols[ mapping_gene ] , round(expr_data_fix[ mapping_gene, ],2 ) )
+      colnames(exprs_genes) =  c( "logFC" , "expr_ctrl", "expr_case", "hgnc_symbol", colnames(expr_data_fix ) )
       exprs_genes = exprs_genes[ order( as.double(exprs_genes[,1]), decreasing = T  ),]
       
       if ( integrate_drug_data  ){
@@ -238,7 +240,7 @@ if ( ! is.null( kegg_t$Kegg_id ) ){
       file_name = str_replace( genes_of_interest_file_path, "genes_of_interest", paste( pathway_id, pathway_name, sep ="_")  )
       message(c(i,file_name))
       
-      write.xlsx( exprs_genes, str_replace(str_replace(file_name,"~",user_folder),".csv",".xls"), row.names=F )
+      write.xlsx( exprs_genes, str_replace(str_replace(file_name,"~",user_folder),".csv",".xls"), row.names=T )
       
     }
   }

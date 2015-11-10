@@ -41,7 +41,7 @@ dir.create( results_file_path, showWarnings = F)
 #plot( volc_all$logFC,   1-( volc_all$P.Value ) )
 #dev.off()
 
-topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )
+topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = 3 )
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")

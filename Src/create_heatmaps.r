@@ -2,8 +2,10 @@ print("Creating heatmaps")
 if ( create_heatmaps_genes_of_interest ){
   
   cutoff = sort(abs( topall_res$logFC ), decreasing = T)[heatmap_list_genes_count]
-  probe_ids = rownames(topall_res)[ abs( topall_res$logFC ) >= cutoff ]
-  hgnc_ids  = topall_res$HGNC_symb[ abs( topall_res$logFC ) >= cutoff ]
+  #probe_ids = rownames(topall_res)[ abs( topall_res$logFC ) >= cutoff ]
+  probe_ids = topall_res$ID[ abs( topall_res$logFC ) >= cutoff ]
+  hgnc_ids  = topall_res$Gene.symbol[ abs( topall_res$logFC ) >= cutoff ]
+  #hgnc_ids  = topall_res$HGNC_symb[ abs( topall_res$logFC ) >= cutoff ]
   eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
   
   dif = as.double(rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
