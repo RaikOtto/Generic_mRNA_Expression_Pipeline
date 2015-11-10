@@ -70,19 +70,29 @@ if ( chip_type == "hgu133plus2" ){
     "HGNC_names"          = hgnc_names,
     "Probe_ids"           = probe_ids,
     #"entrez"              = entrez,
-    "gene_information"    = topall$geneassignment
+    #"gene_information"    = topall$geneassignment
   )
   
+  row.names( topall_res ) = probe_ids
   topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
-  #topall_res = topall_res[ topall_res$HGNC_symb != "" ,]
   
   if ( filter_topall_res ){
     topall_res = topall_res[ which( topall_res$HGNC_symb != "" ), ]
     topall_res = topall_res[-which( grepl( "microRNA", topall_res$HGNC_names ) ),]
   }
 
+} else if ( chip_type == "HumanHT-12.v4" ){
+  
+  gpl = annotation(eDatSet)
+  platf = getGEO( gpl, AnnotGPL = T )
+  ncbifd = data.frame( attr( dataTable( platf ), "table" ) )
+  
+  topall_res = topall[ setdiff( colnames( topall ), setdiff( fvarLabels(eDatSet), "ID" ) ) ]
+  topall_res = merge( topall_res, ncbifd, by = "ID" )
+  topall_res = topall_res[ order( topall_res$logFC, decreasing = T ), ]
+  
 }
-
+  
 dir.create( results_file_path, showWarnings = F)
 write.xlsx( topall_res, str_replace(str_replace(name_res_file,"~",user_folder),".csv",".xls"), row.names=F )
 

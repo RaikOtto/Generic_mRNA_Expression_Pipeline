@@ -97,6 +97,7 @@ if ( chip_type == "hgu133plus2" ){
 } else if ( chip_type == "HumanHT-12.v4" ){
   
   suppressMessages(library("lumi"))
+  suppressMessages(library("GEOquery"))
   
 } else {
   

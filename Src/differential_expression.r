@@ -4,6 +4,7 @@ if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
   eset = eset[ ! startsWith( rownames(eset), "AFFX-" ), ]
 }
 
+#eset = raw_data
 eset = eset[ , which( colnames(eset) %in% phenodata$ID  ) ]  
 index = which( colnames(phenodata) == cohorts_type )
 pData( eset )$Group = phenodata[ match( colnames( eset ), phenodata$ID, nomatch = 0 ), index  ]
@@ -12,7 +13,8 @@ eDatSet = eset
 if ( var_filter ){
 
   library("genefilter")
-  exprs( eDatSet ) = exprs( varFilter( eDatSet, require.entrez = F ) )
+  exprs( eDatSet ) = exprs( varFilter( eDatSet ) )
+
 }
 
 source("Src/cohort_creation.r")
@@ -20,6 +22,7 @@ fit = lmFit( eDatSet[ ,  ], design )
 
 if (stat_design == "contrast"){
     
+    #fit = lmFit( eDatSet[ ,c( index_case, index_ctrl )  ], design )
   #fit = lmFit( eDatSet[ ,index_cohorts_vec  ], design )
     cont.matrix = makeContrasts( contrast = CASE - CTRL,  levels = design )
     fit = contrasts.fit( fit, cont.matrix )
@@ -38,7 +41,7 @@ dir.create( results_file_path, showWarnings = F)
 #plot( volc_all$logFC,   1-( volc_all$P.Value ) )
 #dev.off()
 
-topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )
+topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = 3 )
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")

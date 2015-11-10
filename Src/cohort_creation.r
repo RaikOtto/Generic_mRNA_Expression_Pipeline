@@ -41,14 +41,18 @@ if ( !( quality_control_only )  ){
   
 }
 
-#index_ctrl2 = as.integer( which( phenodata$Group == "NORMAL") )
-#index_case2 = as.integer( which( phenodata$Group == "NET" ) )
+if( chip_type == "HumanHT-12.v4" ){
+  
+  index_ctrl2 = as.integer( which( phenodata$Group == "NORMAL") )
+  index_case2 = as.integer( which( phenodata$Group == "NET" ) )
+
+}
 
 index_ctrl = as.integer( which( design[ ,colnames(design) == "CTRL" ] == 1 ) )
 index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
 
 #if (exists("raw_data")){
-if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
+if( ! ("Group" %in% colnames(pData( raw_data ) ) ) & chip_type != "HumanHT-12.v4" ) {
   
   raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
   raw_data_group_vec[  index_ctrl ] = "CTRL"
@@ -56,12 +60,16 @@ if( ! ("Group" %in% colnames(pData( raw_data ) ) ) ) {
   pData(raw_data) = cbind( pData(raw_data), raw_data_group_vec )
   raw_data_group_vec = raw_data_group_vec[which(raw_data_group_vec != "")]
   colnames(pData(raw_data))[-1] = "Group"
-  #raw_data = raw_data[,pData(raw_data)$Group!=""]
-  
-  #eset = eset[ , c( index_ctrl2, index_case2 )  ]
-  #eset$Group = raw_data_group_vec
-  #design <- model.matrix(~ Group + 0, eset)
-  #colnames(design) = c("CASE", "CTRL")
+
+} else if( chip_type == "HumanHT-12.v4"){
+ 
+  raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
+  raw_data_group_vec[  index_ctrl2 ] = "CTRL"
+  raw_data_group_vec[  index_case2 ] = "CASE"
+  pData(raw_data)$Cohorts = raw_data_group_vec
+  raw_data_group_vec = raw_data_group_vec[which(raw_data_group_vec != "")]
+  eset = raw_data
+  eset = eset[ , c( index_case2, index_ctrl2 )  ]
 }
 #}
 
