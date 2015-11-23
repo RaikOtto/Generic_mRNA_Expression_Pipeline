@@ -93,7 +93,7 @@ if ( chip_type == "hgu133plus2" ){
   
   topall_res = data.frame(
     
-    "ID"                  = probe_ids
+    "ID"                  = probe_ids,
     "logFC"               = round( topall$logFC,2 ),
     "expr_ctrl"           = round( exprs_ctrl, 2  ),
     "expr_case"           = round( exprs_case, 2  ),

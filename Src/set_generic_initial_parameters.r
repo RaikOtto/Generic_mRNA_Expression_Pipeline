@@ -9,6 +9,7 @@ suppressMessages(library("stringr"))
 use_gsea = F
 export_eset = F
 filter_topall_res = T
+create_heatmaps_genes_of_interest = T
 
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
