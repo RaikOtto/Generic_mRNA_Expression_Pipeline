@@ -31,7 +31,7 @@ GSEA(                                                                      # Inp
                                                                            doc.string            = " SM_MZ_BM_all_vs_SM_MZ_Blood_all_GSEA",     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
                                                                            non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
                                                                            reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
-                                                                           nperm                 = 100,            # Number of random permutations (default: 1000)
+                                                                           nperm                 = 1000,            # Number of random permutations (default: 1000)
                                                                            weighted.score.type   =  1,              # Enrichment correlation-based weighting: 0=no weight (KS), 1= weigthed, 2 = over-weigthed (default: 1)
                                                                            nom.p.val.threshold   = -1,              # Significance threshold for nominal p-vals for gene sets (default: -1, no thres)
                                                                            fwer.p.val.threshold  = -1,              # Significance threshold for FWER p-vals for gene sets (default: -1, no thres)
