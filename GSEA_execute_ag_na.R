@@ -12,6 +12,8 @@ if ( kocent ){
 
 setwd( pipeline_loc )
 
+cel_files_path = paste(pipeline_loc, "Project_files/ag_na_GSEA/Input", sep = "/")
+
 output_path = paste( pipeline_loc, "Project_files/ag_na_GSEA/Output", sep = "/" )
 dir.create(output_path)
 
