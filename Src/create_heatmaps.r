@@ -3,7 +3,8 @@ if ( create_heatmaps_genes_of_interest ){
 
   if ( use_kegg_for_heatmap ){
 
-    mapping   = which( hgnc_symbols %in% as.character(kegg_t$Gene_id_hgnc) )
+    gene_source_kegg = kegg_t$Heatmap[ kegg_t$Heatmap != ""]
+    mapping   = which( hgnc_symbols %in% as.character(gene_source_kegg) )
 
     probe_ids = rownames( exprs( eset ))[ mapping ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
@@ -103,7 +104,7 @@ if ( create_heatmaps_genes_of_interest ){
   rownames(logFC_side_bar) = c("FoldChange")
   library("devtools")
   source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
-  m=colorRampPalette(colors = c("green","black","red"))( 75 )
+  m = colorRampPalette(colors = c("green","black","red"))( 75 )
 
   pdf(pdf_name)
 

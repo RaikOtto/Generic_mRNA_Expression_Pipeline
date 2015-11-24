@@ -24,7 +24,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "MZ_SM_all"
+which_project = "hnsc"
 
 source("project_files.r")
 options(error=traceback)
@@ -39,10 +39,10 @@ create_heatmaps_genes_of_interest = T
 use_kegg_for_heatmap = T
 
 create_cohorts    = T # 2
-parse_files       = T # 3
-normalize         = T # 4
+parse_files       = F # 3
+normalize         = F # 4
 qc_control        = F # 5
-annotate          = T # 6
+annotate          = F # 6
 absent_analysis   = F # 7
 dif_exp_ana       = T # 8
 export_results    = T # 9

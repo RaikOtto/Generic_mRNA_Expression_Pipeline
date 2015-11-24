@@ -1,6 +1,7 @@
 library("WriteXLS")
 library("stringr")
 
+split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
 hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
 dir.create( entities_of_interest_path, showWarnings = F)
 source("Src/cohort_creation.r")
