@@ -10,6 +10,8 @@ use_gsea = F
 export_eset = F
 filter_topall_res = T
 
+use_kegg_for_heatmap = F
+
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
 cel_files_path = sub( x = cel_files_path, "/$", "")

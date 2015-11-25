@@ -1,10 +1,11 @@
 print("Creating heatmaps")
-if ( create_heatmaps_genes_of_interest ){
 
+if ( create_heatmaps_genes_of_interest ){
+  
   if ( use_kegg_for_heatmap ){
 
     gene_source_kegg = kegg_t$Heatmap[ kegg_t$Heatmap != ""]
-    mapping   = which( hgnc_symbols %in% as.character(gene_source_kegg) )
+    mapping   = which( as.character( hgnc_symbols ) %in% as.character(gene_source_kegg) )
 
     probe_ids = rownames( exprs( eset ))[ mapping ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
@@ -16,13 +17,13 @@ if ( create_heatmaps_genes_of_interest ){
 
     cutoff = sort(abs( topall_res$logFC ), decreasing = T)[heatmap_list_genes_count]
 
-    probe_ids = topall_res$Probe_ids[ abs( topall_res$logFC ) >= cutoff ]
-    hgnc_ids  = topall_res$Gene.symbol[ abs( topall_res$logFC ) >= cutoff ]
+    probe_ids = rownames( topall_res)[ abs( topall_res$logFC ) >= cutoff ]
+    hgnc_ids  = topall_res$HGNC_symb[ abs( topall_res$logFC ) >= cutoff ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
     rownames( eset_selection) = hgnc_ids
   }
 
-  dif = as.double(rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
+  dif = as.double( rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
 
   eset_selection = eset_selection[,  order(order(c(index_ctrl,index_case))) ]
   eset_selection_dif = eset_selection - rowMeans( eset_selection )
@@ -32,9 +33,10 @@ if ( create_heatmaps_genes_of_interest ){
 
   ## filter for uniques
 
-  eset_selection = eset_selection[match(unique(rownames(eset_selection)),rownames(eset_selection)),]
-  eset_selection_dif = eset_selection_dif[match(unique(rownames(eset_selection_dif)),rownames(eset_selection_dif)),]
-  dif = as.double(rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
+  unique_mapping = match( unique( rownames( eset_selection ) ), rownames( eset_selection ) )
+  eset_selection = eset_selection[ unique_mapping,]
+  eset_selection_dif = eset_selection_dif[ unique_mapping,]
+  dif = as.double( rowMeans( eset_selection[ , index_ctrl ] ) - rowMeans( eset_selection[ , index_case]))
 
   pdf_name = paste(
     output_path,
@@ -53,6 +55,7 @@ if ( create_heatmaps_genes_of_interest ){
   logFC_side_bar = t(
     c(
       colorRampPalette(colors = c("red"))( length( dif[ dif < 0 ]) ),
+      colorRampPalette(colors = c("yellow"))( length( dif[ dif == 0 ]) ),
       colorRampPalette(colors = c("green"))( length( dif[ dif > 0 ]) )
     )
   )
@@ -94,17 +97,6 @@ if ( create_heatmaps_genes_of_interest ){
   )
 
   # heatmap.3
-
-  logFC_side_bar = t(
-    c(
-      colorRampPalette(colors = c("red"))( length( dif[ dif < 0 ]) ),
-      colorRampPalette(colors = c("green"))( length( dif[ dif > 0 ]) )
-    )
-  )
-  rownames(logFC_side_bar) = c("FoldChange")
-  library("devtools")
-  source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
-  m = colorRampPalette(colors = c("green","black","red"))( 75 )
 
   pdf(pdf_name)
 

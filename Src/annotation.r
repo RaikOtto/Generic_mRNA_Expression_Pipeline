@@ -19,6 +19,10 @@ if ( chip_type == "hgu133plus2" ){
     
   } else {
     
+    hgnc_symbols_hgu = select(hgu133plus2.db,featureNames( eset  ),"SYMBOL")
+    colnames( hgnc_symbols_hgu )[2] = "geneassignment"
+    featureData( eset ) = new("AnnotatedDataFrame", data = hgnc_symbols_hgu)
+    
     hgnc_genes = mget( rownames(eset), hgu133plus2SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
     ensembl_genes = mget( rownames(eset), hgu133plus2ENSEMBL ); ensembl_genes[ is.na(ensembl_genes)  ] = ""
     entrez_genes = mget( rownames(eset), hgu133plus2ENTREZID ); entrez_genes[ is.na(entrez_genes)  ] = ""
