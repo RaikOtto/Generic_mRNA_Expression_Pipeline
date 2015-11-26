@@ -23,20 +23,39 @@ if ( create_heatmaps_genes_of_interest ){
     rownames( eset_selection) = hgnc_ids
   }
 
-  dif = as.double( rowMeans( eset_selection[ , index_ctrl]) - rowMeans( eset_selection[ , index_case]))
+  # mapping to cohorts vectors
+  
+  map_case_ctrl = match( names(cohorts_vec), colnames(eset_selection))
+  index_ctrl    = which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CTRL" ]) )
+  index_case    = which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) )
+  
+  eset_selection = eset_selection[ rownames(eset_selection) != "NA"  , ]
 
-  eset_selection = eset_selection[,  order(order(c(index_ctrl,index_case))) ]
+  dif = as.double( rowMeans( eset_selection[ , index_case]) - rowMeans( eset_selection[ , index_ctrl]))
+
+  eset_selection = eset_selection[ 
+    order(dif, decreasing = T),
+    order(order(c(index_ctrl,index_case)))
+  ]
   eset_selection_dif = eset_selection - rowMeans( eset_selection )
-
-  eset_selection_dif = eset_selection_dif[ order(dif, decreasing = F), ]
-  eset_selection = eset_selection[ order(dif, decreasing = F), ]
 
   ## filter for uniques
 
   unique_mapping = match( unique( rownames( eset_selection ) ), rownames( eset_selection ) )
   eset_selection = eset_selection[ unique_mapping,]
   eset_selection_dif = eset_selection_dif[ unique_mapping,]
-  dif = as.double( rowMeans( eset_selection[ , index_ctrl ] ) - rowMeans( eset_selection[ , index_case]))
+  dif = dif[ unique_mapping  ]
+  
+  ## trim
+  
+  for (i in 1:dim( eset_selection_dif  )[1]){
+    for (j in 1:dim( eset_selection_dif  )[2]){
+      if (eset_selection_dif[i,j] > 5)
+        eset_selection_dif[i,j] = 5
+      else if (eset_selection_dif[i,j] < -5)
+        eset_selection_dif[i,j] = -5
+    }
+  }
 
   pdf_name = paste(
     output_path,
@@ -51,36 +70,24 @@ if ( create_heatmaps_genes_of_interest ){
   )
 
   # heatmap.3
+  
+  subtype_top_bar = as.matrix( c(
+    colorRampPalette(colors = c("yellow"))( length( map_case_ctrl ) )
+  ))
+  subtype_top_bar[ which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) ), 1  ] = "blue"
+  colnames(subtype_top_bar) = c("Cohort")
 
   logFC_side_bar = t(
     c(
-      colorRampPalette(colors = c("red"))( length( dif[ dif < 0 ]) ),
+      colorRampPalette(colors = c("red"))( length( dif[ dif > 0 ]) ),
       colorRampPalette(colors = c("yellow"))( length( dif[ dif == 0 ]) ),
-      colorRampPalette(colors = c("green"))( length( dif[ dif > 0 ]) )
+      colorRampPalette(colors = c("green"))( length( dif[ dif < 0 ]) )
     )
   )
   rownames(logFC_side_bar) = c("FoldChange")
   library("devtools")
   source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
-  m=colorRampPalette(colors = c("green","black","red"))( 75 )
-
-  pdf(pdf_name)
-
-    heatmap.3(
-      eset_selection,
-      main = paste0( "Sample exprs and logFC ", project_name ),
-      #main = paste0( "Dif sample to avg expr all ", project_name ),
-      RowSideColors = logFC_side_bar,
-      col = m,
-      trace = NULL,
-      Colv = F,
-      Rowv = F,
-      dendrogram = "none" ,
-      margins = c(9,7),
-      cexCol = .75,
-      cexRow = .75
-    )
-  dev.off()
+  m = colorRampPalette(colors = c("green","black","red"))( 75 )
 
   ### dif darstellung
 
@@ -103,16 +110,31 @@ if ( create_heatmaps_genes_of_interest ){
   heatmap.3(
     eset_selection_dif,
     main = paste0( "Sample exprs and logFC ", project_name ),
-    #main = paste0( "Dif sample to avg expr all ", project_name ),
+    #main = paste0( "37 most differentially expressed genes BA vs MS" ),
     RowSideColors = logFC_side_bar,
     col = m,
     trace = NULL,
     Colv = F,
     Rowv = F,
     dendrogram = "none" ,
-    margins = c(9,7),
+    #margins = c(9,7),
     cexCol = .75,
-    cexRow = .75
+    cexRow = .75,
+    ColSideColors = subtype_top_bar
+    
+  )
+  legend("topright",
+         legend=c(
+           "CTRL",
+           "CASE",
+           "",
+           "Stronger exp CASE",
+           "Stronger exp CTRL"
+          ),
+         fill = c("blue","yellow","white", "red","green"), 
+         border = F, bty="n",
+         y.intersp = 0.7,
+         cex=0.7
   )
   dev.off()
 }
