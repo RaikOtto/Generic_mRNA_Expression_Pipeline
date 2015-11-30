@@ -20,13 +20,27 @@ if ( chip_type == "hgu133plus2" ){
   } else {
     
     hgnc_genes = mget( rownames(eset), hgu133plus2SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
-    ensembl_genes = mget( rownames(eset), hgu133plus2ENSEMBL ); ensembl_genes[ is.na(ensembl_genes)  ] = ""
-    entrez_genes = mget( rownames(eset), hgu133plus2ENTREZID ); entrez_genes[ is.na(entrez_genes)  ] = ""
-    uniprot = mget( rownames(eset), hgu133plus2UNIPROT ); uniprot[ is.na(uniprot)  ] = ""
+    hgnc_names = mget( rownames(eset), hgu133plus2GENENAME ); gene_name[ is.na(gene_name)  ] = ""
+    
+    featData = data.frame(
+      "geneassignment" = hgnc_genes,
+      "gene_name"      = hgnc_names
+    )
+
+    featureData( eset ) = new("AnnotatedDataFrame", data = featData)
+    
+    hgnc_symbols = hgnc_genes
+    pathway = as.vector( mget( rownames(eset), hgu133plus2PATH ) )
+    pathway = as.character( unlist( lapply( pathway, FUN = paste0, collapse = ","  ) ) );
+    pathway[ pathway == "NA" ] = ""
+
+    #ensembl_genes = mget( rownames(eset), hgu133plus2ENSEMBL ); ensembl_genes[ is.na(ensembl_genes)  ] = ""
+    #entrez_genes = mget( rownames(eset), hgu133plus2ENTREZID ); entrez_genes[ is.na(entrez_genes)  ] = ""
+    #uniprot = mget( rownames(eset), hgu133plus2UNIPROT ); uniprot[ is.na(uniprot)  ] = ""
     #pfam   = select( rownames(eset), hgu133plus2PFAM )
-    go = mget( rownames(eset), hgu133plus2GO ); go[ is.na(go)  ] = ""
-    omim = mget( rownames(eset), hgu133plus2OMIM ); go[ is.na(omim)  ] = ""
-    enzyme = mget( rownames(eset), hgu133plus2ENZYME ); enzyme[ is.na(enzyme)  ] = ""
+    #go = mget( rownames(eset), hgu133plus2GO ); go[ is.na(go)  ] = ""
+    #omim = mget( rownames(eset), hgu133plus2OMIM ); go[ is.na(omim)  ] = ""
+    #enzyme = mget( rownames(eset), hgu133plus2ENZYME ); enzyme[ is.na(enzyme)  ] = ""
     
   }
   

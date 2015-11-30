@@ -41,9 +41,9 @@ if ( chip_type %in% c( "hgu133plus2" ) ){
 
 library("biomaRt")
 
-ensembl     = useMart("ensembl",dataset="hsapiens_gene_ensembl")
-entrez_ids  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols), filters = "hgnc_symbol" , mart = ensembl)
+ensembl     = useMart("ENSEMBL_MART_ENSEMBL",dataset = "hsapiens_gene_ensembl", host = "www.ensembl.org")
 
+entrez_ids  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols), filters = "hgnc_symbol" , mart = ensembl)
 hgnc_map    = match( hgnc_symbols, entrez_ids$hgnc_symbol  , nomatch = 0 )
 entrez      = rep( "", length( hgnc_symbols ) )
 entrez[ which( hgnc_map != 0 ) ] = entrez_ids$entrezgene[ hgnc_map ]
@@ -91,3 +91,4 @@ system("rm *.xml")
 system("ls | grep -v 'pathview.png$' | xargs rm")
 
 setwd( pipeline_loc )
+

@@ -1,17 +1,20 @@
 library("WriteXLS")
 library("stringr")
 
-hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
+#if ( ! exists("hgnc_symbols"))
+source("Src/annotation.r")
+
 dir.create( entities_of_interest_path, showWarnings = F)
 source("Src/cohort_creation.r")
 
-if ( ! exists("hgnc_symbols"))
-  source("Src/annotation.r")
-
 if( chip_type == "HumanHT-12.v4" ){
+  
   expr_data_fix = eset_select
+  
 } else{
+  
   expr_data_fix  = exprs(eset)
+  
 }
 
 exprs_case = rowMeans( expr_data_fix[,index_case] )
@@ -19,11 +22,11 @@ exprs_ctrl = rowMeans( expr_data_fix[,index_ctrl] )
 dif_exp    = exprs_case - exprs_ctrl
 
 expr_data = cbind(
+
   round( dif_exp, 2 ),
   round( exprs_case, 2),
   round( exprs_ctrl, 2),
   expr_data_fix
-
 )
 
 colnames(expr_data)[1] = "logFC"
@@ -45,8 +48,9 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
   selection = as.character( unique( kegg_t$Gene_id_hgnc ) )
   selection = selection[ selection != ""  ]
 
-  mapping = which( hgnc_symbols %in% selection)
-  gene_ids = hgnc_symbols[hgnc_symbols %in% selection]
+  hgnc_symbols = as.character( hgnc_genes )
+  mapping = which( hgnc_genes %in% selection)
+  gene_ids = hgnc_symbols[hgnc_genes %in% selection]
 
   exprs_case = expr_data_fix[mapping,index_case]
   exprs_ctrl = expr_data_fix[mapping,index_ctrl]
