@@ -12,7 +12,7 @@ if ( kocent ){
 
 setwd( pipeline_loc )
 
-output_path = paste( pipeline_loc, "Project_files/ag_na_GSEA/Output", sep = "/" )
+output_path = paste( pipeline_loc, "Project_files/ag_na_GSEA", sep = "/" )
 dir.create(output_path)
 
 GSEA.program.location = paste(pipeline_loc, "GSEA.1.0.R", sep ="/")
