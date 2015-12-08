@@ -1,74 +1,83 @@
-eset = eset[ , which( colnames(eset) %in% phenodata$ID  ) ]  
-index = which( colnames(phenodata) == cohorts_type )
-pData( eset )$Group = phenodata[ match( colnames( eset ), phenodata$ID, nomatch = 0 ), index  ]
-#eDatSet = eset
+suppressMessages( source( "Src/GSEA.1.0.R", verbose=T, max.deparse.length=9999) )
 
-if (var_filter ){
+message( "Preparing ExpressionSet.gct file for GSEA" )
+probe_ids = hgnc_symbols
+descr = rep( "NA", length(probe_ids) )
+data = exprs(eset)
+expression_out = data.frame("NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data)
+
+index_case_gsea = sapply( index_case, function(x) x + 2 )
+index_ctrl_gsea = sapply( index_ctrl, function(x) x + 2 )
+
+expression_out = expression_out[ expression_out$NAMES != "", ]
+names_dupli = expression_out$NAMES[ which( duplicated( expression_out$NAMES ) ) ]
+names_dupli = unique(names_dupli)
+
+if( length( names_dupli ) > 0 ){
   
-  exprs( eDatSet ) = exprs( varFilter( eDatSet  , var.cutoff = 0.6 ) )
+  # collapsing duplicate gene symbols by logFC
+  index_dupli = which( expression_out$NAMES %in% names_dupli )
+  for (i in 1:length(names_dupli)){
+  
+    index = which( expression_out$NAMES == names_dupli[i])
+    current = expression_out[index,]
+  
+    exprs_case_gsea = rowMeans( current[ , index_case_gsea ] )
+    exprs_ctrl_gsea = rowMeans( current[ , index_ctrl_gsea ] )
+    dif_exp_gsea    = exprs_case_gsea - exprs_ctrl_gsea
+  
+    index_max = which.max( abs( dif_exp_gsea ) ) 
+    expression_out = rbind( expression_out, current[ index_max, ] )
+  
+  }
+  expression_out = expression_out[ -index_dupli, ]
 }
 
-source("Src/cohort_creation.r")
+# write ExpressionSet.gct file in Input directory
+fileConn = file( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) )
+writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out - 2), sep = "\t" ) ), fileConn)
+close(fileConn)
+write.table( expression_out, file = paste( cel_files_path, "ExpressionSet.gct", sep ="/" ), sep = "\t", row.names = F, quote = F, append = T )
 
-probeIds = rownames( exprs( eset ) )
-binaryGeneSet = rep( 0, length( probeIds ) )
-names(binaryGeneSet) = probeIds
-
-mapGeneSet = function( mSigDB_vec, probe_map_hgnc, binaryGeneSet ){
-  
-  vec = rep("0",length(mSigDB_vec))
-  vec[ mSigDB_vec == 1  ] = probe_map_hgnc
-  mapping = match( as.character( mSigDB_vec ), probe_map_hgnc, nomatch = 0 )
-  res = binaryGeneSet
-  res[ which( mapping != 0) ] = 1
-  
-  return(res)
-}
-
-#mapGeneSet = function( mSigDB_vec, geneMap, binaryGeneSet ){
-
-#  mapping = which( mSigDB_vec %in% geneMap$hgnz_symbols )
-#  probesOfGeneSet = geneMap$entrez_ids[ mapping ]
-#  binaryGeneSet[ probesOfGeneSet ] = 1
-#  return( binaryGeneSet )
-#}
+# work in progress
+#fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
+#writeLines( c( paste( length( expression_out - 2 ), "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
 
 
-#mSigDB = read.table("~/Downloads/c2.all.v5.0.symbols.gmt.txt",sep="\t",header=F,fill=T)
-#mSigDB = read.table("~/Downloads/h.all.v5.0.symbols.gmt.txt",sep="\t",header=F,fill=T)
-#identifier_mSigDB = mSigDB[,c(1,2)]
-#mSigDB = mSigDB[,c(-1,-2)]
-
-mSigDB = read.table(c2.all.v5_gsea_file_path, header = F, sep ="\t", fill = T)
-#mSigDB = read.table("~/Downloads/c2.cp.v5.0.symbols.gmt.txt",header = F, sep ="\t", fill = T)
-
-mSigDB = mSigDB[,-2]
-identifier_mSigDB = rownames(mSigDB)
-
-mSigDB_res = apply( mSigDB[,], FUN = mapGeneSet, hgnc_symbols, binaryGeneSet, MARGIN = 1)
-
-colnames(mSigDB_res) = identifier_mSigDB
-mSigDB_res = t(mSigDB_res)
-
-###
-
-library("GSEAlm")
-pVals = gsealmPerm( eset, ~Cohort, mSigDB_res, nperm = 100 )
-
-pVals_cor = as.data.frame( apply( pVals, 2, p.adjust, method = "BH", n = nrow(pVals) ) )
-
-pVals_lower = pVals_cor$Lower[ order( pVals_cor$Lower, decreasing = F ) ]
-names(pVals_lower) = rownames(pVals_cor)[ order( pVals_cor$Lower, decreasing = F ) ]
-
-pVals_Upper = pVals_cor$Upper[ order( pVals_cor$Upper, decreasing = F ) ]
-names(pVals_Upper) = rownames(pVals_cor)[ order( pVals_cor$Upper, decreasing = F ) ]
-
-threshold_lower = quantile( pVals$Lower, probs = seq(0.0,1.0,by = .01))[3]
-threshold_upper = quantile( pVals$Upper, probs = seq(0.0,1.0,by = .01))[3]
-
-lower = rownames(pVals)[ pVals$Upper <= threshold_upper ]
-higher= rownames(pVals)[ pVals$Lower <= threshold_lower ]
-
-#write.table(pVals, "~/Dropbox/PhD/Ovarian_cancer/Results/pVals.tab",sep="\t",row.names=T,quote=F)
-write.xlsx(higher, paste(results_file_path, "upper.xlsx", sep = "/"), row.names = F)
-write.xlsx(lower, paste(results_file_path, "lower.xlsx", sep = "/"), row.names = F)
+GSEA(                                                                      # Input/Output Files :-------------------------------------------
+                                                                           input.ds =  paste(cel_files_path, "ExpressionSet.gct", sep ="/"),               # Input gene expression Affy dataset file in RES or GCT format
+                                                                           input.cls = paste(cel_files_path, "phenotypes_GSEA.cls", sep ="/"),               # Input class vector (phenotype) file in CLS format
+                                                                           gs.db =     paste(cel_files_path, "c2.all.v5.0.symbols.gmt", sep ="/"),           # Gene set database in GMT format
+                                                                           output.directory      = gsea_output_path,            # Directory where to store output and results (default: "")
+                                                                           #  Program parameters :----------------------------------------------------------------------------------------------------------------------------
+                                                                           doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
+                                                                           non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
+                                                                           reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
+                                                                           nperm                 = 100,            # Number of random permutations (default: 1000)
+                                                                           weighted.score.type   =  1,              # Enrichment correlation-based weighting: 0=no weight (KS), 1= weigthed, 2 = over-weigthed (default: 1)
+                                                                           nom.p.val.threshold   = -1,              # Significance threshold for nominal p-vals for gene sets (default: -1, no thres)
+                                                                           fwer.p.val.threshold  = -1,              # Significance threshold for FWER p-vals for gene sets (default: -1, no thres)
+                                                                           fdr.q.val.threshold   = 0.25,            # Significance threshold for FDR q-vals for gene sets (default: 0.25)
+                                                                           topgs                 = 20,              # Besides those passing test, number of top scoring gene sets used for detailed reports (default: 10)
+                                                                           adjust.FDR.q.val      = F,               # Adjust the FDR q-vals (default: F)
+                                                                           gs.size.threshold.min = 15,              # Minimum size (in genes) for database gene sets to be considered (default: 25)
+                                                                           gs.size.threshold.max = 500,             # Maximum size (in genes) for database gene sets to be considered (default: 500)
+                                                                           reverse.sign          = F,               # Reverse direction of gene list (pos. enrichment becomes negative, etc.) (default: F)
+                                                                           preproc.type          = 0,               # Preproc.normalization: 0=none, 1=col(z-score)., 2=col(rank) and row(z-score)., 3=col(rank). (def: 0)
+                                                                           random.seed           = 111,             # Random number generator seed. (default: 123456)
+                                                                           perm.type             = 0,               # For experts only. Permutation type: 0 = unbalanced, 1 = balanced (default: 0)
+                                                                           fraction              = 1.0,             # For experts only. Subsampling fraction. Set to 1.0 (no resampling) (default: 1.0)
+                                                                           replace               = F,               # For experts only, Resampling mode (replacement or not replacement) (default: F)
+                                                                           save.intermediate.results = F,           # For experts only, save intermediate results (e.g. matrix of random perm. scores) (default: F)
+                                                                           OLD.GSEA              = F,               # Use original (old) version of GSEA (default: F)
+                                                                           use.fast.enrichment.routine = T          # Use faster routine to compute enrichment for random permutations (default: T)
+)
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                           
+# Overlap and leading gene subset assignment analysis of the GSEA results                                                                           
+GSEA.Analyze.Sets(
+  directory = gsea_output_path,        # Directory where to store output and results (default: "")
+  topgs = 20,                     # number of top scoring gene sets used for analysis
+  height = 16,
+  width = 16
+)
