@@ -6,9 +6,14 @@ suppressMessages(library("KEGG.db"))
 suppressMessages(library("pathview"))
 suppressMessages(library("stringr"))
 
-use_gsea = F
+use_gsea = T
 export_eset = F
-filter_topall_res = T
+filter_topall_res = F
+
+message( "Parameters set:")
+message( paste( "use_gsea: ", use_gsea, sep = "" ) )
+message( paste( "export_eset: ", export_eset, sep = "" ) )
+message( paste( "filer_topall_res: ", filter_topall_res, sep = "" ) )
 
 output_path = dirname(cel_files_path)
 dir.create( paste( output_path, "Output", sep = "/"), showWarnings = F )
@@ -17,6 +22,7 @@ cpdb_file                   = "CPDB_pathways_genes.tab"
 tissue_norm_exprs_file      = "GSE1133-GPL96_series_matrix.txt"
 tissue_norm_exprs_file_path = paste( pipeline_loc , paste( "Misc" ,tissue_norm_exprs_file, sep ="/" ) , sep ="/" )
 quality_report_path         = paste( output_path, "Output/QC_report" , sep = "/" )
+gsea_output_path            = paste( output_path, "Output/GSEA_Results", sep = "/" )
 results_file_path           = paste( output_path, "Output", paste( "Results", project_name, sep ="_"), sep = "/" )
 name_res_file               = paste( results_file_path, paste( "dif_exp_results", "csv", sep ="."), sep = "/" )
 pathway_maps_path           = paste( results_file_path  , "pathway_maps_dif_exp", sep ="/" )

@@ -64,11 +64,12 @@ run_analysis = function(){
   if ( dif_exp_ana ){
     
     message( "Running step 8: Differential Expression" )
-    if ( use_gsea ){
-      source( "Src/gsea.r")
-    } else{
-      source("Src/differential_expression.r")
-    }
+    source("Src/differential_expression.r")
+    #if ( use_gsea ){
+     # source( "Src/gsea.r")
+    #} else{
+     # source("Src/differential_expression.r")
+    #}
   }
   
   ### Part Analysis
@@ -82,6 +83,11 @@ run_analysis = function(){
     
     message( "Running step 9: Exporting data" )
     source( "Src/result_preparation.r" )
+  }
+  
+  ### Part GSEA Analysis
+  if ( use_gsea ){
+    source( "Src/gsea.R")
   }
   
   if ( create_pathways ){
