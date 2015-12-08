@@ -2181,7 +2181,7 @@ GSEA.Analyze.Sets <- function(
       set.table[i, 5] <- dataset
 
 #      set.table[i, 2] <- paste(set.name, dataset, sep ="", collapse="")
-      set.table[i, 2] <- substr(set.name, 1, 20) 
+      set.table[i, 2] <- substr(set.name, 1, 40) 
    }
 
    print(c("set name=", prefix.name))
