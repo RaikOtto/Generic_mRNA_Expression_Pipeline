@@ -6,7 +6,6 @@ suppressMessages(library("KEGG.db"))
 suppressMessages(library("pathview"))
 suppressMessages(library("stringr"))
 
-use_gsea = T
 export_eset = F
 filter_topall_res = F
 
