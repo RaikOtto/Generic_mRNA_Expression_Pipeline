@@ -10,6 +10,9 @@ if ( chip_type == "hgu133plus2" ){
   hgnc_names  = as.character(mget( rownames( topall ) ,hgu133plus2GENENAME))
   entrez_genes= as.character(mget( rownames( topall ) ,hgu133plus2ENTREZID))
   pathway     = as.character(mget( rownames( topall  ) ,hgu133plus2PATH))
+  pathway     = as.character( unlist( lapply( pathway, FUN = paste0, collapse = ","  ) ) )
+  pathway = str_replace_all( string =  pathway, pattern = '\"', replacement = "" )
+  pathway[ pathway == "NA" ] = ""
 
   topall_res = data.frame(
 
@@ -22,6 +25,7 @@ if ( chip_type == "hgu133plus2" ){
   )
 
   row.names( topall_res ) = probe_ids
+  topall_res = topall_res[ topall_res$HGNC_symb != "NA", ]
 
   topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
 
