@@ -32,7 +32,7 @@ source( "Src/pipeline_structure.r" )
 
 ### set run parameters
 
-var_filter = T
+var_filter = F
 use_gsea   = T
 
 #p_val = 0.05
