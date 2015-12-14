@@ -885,7 +885,8 @@ if (OLD.GSEA == T) {
 
 if (output.directory != "")  {
 
-filename <- paste(output.directory, doc.string, "_params.txt", sep="", collapse="")  
+dir.create( output.directory )
+filename <- paste(output.directory, paste(doc.string, "params.txt", sep="_"), sep = "/" )
 
 time.string <- as.character(as.POSIXlt(Sys.time(),"GMT"))
 write(paste("Run of GSEA on ", time.string), file=filename)
@@ -1641,11 +1642,11 @@ if (OLD.GSEA == F) {
 
 if (output.directory != "")  {
        if (phen1.rows > 0) {
-          filename <- paste(output.directory, doc.string, ".SUMMARY.RESULTS.REPORT.", phen1,".txt", sep="", collapse="")
+          filename <- paste(output.directory, paste( doc.string, ".SUMMARY.RESULTS.REPORT.", phen1,".txt", sep=""), sep = "/", collapse = "" )
           write.table(report.phen1, file = filename, quote=F, row.names=F, sep = "\t")
        }
        if (phen2.rows > 0) {
-          filename <- paste(output.directory, doc.string, ".SUMMARY.RESULTS.REPORT.", phen2,".txt", sep="", collapse="")
+         filename <- paste(output.directory, paste( doc.string, ".SUMMARY.RESULTS.REPORT.", phen2,".txt", sep=""), sep = "/", collapse = "" )
           write.table(report.phen2, file = filename, quote=F, row.names=F, sep = "\t")
        }
 }
@@ -1655,18 +1656,18 @@ if (output.directory != "")  {
 if (output.directory != "")  {
       if (non.interactive.run == F) {
            if (.Platform$OS.type == "windows") {
-              glob.filename <- paste(output.directory, doc.string, ".global.plots", sep="", collapse="")
+              glob.filename <- paste( output.directory, paste( doc.string, ".global.plots", sep="" ), sep = "/", collapse = "" )
               windows(width = 10, height = 10)
            } else if (.Platform$OS.type == "unix") {
-               glob.filename <- paste(output.directory, doc.string, ".global.plots.pdf", sep="", collapse="")
-               pdf(file=glob.filename, height = 10, width = 10)
+               glob.filename <- paste( output.directory, paste( doc.string, ".global.plots.pdf", sep = "" ), sep = "/", collapse = "" )
+               pdf( file=glob.filename, height = 10, width = 10 )
            }
       } else {
            if (.Platform$OS.type == "unix") {
-              glob.filename <- paste(output.directory, doc.string, ".global.plots.pdf", sep="", collapse="")
+             glob.filename <- paste( output.directory, paste( doc.string, ".global.plots.pdf", sep = "" ), sep = "/", collapse = "" )
               pdf(file=glob.filename, height = 10, width = 10)
            } else if (.Platform$OS.type == "windows") {
-              glob.filename <- paste(output.directory, doc.string, ".global.plots.pdf", sep="", collapse="")
+              glob.filename <- paste( output.directory, paste( doc.string, ".global.plots.pdf", sep = "" ), sep = "/", collapse = "")
               pdf(file=glob.filename, height = 10, width = 10)
            }
       }
@@ -1827,7 +1828,9 @@ if (output.directory != "")  {
          C <- rbind(B[1:100,], rep(0, Ns), rep(0, Ns), B[(floor(N/2) - 50 + 1):(floor(N/2) + 50),], rep(0, Ns), rep(0, Ns), B[(N - 100 + 1):N,])
       } 
       rm(B)
+      #png( paste( output.directory, "Heatmap.png", sep = "/" ), width = 800, height = 800, res = 150  )
       GSEA.HeatMapPlot(V = C, col.labels = class.labels, col.classes = class.phen, main = "Heat Map for Genes in Dataset")
+      #dev.off()
 
 # p-vals plot
       nom.p.vals <- p.vals[Obs.ES.index,1]
@@ -1917,23 +1920,24 @@ if (output.directory != "")  {
 
 if (output.directory != "")  {
 
-       filename <- paste(output.directory, doc.string, ".", gs.names[i], ".report.", phen.tag, ".", loc, ".txt", sep="", collapse="")
+  
+       filename <- paste(output.directory, paste( doc.string, ".", gs.names[i], ".report.", phen.tag, ".", loc, ".txt", sep=""), sep = "/", collapse = "" )
        write.table(gene.report, file = filename, quote=F, row.names=F, sep = "\t")
 
        if (non.interactive.run == F) {
            if (.Platform$OS.type == "windows") {
-               gs.filename <- paste(output.directory, doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, sep="", collapse="")
+               gs.filename <- paste(output.directory, paste( doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, sep=""), sep = "/", collapse = "" )
                windows(width = 14, height = 6)
            } else if (.Platform$OS.type == "unix") {
-               gs.filename <- paste(output.directory, doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep="", collapse="")
+               gs.filename <- paste(output.directory, paste( doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep=""), sep = "/", collapse="")
                pdf(file=gs.filename, height = 6, width = 14)
            }
        } else {
            if (.Platform$OS.type == "unix") {
-              gs.filename <- paste(output.directory, doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep="", collapse="")
+              gs.filename <- paste(output.directory, paste( doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep = ""), sep = "/", collapse = "")
               pdf(file=gs.filename, height = 6, width = 14)
            } else if (.Platform$OS.type == "windows") {
-              gs.filename <- paste(output.directory, doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep="", collapse="")
+              gs.filename <- paste(output.directory, paste( doc.string, ".", gs.names[i], ".plot.", phen.tag, ".", loc, ".pdf", sep = ""), sep = "/", collapse = "")
               pdf(file=gs.filename, height = 6, width = 14)
            }
        }
@@ -2181,7 +2185,7 @@ GSEA.Analyze.Sets <- function(
       set.table[i, 5] <- dataset
 
 #      set.table[i, 2] <- paste(set.name, dataset, sep ="", collapse="")
-      set.table[i, 2] <- substr(set.name, 1, 20) 
+      set.table[i, 2] <- paste(i, substr(set.name, 1, 20), sep = "_")
    }
 
    print(c("set name=", prefix.name))
@@ -2215,7 +2219,7 @@ GSEA.Analyze.Sets <- function(
 
    leading.lists <- NULL
    for (i in 1:max.sets.phen1) {
-      inputfile <- paste(directory, set.table.phen1[i, 1], sep="", collapse="")
+      inputfile <- paste(directory, paste( set.table.phen1[i, 1], sep=""), sep = "/", collapse="")
       gene.set <- read.table(file=inputfile, sep="\t", header=T, comment.char="", as.is=T)
       leading.set <- as.vector(gene.set[gene.set[,"CORE_ENRICHMENT"] == "YES", "SYMBOL"])
       leading.lists <- c(leading.lists, list(leading.set))
@@ -2244,18 +2248,18 @@ GSEA.Analyze.Sets <- function(
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen1, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen1, sep="" ), sep ="/", collapse="")
            windows(height = width, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         }
    }
@@ -2277,7 +2281,7 @@ GSEA.Analyze.Sets <- function(
    D.phen1 <- data.frame(M)
    names(D.phen1) <- all.leading.genes
    row.names(D.phen1) <- set.table.phen1[1:max.sets.phen1, 2]
-   output <- paste(directory, doc.string, ".leading.genes.", phen1, ".gct", sep="")
+   output <- paste(directory, paste( doc.string, ".leading.genes.", phen1, ".gct", sep=""), sep = "/" )
    GSEA.write.gct(D.phen1, filename=output)
 
    # Save leading subsets as a single gene set in a .gmt file
@@ -2285,23 +2289,23 @@ GSEA.Analyze.Sets <- function(
    row.header <- paste(doc.string, ".all.leading.genes.", phen1, sep="")
    output.line <- paste(all.leading.genes, sep="\t", collapse="\t")
    output.line <- paste(row.header, row.header, output.line, sep="\t", collapse="")
-   output <- paste(directory, doc.string, ".all.leading.genes.", phen1, ".gmt", sep="")
+   output <- paste(directory, paste( doc.string, ".all.leading.genes.", phen1, ".gmt", sep=""), sep = "/" )
    write(noquote(output.line), file = output, ncolumns = length(output.line))
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen1, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen1, sep=""), sep = "/", collapse="")
            windows(height = height, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    }
@@ -2329,7 +2333,7 @@ GSEA.Analyze.Sets <- function(
 
    leading.lists <- NULL
    for (i in 1:max.sets.phen2) {
-      inputfile <- paste(directory, set.table.phen2[i, 1], sep="", collapse="")
+      inputfile <- paste(directory, set.table.phen2[i, 1], sep="/", collapse="")
       gene.set <- read.table(file=inputfile, sep="\t", header=T, comment.char="", as.is=T)
       leading.set <- as.vector(gene.set[gene.set[,"CORE_ENRICHMENT"] == "YES", "SYMBOL"])
       leading.lists <- c(leading.lists, list(leading.set))
@@ -2358,18 +2362,18 @@ GSEA.Analyze.Sets <- function(
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen2, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen2, sep=""), sep = "/", collapse="")
            windows(height = width, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.overlap.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.overlap.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = width, width = width)
         }
    }
@@ -2391,7 +2395,7 @@ GSEA.Analyze.Sets <- function(
    D.phen2 <- data.frame(M)
    names(D.phen2) <- all.leading.genes
    row.names(D.phen2) <- set.table.phen2[1:max.sets.phen2, 2]
-   output <- paste(directory, doc.string, ".leading.genes.", phen2, ".gct", sep="")
+   output <- paste(directory, paste( doc.string, ".leading.genes.", phen2, ".gct", sep=""), sep = "/")
    GSEA.write.gct(D.phen2, filename=output)
 
    # Save primary subsets as a single gene set in a .gmt file
@@ -2399,23 +2403,23 @@ GSEA.Analyze.Sets <- function(
    row.header <- paste(doc.string, ".all.leading.genes.", phen2, sep="")
    output.line <- paste(all.leading.genes, sep="\t", collapse="\t")
    output.line <- paste(row.header, row.header, output.line, sep="\t", collapse="")
-   output <- paste(directory, doc.string, ".all.leading.genes.", phen2, ".gmt", sep="")
+   output <- paste(directory, paste( doc.string, ".all.leading.genes.", phen2, ".gmt", sep=""), sep = "/" )
    write(noquote(output.line), file = output, ncolumns = length(output.line))
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen2, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen2, sep=""),sep ="/", collapse="")
            windows(height = height, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    }
@@ -2478,18 +2482,18 @@ GSEA.Analyze.Sets <- function(
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen1, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen1, sep=""), sep = "/", collapse="")
            windows(height = height, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen1, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    }
@@ -2501,7 +2505,7 @@ GSEA.Analyze.Sets <- function(
 
    GSEA.HeatMapPlot2(V = t(A), row.names = A.names, col.names = A.row.names, main = "Leading Subsets Assignment (clustered)", sub = paste(doc.string, " - ", phen1, sep=""), xlab=" ", ylab=" ", color.map = cmap) 
 
-    text.filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen1, ".txt", sep="", collapse="")
+    text.filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen1, ".txt", sep=""), sep = "/", collapse="")
     line.list <- c("Gene", A.row.names)
     line.header <- paste(line.list, collapse="\t")
     line.length <- length(A.row.names) + 1
@@ -2562,18 +2566,18 @@ GSEA.Analyze.Sets <- function(
 
    if (non.interactive.run == F) {
         if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen2, sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen2, sep=""), sep = "/", collapse="")
            windows(height = height, width = width)
         } else if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    } else {
         if (.Platform$OS.type == "unix") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         } else if (.Platform$OS.type == "windows") {
-           filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep="", collapse="")
+           filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen2, ".pdf", sep=""), sep = "/", collapse="")
            pdf(file=filename, height = height, width = width)
         }
    }
@@ -2583,7 +2587,7 @@ GSEA.Analyze.Sets <- function(
 #   GSEA.HeatMapPlot2(V = A, row.names = A.row.names, col.names = A.names, main = "Leading Subsets Assignment (clustered)", sub = paste(doc.string, " - ", phen2, sep=""), xlab=" ", ylab=" ", color.map = cmap) 
    GSEA.HeatMapPlot2(V = t(A), row.names =A.names , col.names = A.row.names, main = "Leading Subsets Assignment (clustered)", sub = paste(doc.string, " - ", phen2, sep=""), xlab=" ", ylab=" ", color.map = cmap) 
 
-    text.filename <- paste(directory, doc.string, ".leading.assignment.clustered.", phen2, ".txt", sep="", collapse="")
+    text.filename <- paste(directory, paste( doc.string, ".leading.assignment.clustered.", phen2, ".txt", sep=""), sep = "/", collapse="")
     line.list <- c("Gene", A.row.names)
     line.header <- paste(line.list, collapse="\t")
     line.length <- length(A.row.names) + 1
