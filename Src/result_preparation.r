@@ -87,14 +87,25 @@ if ( chip_type == "hgu133plus2" ){
   }
 
 } else if ( chip_type == "HumanHT-12.v4" ){
-
-  gpl = annotation(eDatSet)
-  platf = getGEO( gpl, AnnotGPL = T )
-  ncbifd = data.frame( attr( dataTable( platf ), "table" ) )
-
-  topall_res = topall[ setdiff( colnames( topall ), setdiff( fvarLabels(eDatSet), "ID" ) ) ]
-  topall_res = merge( topall_res, ncbifd, by = "ID" )
-  topall_res = topall_res[ order( topall_res$logFC, decreasing = T ), ]
+  
+  hgnc_genes = unlist( mget( rownames( topall ), illuminaHumanv4SYMBOL ) ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
+  hgnc_names = unlist( mget( rownames( topall ), illuminaHumanv4GENENAME ) ); hgnc_names[ is.na(hgnc_names)  ] = ""
+  entrez = unlist( mget( rownames( topall ) , illuminaHumanv4ENTREZID ) )
+  index_probes = match( rownames( topall ), rownames(eset), nomatch = 0 )
+  exprs_case = rowMeans( exprs( eset )[ index_probes, index_case ] )
+  exprs_ctrl = rowMeans( exprs( eset )[ index_probes, index_ctrl ] )
+  
+  topall_res = data.frame(
+    "logFC"               = round( topall$logFC,2 ),
+    "expr_ctrl"           = round( exprs_ctrl, 2  ),
+    "expr_case"           = round( exprs_case, 2  ),
+    "P_Value"             = topall$P.Value,
+    "HGNC_symb"           = hgnc_genes,
+    "HGNC_names"          = hgnc_names,
+    "entrez"              = entrez
+  )
+  
+  topall_res = topall_res[ order( topall_res$logFC, decreasing = T )  ,]
 
 }
 
