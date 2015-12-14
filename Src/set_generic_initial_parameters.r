@@ -8,6 +8,7 @@ suppressMessages(library("stringr"))
 
 export_eset = F
 filter_topall_res = F
+heatmap_list_genes_count = 40
 
 message( "Parameters set:")
 message( paste( "use_gsea: ", use_gsea, sep = "" ) )
