@@ -16,7 +16,7 @@ if ( kocent ){
 
 }
 
-#pipeline_loc = paste( system( "echo $HOME", intern = T), "Generic_mRNA_Expression_Pipeline", sep ="/" )
+pipeline_loc = "/Users/jan-niklas/Generic_mRNA_Expression_Pipeline"
 print(c("Kocent:",kocent ))
 
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
@@ -24,7 +24,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "bm_vs_blood_all"
+which_project = "GSE43795"
 
 source("project_files.r")
 options( error = traceback )
@@ -39,7 +39,7 @@ use_gsea   = T
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = T # 4
+normalize         = F # 4
 qc_control        = F # 5
 annotate          = T # 6
 absent_analysis   = F # 7

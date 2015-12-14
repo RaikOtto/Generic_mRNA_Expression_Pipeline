@@ -35,13 +35,18 @@ if( length( names_dupli ) > 0 ){
 
 # write ExpressionSet.gct file in Input directory
 fileConn = file( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) )
-writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out - 2), sep = "\t" ) ), fileConn)
+writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out) - 2, sep = "\t" ) ), fileConn)
 close(fileConn)
 write.table( expression_out, file = paste( cel_files_path, "ExpressionSet.gct", sep ="/" ), sep = "\t", row.names = F, quote = F, append = T )
 
 # work in progress
-#fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
-#writeLines( c( paste( length( expression_out - 2 ), "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
+fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
+phenoLabel = rep( 0, length( expression_out ) - 2 )
+phenoLabel[index_case] = 1
+phenoLabel = as.matrix(t(phenoLabel))
+writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
+close(fileConn)
+write.table(phenoLabel, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
 
 
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
@@ -53,7 +58,7 @@ GSEA(                                                                      # Inp
                                                                            doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
                                                                            non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
                                                                            reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
-                                                                           nperm                 = 100,            # Number of random permutations (default: 1000)
+                                                                           nperm                 = 1000,            # Number of random permutations (default: 1000)
                                                                            weighted.score.type   =  1,              # Enrichment correlation-based weighting: 0=no weight (KS), 1= weigthed, 2 = over-weigthed (default: 1)
                                                                            nom.p.val.threshold   = -1,              # Significance threshold for nominal p-vals for gene sets (default: -1, no thres)
                                                                            fwer.p.val.threshold  = -1,              # Significance threshold for FWER p-vals for gene sets (default: -1, no thres)
