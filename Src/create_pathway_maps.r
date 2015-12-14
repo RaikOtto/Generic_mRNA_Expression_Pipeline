@@ -53,21 +53,21 @@ entrez      = rep( "", length( hgnc_symbols ) )
 entrez[ which( hgnc_map != 0 ) ] = entrez_ids$entrezgene[ hgnc_map ]
 entrez[ is.na(entrez) ] = ""
 
-if ( chip_type == "HumanHT-12.v4" ){
+#if ( chip_type == "HumanHT-12.v4" ){
   
-  probe_ids = ncbifd$ID
-  eset_select = exprs(eDatSet)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
-  eset_select = eset_select[ which( !is.na( rownames(eset_select) ) ), ]
-  exprs_case = round( rowMeans( eset_select[ ,index_case ] ), 2 )
-  exprs_ctrl = round( rowMeans( eset_select[ ,index_ctrl ] ), 2 )
-  dif_exp = round( exprs_case - exprs_ctrl, 2)
+  #probe_ids = ncbifd$ID
+  #eset_select = exprs(eDatSet)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
+  #eset_select = eset_select[ which( !is.na( rownames(eset_select) ) ), ]
+  #exprs_case = round( rowMeans( eset_select[ ,index_case ] ), 2 )
+  #exprs_ctrl = round( rowMeans( eset_select[ ,index_ctrl ] ), 2 )
+  #dif_exp = round( exprs_case - exprs_ctrl, 2)
   
-} else{
+#} else{
   
   exprs_case = round( rowMeans( exprs( eDatSet )[ ,index_case ] ), 2 )
   exprs_ctrl = round( rowMeans( exprs( eDatSet )[ ,index_ctrl ] ), 2 )
   dif_exp = round( exprs_case - exprs_ctrl, 2)
-}
+#}
 
 res_all_path = data.frame(
 
