@@ -1,48 +1,56 @@
 suppressMessages( source( "Src/GSEA.1.0.R", verbose=T, max.deparse.length=9999) )
 
-message( "Preparing ExpressionSet.gct file for GSEA" )
-probe_ids = hgnc_symbols
-descr = rep( "NA", length(probe_ids) )
-data = exprs(eset)
-expression_out = data.frame("NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data)
+if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
+  message( "Preparing ExpressionSet.gct file for GSEA" )
+  probe_ids = hgnc_symbols
+  descr = rep( "NA", length(probe_ids) )
+  data = exprs(eset)
+  expression_out = data.frame("NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data)
 
-index_case_gsea = sapply( index_case, function(x) x + 2 )
-index_ctrl_gsea = sapply( index_ctrl, function(x) x + 2 )
+  index_case_gsea = sapply( index_case, function(x) x + 2 )
+  index_ctrl_gsea = sapply( index_ctrl, function(x) x + 2 )
 
-expression_out = expression_out[ expression_out$NAMES != "", ]
-names_dupli = expression_out$NAMES[ which( duplicated( expression_out$NAMES ) ) ]
-names_dupli = unique(names_dupli)
+  expression_out = expression_out[ expression_out$NAMES != "", ]
+  names_dupli = expression_out$NAMES[ which( duplicated( expression_out$NAMES ) ) ]
+  names_dupli = unique(names_dupli)
 
-if( length( names_dupli ) > 0 ){
+  if( length( names_dupli ) > 0 ){
   
-  # collapsing duplicate gene symbols by logFC
-  index_dupli = which( expression_out$NAMES %in% names_dupli )
-  for (i in 1:length(names_dupli)){
+    # collapsing duplicate gene symbols by logFC
+    index_dupli = which( expression_out$NAMES %in% names_dupli )
+    for (i in 1:length(names_dupli)){
   
-    index = which( expression_out$NAMES == names_dupli[i])
-    current = expression_out[index,]
+      index = which( expression_out$NAMES == names_dupli[i])
+      current = expression_out[index,]
+    
+      exprs_case_gsea = rowMeans( current[ , index_case_gsea ] )
+      exprs_ctrl_gsea = rowMeans( current[ , index_ctrl_gsea ] )
+      dif_exp_gsea    = exprs_case_gsea - exprs_ctrl_gsea
   
-    exprs_case_gsea = rowMeans( current[ , index_case_gsea ] )
-    exprs_ctrl_gsea = rowMeans( current[ , index_ctrl_gsea ] )
-    dif_exp_gsea    = exprs_case_gsea - exprs_ctrl_gsea
+      index_max = which.max( abs( dif_exp_gsea ) ) 
+      expression_out = rbind( expression_out, current[ index_max, ] )
   
-    index_max = which.max( abs( dif_exp_gsea ) ) 
-    expression_out = rbind( expression_out, current[ index_max, ] )
-  
+    }
+    expression_out = expression_out[ -index_dupli, ]
   }
-  expression_out = expression_out[ -index_dupli, ]
+
+  # write ExpressionSet.gct file in Input directory
+  fileConn = file( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) )
+  writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out) - 2, sep = "\t" ) ), fileConn)
+  close(fileConn)
+  write.table( expression_out, file = paste( cel_files_path, "ExpressionSet.gct", sep ="/" ), sep = "\t", row.names = F, quote = F, append = T )
 }
 
-# write ExpressionSet.gct file in Input directory
-fileConn = file( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) )
-writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out - 2), sep = "\t" ) ), fileConn)
-close(fileConn)
-write.table( expression_out, file = paste( cel_files_path, "ExpressionSet.gct", sep ="/" ), sep = "\t", row.names = F, quote = F, append = T )
-
-# work in progress
-#fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
-#writeLines( c( paste( length( expression_out - 2 ), "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
-
+if( !file.exists( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) ) ){
+  # work in progress
+  fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
+  phenoLabel = rep( 0, length( expression_out ) - 2 )
+  phenoLabel[index_case] = 1
+  phenoLabel = as.matrix(t(phenoLabel))
+  writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
+  close(fileConn)
+  write.table(phenoLabel, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
+}
 
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
                                                                            input.ds =  paste(cel_files_path, "ExpressionSet.gct", sep ="/"),               # Input gene expression Affy dataset file in RES or GCT format
@@ -53,7 +61,7 @@ GSEA(                                                                      # Inp
                                                                            doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
                                                                            non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
                                                                            reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
-                                                                           nperm                 = 100,            # Number of random permutations (default: 1000)
+                                                                           nperm                 = 1000,            # Number of random permutations (default: 1000)
                                                                            weighted.score.type   =  1,              # Enrichment correlation-based weighting: 0=no weight (KS), 1= weigthed, 2 = over-weigthed (default: 1)
                                                                            nom.p.val.threshold   = -1,              # Significance threshold for nominal p-vals for gene sets (default: -1, no thres)
                                                                            fwer.p.val.threshold  = -1,              # Significance threshold for FWER p-vals for gene sets (default: -1, no thres)

@@ -87,7 +87,7 @@ run_analysis = function(){
   
   ### Part GSEA Analysis
   if ( use_gsea ){
-    source( "Src/gsea.R")
+    source( "Src/gsea.r")
   }
   
   if ( create_pathways ){

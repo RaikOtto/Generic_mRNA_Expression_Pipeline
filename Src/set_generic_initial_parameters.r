@@ -40,6 +40,9 @@ vcf_folder                  = ""
 expression_data = "~/Dropbox/PhD/NAR_sub_june_2015/expression_all.txt"
 frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
 
+use_kegg_for_heatmap = F
+heatmap_list_genes_count = 20
+
 #if (time_series){ quality_control_only = T; qc_control = T }
 
 strEndsWith <- function(haystack, needle)
@@ -102,8 +105,9 @@ if ( chip_type == "hgu133plus2" ){
   
 } else if ( chip_type == "HumanHT-12.v4" ){
   
-  suppressMessages(library("lumi"))
-  suppressMessages(library("GEOquery"))
+  suppressMessages(library( "lumi" ) )
+  suppressMessages(library( "GEOquery" ) )
+  suppressMessages( library( "illuminaHumanv4.db" ) )
   
 } else {
   

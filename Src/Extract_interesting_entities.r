@@ -7,15 +7,15 @@ source("Src/annotation.r")
 dir.create( entities_of_interest_path, showWarnings = F)
 source("Src/cohort_creation.r")
 
-if( chip_type == "HumanHT-12.v4" ){
+#if( chip_type == "HumanHT-12.v4" ){
   
-  expr_data_fix = eset_select
+#  expr_data_fix = eset_select
   
-} else{
+#} else{
   
-  expr_data_fix  = exprs(eset)
+expr_data_fix  = exprs( eset )
   
-}
+#}
 
 exprs_case = rowMeans( expr_data_fix[,index_case] )
 exprs_ctrl = rowMeans( expr_data_fix[,index_ctrl] )
@@ -32,7 +32,7 @@ expr_data = cbind(
 colnames(expr_data)[1] = "logFC"
 colnames(expr_data)[2] = "Expr_case"
 colnames(expr_data)[3] = "Expr_ctrl"
-expr_data = as.data.frame(expr_data)
+expr_data = as.data.frame( expr_data) 
 
 kegg_t = read.table( kegg_file_path, header =T , sep ="," )
 cpdb_t = read.table( cpdb_file_path, header =T , sep ="\t", fill = T )
@@ -146,30 +146,31 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
 
   write.xlsx( res_int, str_replace(str_replace(genes_of_interest_file_path,"~",user_folder),".csv",".xls"), row.names = F )
 }
+
 ### pathways
 
 if ( ! is.null( kegg_t$Kegg_id ) ){
 
-  mapping = match( kegg_t$Kegg_id  ,cpdb_ident, nomatch = 0 )
-  message(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) )  )
+  mapping = match( as.character( kegg_t$Kegg_id )  ,cpdb_ident, nomatch = 0 )
+  message(paste0(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) ), collapse = ", ") )
 
-  mapping = match( cpdb_ident, kegg_t$Kegg_id, nomatch = 0 )
-  mapping = mapping[mapping!=0]
+  #mapping = match( cpdb_ident, kegg_t$Kegg_id, nomatch = 0 )
+  #mapping = mapping[mapping!=0]
   genes_of_interest = cpdb_t$hgnc_symbol_ids[mapping]
 
   for ( i  in  mapping ){
+    
+    pathway_id    = as.character( cpdb_ident[ i ] )
 
-    pathway_id    = as.character( kegg_t$Kegg_id[ i ] )
+    if (length( pathway_id ) >= 1){
 
-    if (pathway_id != ""){
-
-      pathway_name  = as.character( kegg_t$Kegg_name[ i ] )
+      pathway_name  = as.character( pathway_id )
       pathway_name  = str_replace(pathway_name,"/","and")
       genes         = cpdb_t$hgnc_symbol_ids[ i ]
       gene_list     = unlist( str_split( genes, "," ) )
-      mapping_gene  = match( gene_list, as.character( hgnc_symbols), nomatch = 0 )
+      mapping_gene  = which( as.character( hgnc_symbols) %in% as.character(gene_list) )
 
-      exprs_genes = expr_data_fix[mapping_gene,]
+      exprs_genes = expr_data_fix[ mapping_gene,]
       exprs_case = round( rowMeans( exprs_genes[,index_case]),2 )
       exprs_ctrl = round( rowMeans( exprs_genes[,index_ctrl]),2 )
       dif_exp = round( exprs_case - exprs_ctrl, 2)

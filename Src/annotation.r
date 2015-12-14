@@ -84,6 +84,34 @@ if ( chip_type == "hgu133plus2" ){
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
   
+} else if ( chip_type %in% c( "HumanHT-12.v4" ) ){
+  
+  hgnc_genes = mget( rownames(eset), illuminaHumanv4SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
+  hgnc_names = mget( rownames(eset), illuminaHumanv4GENENAME ); hgnc_names[ is.na(hgnc_names)  ] = ""
+  hgnc_genes = unlist( hgnc_genes )
+  hgnc_names = unlist( hgnc_names )
+  
+  featData = data.frame(
+    "geneassignment" = hgnc_genes,
+    "gene_name"      = hgnc_names
+  )
+  
+  featureData( eset ) = new("AnnotatedDataFrame", data = featData)
+  
+  hgnc_symbols = hgnc_genes
+  
+  #gpl = annotation( eset )
+  #platf = getGEO(gpl, AnnotGPL = TRUE)
+  #ncbifd = data.frame( attr( dataTable( platf ), "table" ) )
+  #featureData( eset ) = platf
+  
+  
+  #tT <- tT[ setdiff( colnames( tT ), setdiff( fvarLabels( gset ), "ID" ) )]
+  #tT <- merge( tT, ncbifd, by="ID" )
+  #tT <- tT[order( tT$P.Value ), ]  # restore correct order
+  
+  #tT <- subset(tT, select=c("ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID","Chromosome.location","Chromosome.annotation","UniGene.title","UniGene.symbol","UniGene.ID","Nucleotide.Title","GI","GenBank.Accession","Platform_CLONEID","Platform_ORF","Platform_SPOTID","GO.Function","GO.Process","GO.Component","GO.Function.ID","GO.Process.ID","GO.Component.ID"))
+
 } else {
   
   message("Unknown Chip Type")
