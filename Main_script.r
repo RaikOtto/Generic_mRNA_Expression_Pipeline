@@ -45,9 +45,9 @@ annotate          = T # 6
 absent_analysis   = F # 7
 dif_exp_ana       = T # 8
 export_results    = T # 9
-create_pathways   = T # 10
+create_pathways   = F # 10
 extract_interest  = T # 11
-create_heatmaps_genes_of_interest = F # 12
+create_heatmaps_genes_of_interest = T # 12
 annotate_tissue_abbundance = F # 13
 
 ### generic
