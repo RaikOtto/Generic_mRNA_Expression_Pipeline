@@ -45,9 +45,9 @@ if ( create_heatmaps_genes_of_interest ){
   eset_selection = eset_selection[ unique_mapping,]
   eset_selection_dif = eset_selection_dif[ unique_mapping,]
   dif = dif[ unique_mapping  ]
-  
+
   ## trim
-  
+
   for (i in 1:dim( eset_selection_dif  )[1]){
     for (j in 1:dim( eset_selection_dif  )[2]){
       if (eset_selection_dif[i,j] > 5)
