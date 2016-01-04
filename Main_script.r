@@ -39,7 +39,7 @@ use_gsea   = F
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = F # 4
+normalize         = T # 4
 qc_control        = T # 5
 annotate          = F # 6
 absent_analysis   = F # 7
