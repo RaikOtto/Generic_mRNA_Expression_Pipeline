@@ -5,7 +5,7 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
   probe_ids = hgnc_symbols
   descr = rep( "NA", length( probe_ids ) )
   data = as.data.frame( exprs( eset ) )
-  expression_out = data.frame( "NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data )
+  expression_out = data.frame( "NAMES" = probe_ids, "DESCRIPTION" = descr, data )
 
   index_case_gsea = sapply( index_case, function(x) x + 2 )
   index_ctrl_gsea = sapply( index_ctrl, function(x) x + 2 )
@@ -55,7 +55,7 @@ if( !file.exists( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) ) ){
   }
   writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), pheno_order, phenoLabels ), fileConn )
   close(fileConn)
-  write.table(phenoLabels, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
+  #write.table(phenoLabels, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
 }
 
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
@@ -64,7 +64,7 @@ GSEA(                                                                      # Inp
                                                                            gs.db =     paste(cel_files_path, "c2.all.v5.1.symbols.gmt", sep ="/"),           # Gene set database in GMT format
                                                                            output.directory      = gsea_output_path,            # Directory where to store output and results (default: "")
                                                                            #  Program parameters :----------------------------------------------------------------------------------------------------------------------------
-                                                                           doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
+                                                                           doc.string            = "Benign_vs_Malignant",     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
                                                                            non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
                                                                            reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
                                                                            nperm                 = 1000,            # Number of random permutations (default: 1000)
