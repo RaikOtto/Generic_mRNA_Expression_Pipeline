@@ -16,7 +16,7 @@ if ( kocent ){
 
 }
 
-#2pipeline_loc = "/Users/jan-niklas/Generic_mRNA_Expression_Pipeline"
+#pipeline_loc = "/Users/jan-niklas/Generic_mRNA_Expression_Pipeline"
 print(c("Kocent:",kocent ))
 
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
