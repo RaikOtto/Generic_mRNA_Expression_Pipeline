@@ -19,8 +19,8 @@ if ( chip_type == "hgu133plus2" ){
     
   } else {
     
-    hgnc_genes = mget( rownames(eset), hgu133plus2SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
-    hgnc_names = mget( rownames(eset), hgu133plus2GENENAME ); gene_name[ is.na(gene_name)  ] = ""
+    hgnc_genes = unlist(mget( rownames(eset), hgu133plus2SYMBOL )); hgnc_genes[ is.na(hgnc_genes)  ] = ""
+    hgnc_names = unlist(mget( rownames(eset), hgu133plus2GENENAME )); hgnc_names[ is.na(hgnc_names)  ] = ""
     
     featData = data.frame(
       "geneassignment" = hgnc_genes,

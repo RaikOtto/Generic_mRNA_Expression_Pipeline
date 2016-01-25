@@ -16,7 +16,7 @@ if ( kocent ){
 
 }
 
-#pipeline_loc = "/Users/jan-niklas/Generic_mRNA_Expression_Pipeline"
+#2pipeline_loc = "/Users/jan-niklas/Generic_mRNA_Expression_Pipeline"
 print(c("Kocent:",kocent ))
 
 setwd( pipeline_loc ) # Set the path to where the pipeline is located
@@ -24,7 +24,7 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "ovarian"
+which_project = "GSE14407"
 
 source("project_files.r")
 options( error = traceback )
@@ -33,14 +33,14 @@ source( "Src/pipeline_structure.r" )
 ### set run parameters
 
 var_filter = F
-use_gsea   = F
+use_gsea   = T
 
 #p_val = 0.05
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = T # 4
-qc_control        = T # 5
+normalize         = F # 4
+qc_control        = F # 5
 annotate          = F # 6
 absent_analysis   = F # 7
 dif_exp_ana       = F # 8

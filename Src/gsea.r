@@ -1,11 +1,11 @@
-suppressMessages( source( "Src/GSEA.1.0.R", verbose=T, max.deparse.length=9999) )
+suppressMessages( source( "Src/GSEA.1.0.R", verbose = T, max.deparse.length=9999 ) )
 
 if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
   message( "Preparing ExpressionSet.gct file for GSEA" )
   probe_ids = hgnc_symbols
-  descr = rep( "NA", length(probe_ids) )
-  data = exprs(eset)
-  expression_out = data.frame("NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data)
+  descr = rep( "NA", length( probe_ids ) )
+  data = as.data.frame( exprs( eset ) )
+  expression_out = data.frame( "NAMES" = probe_ids, "DESCRIPTION" = descr, "Exprs" = data )
 
   index_case_gsea = sapply( index_case, function(x) x + 2 )
   index_ctrl_gsea = sapply( index_ctrl, function(x) x + 2 )
@@ -19,7 +19,6 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
     # collapsing duplicate gene symbols by logFC
     index_dupli = which( expression_out$NAMES %in% names_dupli )
     for (i in 1:length(names_dupli)){
-  
       index = which( expression_out$NAMES == names_dupli[i])
       current = expression_out[index,]
     

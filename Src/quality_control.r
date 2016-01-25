@@ -24,5 +24,5 @@ if ( !( quality_control_only )  ){
 pData( raw_data ) = pData( eset )
 
 message( "Running Quality Metrics"  )
-#arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T, showWarnings = F)
-arrayQualityMetrics( raw_data, force = T)
+arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T, showWarnings = F)
+#arrayQualityMetrics( raw_data, force = T)
