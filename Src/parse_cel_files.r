@@ -30,7 +30,7 @@ if ( chip_type == "HumanHT-12.v4" ){
 } else if ( chip_type %in% c( "pd.huex.1.0.st.v2", "pd.hugene.2.0.st" ) ){
   
   library("oligo")
-  celFiles = list.celfiles( cel_files_path, full = T, listGzipped = zipped)
+  celFiles = list.celfiles( cel_files_path, full = T)#, listGzipped = zipped)
   raw_data = read.celfiles( filenames = celFiles )
   
 } else {

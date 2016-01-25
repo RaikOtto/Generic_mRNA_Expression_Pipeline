@@ -43,18 +43,25 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
 if( !file.exists( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) ) ){
   # work in progress
   fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
-  phenoLabel = rep( 0, length( expression_out ) - 2 )
-  phenoLabel[index_case] = 1
-  phenoLabel = as.matrix(t(phenoLabel))
-  writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), paste( "#", set_case, set_ctrl, sep = " ") ), fileConn )
+  phenoLabels = rep( 0, length( expression_out ) - 2 )
+  phenoLabels[index_case] = set_case
+  phenoLabels[index_ctrl] = set_ctrl
+  #phenoLabels =  as.vector( t( phenoLabels  ) )
+  phenoLabels = paste( phenoLabels, collapse = " ")
+  if (phenoLabels[1] == set_case){
+    pheno_order = paste( "#", set_case, set_ctrl, sep = " ")
+  } else {
+    pheno_order = paste( "#", set_ctrl, set_case, sep = " ")
+  }
+  writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), pheno_order, phenoLabels ), fileConn )
   close(fileConn)
-  write.table(phenoLabel, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
+  write.table(phenoLabels, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
 }
 
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
                                                                            input.ds =  paste(cel_files_path, "ExpressionSet.gct", sep ="/"),               # Input gene expression Affy dataset file in RES or GCT format
                                                                            input.cls = paste(cel_files_path, "phenotypes_GSEA.cls", sep ="/"),               # Input class vector (phenotype) file in CLS format
-                                                                           gs.db =     paste(cel_files_path, "c2.all.v5.0.symbols.gmt", sep ="/"),           # Gene set database in GMT format
+                                                                           gs.db =     paste(cel_files_path, "c2.all.v5.1.symbols.gmt", sep ="/"),           # Gene set database in GMT format
                                                                            output.directory      = gsea_output_path,            # Directory where to store output and results (default: "")
                                                                            #  Program parameters :----------------------------------------------------------------------------------------------------------------------------
                                                                            doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
