@@ -39,9 +39,9 @@ use_gsea   = T
 
 create_cohorts    = T # 2
 parse_files       = T # 3
-normalize         = F # 4
+normalize         = T # 4
 qc_control        = F # 5
-annotate          = F # 6
+annotate          = T # 6
 absent_analysis   = F # 7
 dif_exp_ana       = F # 8
 export_results    = F # 9
