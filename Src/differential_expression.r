@@ -23,7 +23,7 @@ fit = lmFit( eDatSet[ ,  ], design )
 if (stat_design == "contrast"){
 
     #fit = lmFit( eDatSet[ ,c( index_case, index_ctrl )  ], design )
-  #fit = lmFit( eDatSet[ ,index_cohorts_vec  ], design )
+    #fit = lmFit( eDatSet[ ,index_cohorts_vec  ], design )
     cont.matrix = makeContrasts( contrast = CASE - CTRL,  levels = design )
     fit = contrasts.fit( fit, cont.matrix )
     fit = eBayes( fit )
@@ -38,11 +38,11 @@ if (stat_design == "contrast"){
 
 dir.create( results_file_path, showWarnings = F)
 #png( paste( results_file_path, "logFC_vs_1-PValue.png", sep = "/" ), width = 800, height = 800, res = 150  )
-#plot( volc_all$logFC,   1-( volc_all$P.Value ) )
+plot( volc_all$logFC,   1-( volc_all$P.Value ) )
 #dev.off()
 
 topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )
-topall = topall[ !is.na( topall$geneassignment  ),  ]
+# topall = topall[ !is.na( topall$geneassignment  ),  ] # ??? there are no genes assigned yet! 
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")
