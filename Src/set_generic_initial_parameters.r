@@ -39,8 +39,10 @@ vcf_folder                  = ""
 expression_data = "~/Dropbox/PhD/NAR_sub_june_2015/expression_all.txt"
 frma_path = "/media/rayott/Backup/Runx_AML1_Leukemea/"
 
-use_kegg_for_heatmap = F
-create_heatmaps_genes_of_interest = T
+if (! exists("use_kegg_for_heatmap"))
+  use_kegg_for_heatmap = F
+if (! exists("create_heatmaps_genes_of_interest"))
+  create_heatmaps_genes_of_interest = T
 heatmap_list_genes_count = 40
 
 #if (time_series){ quality_control_only = T; qc_control = T }
