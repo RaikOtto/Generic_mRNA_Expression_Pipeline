@@ -42,7 +42,7 @@ plot( volc_all$logFC,   1-( volc_all$P.Value ) )
 #dev.off()
 
 topall = topTable( fit, coef = "contrast", number  = nrow( eDatSet ), adjust  = "none", p.value = p_val, lfc = lfc_exp )
-# topall = topall[ !is.na( topall$geneassignment  ),  ] # ??? there are no genes assigned yet! 
+# topall = topall[ !is.na( topall$geneassignment  ),  ] # ??? there are no genes assigned to the topall table
 
 if ( (dim(topall)[1] == 0) & (dim(topall)[2] == 0) ){
   stop("Topall has dimension zero")
