@@ -4,7 +4,7 @@ if ( create_heatmaps_genes_of_interest ){
   
   if ( use_kegg_for_heatmap ){
 
-    gene_source_kegg = kegg_t$Heatmap[ kegg_t$Heatmap != ""]
+    gene_source_kegg = as.character( kegg_t$Heatmap[ kegg_t$Heatmap != ""] )
     #gene_source_kegg = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""]
     
     mapping   = which( as.character( hgnc_symbols ) %in% as.character(gene_source_kegg) )

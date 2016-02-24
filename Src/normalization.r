@@ -14,11 +14,17 @@ if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
   eset = oligo::rma( raw_data, target = "core", normalize = T)
   message("Normalization finished, loading annotation information")
   featureData( eset ) = getNetAffx( eset, 'transcript') 
+ 
+} else if ( chip_type %in% c( "HumanHT-12.v4" ) ){
+  
+  eset = raw_data
+  message("Normalization finished, loading annotation information")
+  #featureData( eset ) = getNetAffx( eset, 'transcript') 
   
 } else {
   
-  message(c("Unknown Chip Type: ",chip_type))
-  stop()
+  stop(c("Unknown Chip Type: ",chip_type))
+
 }
 
 if (! quality_control_only  ){
