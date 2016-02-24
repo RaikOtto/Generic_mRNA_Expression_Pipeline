@@ -1,0 +1,2 @@
+packages = c( "xlsx", "gdata", "RColorBrewer", "limma", "KEGG.db", "pathview", "stringr", "hgu133plus2.db", "affy", "simpleaffy", "affyPLM", "affycoretools", "affyQCReport", "annaffy", "hgu133a.db", "oligoData", "arrayQualityMetrics", "WriteXLS", "genefilter", "plotly", "oligo", "pd.huex.1.0.st.v2", "lumi", "GEOquery", "illuminaHumanv4.db" )
+print( suppressMessages( sapply( packages, require, character.only=TRUE, quietly = TRUE ) ) )
