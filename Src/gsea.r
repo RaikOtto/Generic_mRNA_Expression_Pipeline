@@ -36,7 +36,7 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
     
     reduced = do.call( "rbind", reduced )
     expression_out = expression_out[ -index_dupli, ]
-    expression_out = rbind( expression_out, result )
+    expression_out = rbind( expression_out, reduced )
   }
 
   # write ExpressionSet.gct file in Input directory
