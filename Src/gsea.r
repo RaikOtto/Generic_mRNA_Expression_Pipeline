@@ -1,7 +1,7 @@
-suppressMessages( source( "Src/GSEA.1.0.R", verbose = T, max.deparse.length=9999 ) )
+suppressMessages( source( "Src/GSEA.1.0.R", verbose = T, max.deparse.length = 9999 ) )
 
 if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
-  message( "Preparing ExpressionSet.gct file for GSEA" )
+  message( "Creating ExpressionSet.gct file for GSEA." )
   probe_ids = hgnc_symbols
   descr = rep( "NA", length( probe_ids ) )
   data = as.data.frame( exprs( eset ) )
@@ -12,13 +12,16 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
 
   expression_out = expression_out[ expression_out$NAMES != "", ]
   names_dupli = expression_out$NAMES[ which( duplicated( expression_out$NAMES ) ) ]
-  names_dupli = unique(names_dupli)
+  names_dupli = unique( names_dupli )
 
+  reduced = list()
+  
   if( length( names_dupli ) > 0 ){
   
     # collapsing duplicate gene symbols by logFC
     index_dupli = which( expression_out$NAMES %in% names_dupli )
-    for (i in 1:length(names_dupli)){
+    for (i in 1:length( names_dupli ) ){
+      
       index = which( expression_out$NAMES == names_dupli[i])
       current = expression_out[index,]
     
@@ -26,11 +29,14 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
       exprs_ctrl_gsea = rowMeans( current[ , index_ctrl_gsea ] )
       dif_exp_gsea    = exprs_case_gsea - exprs_ctrl_gsea
   
-      index_max = which.max( abs( dif_exp_gsea ) ) 
-      expression_out = rbind( expression_out, current[ index_max, ] )
-  
+      index_max = which.max( abs( dif_exp_gsea ) )
+      temp      = as.data.frame( current[index_max,] )
+      reduced   = c( reduced, list( temp ) )
     }
+    
+    reduced = do.call( "rbind", reduced )
     expression_out = expression_out[ -index_dupli, ]
+    expression_out = rbind( expression_out, reduced )
   }
 
   # write ExpressionSet.gct file in Input directory
@@ -38,25 +44,35 @@ if( !file.exists( paste( cel_files_path, "ExpressionSet.gct", sep = "/" ) ) ){
   writeLines( c( "#1.2", paste(length(expression_out$NAMES), length(expression_out) - 2, sep = "\t" ) ), fileConn)
   close(fileConn)
   write.table( expression_out, file = paste( cel_files_path, "ExpressionSet.gct", sep ="/" ), sep = "\t", row.names = F, quote = F, append = T )
+
+} else{
+  message( paste( "There already exists ExpressionSet.gct file in ", output_path, ".", " Using this for GSEA.", sep = "" ) )
 }
 
 if( !file.exists( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) ) ){
-  # work in progress
+  message( "Creating phenotypes_GSEA.cls file for GSEA." )
   fileConn = file( paste( cel_files_path, "phenotypes_GSEA.cls", sep = "/" ) )
   phenoLabels = rep( 0, length( expression_out ) - 2 )
-  phenoLabels[index_case] = set_case
-  phenoLabels[index_ctrl] = set_ctrl
-  #phenoLabels =  as.vector( t( phenoLabels  ) )
+  case_GSEA = unlist(strsplit( set_case, " " ))
+  case_GSEA = case_GSEA[1]
+  ctrl_GSEA = unlist( strsplit( set_ctrl, " " ) )
+  ctrl_GSEA = ctrl_GSEA[1]
+  phenoLabels[index_case] = case_GSEA
+  phenoLabels[index_ctrl] = ctrl_GSEA
   phenoLabels = paste( phenoLabels, collapse = " ")
   if (phenoLabels[1] == set_case){
-    pheno_order = paste( "#", set_case, set_ctrl, sep = " ")
+    pheno_order = paste( "#", case_GSEA, ctrl_GSEA, sep = " ")
   } else {
-    pheno_order = paste( "#", set_ctrl, set_case, sep = " ")
+    pheno_order = paste( "#", ctrl_GSEA, case_GSEA, sep = " ")
   }
   writeLines( c( paste( length( expression_out ) - 2 , "2", "1", sep = " " ), pheno_order, phenoLabels ), fileConn )
   close(fileConn)
   #write.table(phenoLabels, file = paste( cel_files_path, "phenotypes_GSEA.cls", sep ="/" ), sep = " ", col.names = FALSE, row.names = F, append=TRUE)
+} else{
+  message( paste( "There already exists phenotypes_GSEA.cls file in ", output_path, ".", " Using this for GSEA.", sep = "" ) )
 }
+
+unlink( paste( gsea_output_path, "*", sep = "/" ) )
 
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
                                                                            input.ds =  paste(cel_files_path, "ExpressionSet.gct", sep ="/"),               # Input gene expression Affy dataset file in RES or GCT format
