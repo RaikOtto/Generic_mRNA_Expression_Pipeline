@@ -34,18 +34,18 @@ colnames(expr_data)[2] = "Expr_case"
 colnames(expr_data)[3] = "Expr_ctrl"
 expr_data = as.data.frame( expr_data) 
 
-kegg_t = read.table( kegg_file_path, header =T , sep ="," )
+#keggdata = read.table( kegg_file_path, header =T , sep ="," ) # ??? why ??? load in set initial parameters and even wrong here because endings differ, i.e. sometimes it's tab, sometimes it comma separated
 cpdb_t = read.table( cpdb_file_path, header =T , sep ="\t", fill = T )
 cpdb_ident = str_replace(cpdb_t$external_id, "path:", "")
 
-interesting_pathways_mapping = match( str_trim( kegg_t$Kegg_id ), str_trim( cpdb_ident ) )
+interesting_pathways_mapping = match( str_trim( keggdata$Kegg_id ), str_trim( cpdb_ident ) )
 interesting_pathways_table_kegg_id = cpdb_t[ interesting_pathways_mapping ,]
 
 ### genes
 
-if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
+if ( ! is.null( keggdata$Gene_id_hgnc ) ){
 
-  selection = as.character( unique( kegg_t$Gene_id_hgnc ) )
+  selection = as.character( unique( keggdata$Gene_id_hgnc ) )
   selection = selection[ selection != ""  ]
 
   hgnc_symbols = as.character( hgnc_genes )
@@ -149,12 +149,12 @@ if ( ! is.null( kegg_t$Gene_id_hgnc ) ){
 
 ### pathways
 
-if ( ! is.null( kegg_t$Kegg_id ) ){
+if ( ! is.null( keggdata$Kegg_id ) ){
 
-  mapping = match( as.character( kegg_t$Kegg_id )  ,cpdb_ident, nomatch = 0 )
-  message(paste0(c("Not machted Kegg Pathways:", as.character(kegg_t$Kegg_id[mapping==0]) ), collapse = ", ") )
+  mapping = match( as.character( keggdata$Kegg_id )  ,cpdb_ident, nomatch = 0 )
+  message(paste0(c("Not machted Kegg Pathways:", as.character(keggdata$Kegg_id[mapping==0]) ), collapse = ", ") )
 
-  #mapping = match( cpdb_ident, kegg_t$Kegg_id, nomatch = 0 )
+  #mapping = match( cpdb_ident, keggdata$Kegg_id, nomatch = 0 )
   #mapping = mapping[mapping!=0]
   genes_of_interest = cpdb_t$hgnc_symbol_ids[mapping]
 

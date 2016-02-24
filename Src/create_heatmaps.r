@@ -5,6 +5,8 @@ if ( create_heatmaps_genes_of_interest ){
   if ( use_kegg_for_heatmap ){
 
     gene_source_kegg = kegg_t$Heatmap[ kegg_t$Heatmap != ""]
+    #gene_source_kegg = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""]
+    
     mapping   = which( as.character( hgnc_symbols ) %in% as.character(gene_source_kegg) )
 
     probe_ids = rownames( exprs( eset ))[ mapping ]
@@ -72,9 +74,9 @@ if ( create_heatmaps_genes_of_interest ){
   # heatmap.3
   
   subtype_top_bar = as.matrix( c(
-    colorRampPalette(colors = c("yellow"))( length( map_case_ctrl ) )
+    colorRampPalette(colors = c("blue"))( length( map_case_ctrl ) )
   ))
-  subtype_top_bar[ which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) ), 1  ] = "blue"
+  subtype_top_bar[ which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) ), 1  ] = "yellow"
   colnames(subtype_top_bar) = c("Cohort")
 
   logFC_side_bar = t(
@@ -110,7 +112,6 @@ if ( create_heatmaps_genes_of_interest ){
   heatmap.3(
     eset_selection_dif,
     main = paste0( "Sample exprs and logFC ", project_name ),
-    #main = paste0( "37 most differentially expressed genes BA vs MS" ),
     RowSideColors = logFC_side_bar,
     col = m,
     trace = NULL,
@@ -125,13 +126,18 @@ if ( create_heatmaps_genes_of_interest ){
   )
   legend("topright",
          legend=c(
-           "CTRL",
-           "CASE",
+           #"CTRL",
+           paste0( c( "Control cohort (", set_ctrl,")"), collapse=  ""  ),
+           #"CASE",
+           paste0( c( "Case cohort (", set_case ,")"), collapse=  ""  ),
            "",
-           "Stronger exp CASE",
-           "Stronger exp CTRL"
+           #"Stronger exp CASE",
+           paste0( c( "Stronger exp case (", set_case ,")"), collapse=  ""  ),
+           "No differential exp",
+           #"Stronger exp CTRL"
+           paste0( c( "Stronger exp control (", set_ctrl ,")"), collapse=  ""  )
           ),
-         fill = c("blue","yellow","white", "red","green"), 
+         fill = c("blue","yellow","white", "red","yellow","green"), 
          border = F, bty="n",
          y.intersp = 0.7,
          cex=0.7

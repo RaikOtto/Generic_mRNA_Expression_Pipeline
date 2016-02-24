@@ -3,7 +3,11 @@
 
 if ( chip_type == "HumanHT-12.v4" ){
   
-  raw_data = getGEO(GEO_Id, GSEMatrix = T)
+  raw_data = getGEO(
+    GEO_Id, 
+    GSEMatrix = T
+  )
+  
   if ( length( raw_data ) > 1 )
     idx = grep("GPL10558", attr(raw_data, "names"))
   else
@@ -18,7 +22,8 @@ if ( chip_type == "HumanHT-12.v4" ){
     celFiles = list.celfiles( cel_files_path, full =T)
   }
   
-  raw_data = read.affybatch( filenames = celFiles )
+  raw_data = suppressWarnings(read.affybatch( filenames = celFiles ))
+
   #excluded_files = c()
   
   if( project_name == "Plus2_Runx"  ){

@@ -12,7 +12,7 @@ if ( kocent ){
 
 } else{
 
-  pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_Biomarker_mRNA_Pipeline/"
+  pipeline_loc = "/Users/raikotto/Dropbox/PhD/Generic_mRNA_Expression_Pipeline/"
 
 }
 
