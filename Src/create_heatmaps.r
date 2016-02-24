@@ -5,15 +5,12 @@ if ( create_heatmaps_genes_of_interest ){
   if ( use_kegg_for_heatmap ){
 
     gene_source_kegg = as.character( kegg_t$Heatmap[ kegg_t$Heatmap != ""] )
-    #gene_source_kegg = kegg_t$Gene_id_hgnc[ kegg_t$Gene_id_hgnc != ""]
-    
+
     mapping   = which( as.character( hgnc_symbols ) %in% as.character(gene_source_kegg) )
 
     probe_ids = rownames( exprs( eset ))[ mapping ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
     rownames( eset_selection ) = hgnc_symbols[mapping   ]
-
-    #eset_selection = eset_selection[ match( rownames( eset_selection ), unique( rownames( eset_selection ) ) ), ]
 
   } else {
 
