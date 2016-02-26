@@ -2,12 +2,13 @@
 
 library("stringr")
 
-kegg_t = read.table( kegg_file_path, header =T , sep ="\t" )
-cpdb_t = read.table( cpdb_file_path, header =T , sep ="\t", fill = T )
-cpdb_ident = str_replace(cpdb_t$external_id, "path:", "")
+# this does not belong here, does it?
+#kegg_t = read.table( kegg_file_path, header =T , sep ="\t" )
+#cpdb_t = read.table( cpdb_file_path, header =T , sep ="\t", fill = T )
+#cpdb_ident = str_replace(cpdb_t$external_id, "path:", "")
 
-interesting_pathways_mapping = match( str_trim( kegg_t$HSA_ID ), str_trim( cpdb_ident ) )
-interesting_pathways_table = cpdb_t[ interesting_pathways_mapping ,]
+#interesting_pathways_mapping = match( str_trim( kegg_t$HSA_ID ), str_trim( cpdb_ident ) )
+#interesting_pathways_table = cpdb_t[ interesting_pathways_mapping ,]
 
 if ( chip_type == "hgu133plus2" ){
   
@@ -83,6 +84,7 @@ if ( chip_type == "hgu133plus2" ){
   featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
   hgnc_symbols = str_trim( unlist( lapply( featureData( eset  )$geneassignment, FUN=split_fun, 2 ) ) )
+  hgnc_genes = hgnc_symbols
   
 } else if ( chip_type %in% c( "HumanHT-12.v4" ) ){
   
