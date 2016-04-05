@@ -52,14 +52,14 @@ index_ctrl = as.integer( which( design[ ,colnames(design) == "CTRL" ] == 1 ) )
 index_case = as.integer( which( design[ ,colnames(design) == "CASE" ] == 1 ) )
 
 #if (exists("raw_data")){
-if( ! ("Group" %in% colnames(pData( raw_data ) ) ) & chip_type != "HumanHT-12.v4" ) {
+if( ! ("Cohort" %in% colnames(pData( raw_data ) ) ) & chip_type != "HumanHT-12.v4" ) {
   
   raw_data_group_vec = rep("",dim( pData(raw_data) )[1] )
   raw_data_group_vec[  index_ctrl ] = "CTRL"
   raw_data_group_vec[  index_case ] = "CASE"
   pData(raw_data) = cbind( pData(raw_data), raw_data_group_vec )
   raw_data_group_vec = raw_data_group_vec[which(raw_data_group_vec != "")]
-  colnames(pData(raw_data))[-1] = "Group"
+  colnames(pData(raw_data))[-1] = "Cohort"
 
 } else if( chip_type == "HumanHT-12.v4"){
  

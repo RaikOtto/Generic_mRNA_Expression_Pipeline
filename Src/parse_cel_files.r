@@ -17,7 +17,7 @@ if ( chip_type == "HumanHT-12.v4" ){
 } else if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
   
   if ( zipped ){
-    celFiles = list.celfiles( cel_files_path, full =T)
+    celFiles = list.celfiles( cel_files_path, full =T, listGzipped = TRUE)
   } else {
     celFiles = list.celfiles( cel_files_path, full =T)
   }

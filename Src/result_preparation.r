@@ -16,6 +16,7 @@ if ( chip_type == "hgu133plus2" ){
 
   topall_res = data.frame(
 
+    "Probe_ids"           = probe_ids,
     "logFC"               = topall$logFC,
     "P_Value"             = topall$P.Val,
     "HGNC_symb"           = hgnc_genes,

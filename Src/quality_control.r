@@ -1,4 +1,5 @@
 suppressMessages(library("arrayQualityMetrics"))
+library("affyQCReport")
 
 if ( !( quality_control_only )  ){
   
@@ -24,5 +25,7 @@ if ( !( quality_control_only )  ){
 pData( raw_data ) = pData( eset )
 
 message( "Running Quality Metrics"  )
-arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T, showWarnings = F)
+QCReport(raw_data, file = "~/Documents/AffyQCReport.pdf")
+arrayQualityMetrics( raw_data, intgroup = c("Cohort","Group"), outdir = quality_report_path, force = T, showWarnings = F, do.logtransform = T)
+#arrayQualityMetrics( raw_data, intgroup = "Cohort", outdir = quality_report_path, force = T, showWarnings = F)
 #arrayQualityMetrics( raw_data, force = T)

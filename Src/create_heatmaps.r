@@ -3,25 +3,25 @@ print("Creating heatmaps")
 if ( create_heatmaps_genes_of_interest ){
   
   if ( use_kegg_for_heatmap ){
-
+    
     gene_source_kegg = as.character( kegg_t$Heatmap[ kegg_t$Heatmap != ""] )
-
+    
     mapping   = which( as.character( hgnc_symbols ) %in% as.character(gene_source_kegg) )
-
+    
     probe_ids = rownames( exprs( eset ))[ mapping ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
     rownames( eset_selection ) = hgnc_symbols[mapping   ]
-
+    
   } else {
-
+    
     cutoff = sort(abs( topall_res$logFC ), decreasing = T)[heatmap_list_genes_count]
-
+    
     probe_ids = rownames( topall_res)[ abs( topall_res$logFC ) >= cutoff ]
     hgnc_ids  = topall_res$HGNC_symb[ abs( topall_res$logFC ) >= cutoff ]
     eset_selection = exprs(eset)[ match( probe_ids, rownames( exprs( eset ) )  ) , ]
     rownames( eset_selection) = hgnc_ids
   }
-
+  
   # mapping to cohorts vectors
   
   map_case_ctrl = match( names(cohorts_vec), colnames(eset_selection))
@@ -29,24 +29,24 @@ if ( create_heatmaps_genes_of_interest ){
   index_case    = which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) )
   
   eset_selection = eset_selection[ rownames(eset_selection) != "NA"  , ]
-
+  
   dif = as.double( rowMeans( eset_selection[ , index_case]) - rowMeans( eset_selection[ , index_ctrl]))
-
+  
   eset_selection = eset_selection[ 
     order(dif, decreasing = T),
     order(order(c(index_ctrl,index_case)))
-  ]
+    ]
   eset_selection_dif = eset_selection - rowMeans( eset_selection )
-
+  
   ## filter for uniques
-
+  
   unique_mapping = match( unique( rownames( eset_selection ) ), rownames( eset_selection ) )
   eset_selection = eset_selection[ unique_mapping,]
   eset_selection_dif = eset_selection_dif[ unique_mapping,]
   dif = dif[ unique_mapping  ]
-
+  
   ## trim
-
+  
   for (i in 1:dim( eset_selection_dif  )[1]){
     for (j in 1:dim( eset_selection_dif  )[2]){
       if (eset_selection_dif[i,j] > 5)
@@ -55,7 +55,7 @@ if ( create_heatmaps_genes_of_interest ){
         eset_selection_dif[i,j] = -5
     }
   }
-
+  
   pdf_name = paste(
     output_path,
     paste0(
@@ -67,7 +67,7 @@ if ( create_heatmaps_genes_of_interest ){
     ),
     sep = "/"
   )
-
+  
   # heatmap.3
   
   subtype_top_bar = as.matrix( c(
@@ -75,7 +75,7 @@ if ( create_heatmaps_genes_of_interest ){
   ))
   subtype_top_bar[ which( colnames(eset_selection) %in% names(cohorts_vec[ cohorts_vec == "CASE" ]) ), 1  ] = "yellow"
   colnames(subtype_top_bar) = c("Cohort")
-
+  
   logFC_side_bar = t(
     c(
       colorRampPalette(colors = c("red"))( length( dif[ dif > 0 ]) ),
@@ -87,9 +87,9 @@ if ( create_heatmaps_genes_of_interest ){
   library("devtools")
   source_url("https://raw.githubusercontent.com/obigriffith/biostar-tutorials/master/Heatmaps/heatmap.3.R")
   m = colorRampPalette(colors = c("green","black","red"))( 75 )
-
+  
   ### dif darstellung
-
+  
   pdf_name = paste(
     output_path,
     paste0(
@@ -101,11 +101,11 @@ if ( create_heatmaps_genes_of_interest ){
     ),
     sep = "/"
   )
-
+  
   # heatmap.3
-
+  
   pdf(pdf_name)
-
+  
   heatmap.3(
     eset_selection_dif,
     main = paste0( "Sample exprs and logFC ", project_name ),
@@ -133,7 +133,7 @@ if ( create_heatmaps_genes_of_interest ){
            "No differential exp",
            #"Stronger exp CTRL"
            paste0( c( "Stronger exp control (", set_ctrl ,")"), collapse=  ""  )
-          ),
+         ),
          fill = c("blue","yellow","white", "red","yellow","green"), 
          border = F, bty="n",
          y.intersp = 0.7,
