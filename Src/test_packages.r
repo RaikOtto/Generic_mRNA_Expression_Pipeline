@@ -12,7 +12,7 @@ if ( length( index_bioc ) > 0){
 
 if ( length( index_cran ) > 0){
   current = pack_cran[index_cran]
-  install.packages(current)
+  install.packages(pkgs = current, repos = "http://mirrors.softliste.de/cran/")
 }
 
 packages = c(pack_bioc, pack_cran)
