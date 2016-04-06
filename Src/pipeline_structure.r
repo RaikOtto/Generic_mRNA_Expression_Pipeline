@@ -1,8 +1,8 @@
 run_analysis = function(){
   
   ### Test if all required packages are installed and can be loaded
-  message( "test if all required packages are installed and can be loaded.")
-  source( "Src/test_packages.r")
+  #message( "test if all required packages are installed and can be loaded.")
+  #source( "Src/test_packages.r")
   
   if ( run_generic ){
     
