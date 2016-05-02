@@ -46,7 +46,7 @@ heatmap_list_genes_count = 40
 
 if (project == "goldenSpike"){
   c2.all.v5_gsea_file_path    = paste( cel_files_path, "c2.all.v5.0.symbols.gmt.txt", sep = "/")
-else
+}else {
   c2.all.v5_gsea_file_path    = paste( cel_files_path, "Drosophila_melanogaster_GSEA_GO_sets_all_symbols_highquality_April_2015.gmt", sep = "/")
 }#if (time_series){ quality_control_only = T; qc_control = T }
 
