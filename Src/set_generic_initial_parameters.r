@@ -30,7 +30,6 @@ absent_gene_file_path       = paste( cel_files_path, absent_genes_file, sep ="/"
 tissue_abbundance_res_file  = paste( cel_files_path, "Tissue_abundance_results.csv", sep ="/" )
 kegg_file_path              = paste( cel_files_path , kegg_file, sep ="/")
 cpdb_file_path              = paste( pipeline_loc , paste( "Misc" ,cpdb_file, sep ="/" ) , sep ="/" )
-c2.all.v5_gsea_file_path    = paste( cel_files_path, "c2.all.v5.0.symbols.gmt.txt", sep = "/")
 time_series_res_file_path   = paste( cel_files_path, time_series_res_file, sep ="/")
 entities_of_interest_path   = paste( results_file_path, "Entities_of_interest", sep ="/")
 genes_of_interest_file_path = paste( entities_of_interest_path, genes_of_interest_file, sep ="/") 
@@ -45,7 +44,11 @@ if (! exists("create_heatmaps_genes_of_interest"))
   create_heatmaps_genes_of_interest = T
 heatmap_list_genes_count = 40
 
-#if (time_series){ quality_control_only = T; qc_control = T }
+if (project == "goldenSpike"){
+  c2.all.v5_gsea_file_path    = paste( cel_files_path, "c2.all.v5.0.symbols.gmt.txt", sep = "/")
+else
+  c2.all.v5_gsea_file_path    = paste( cel_files_path, "Drosophila_melanogaster_GSEA_GO_sets_all_symbols_highquality_April_2015.gmt", sep = "/")
+}#if (time_series){ quality_control_only = T; qc_control = T }
 
 strEndsWith <- function(haystack, needle)
 {
