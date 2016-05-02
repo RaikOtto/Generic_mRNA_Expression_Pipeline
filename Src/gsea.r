@@ -77,10 +77,10 @@ unlink( paste( gsea_output_path, "*", sep = "/" ) )
 GSEA(                                                                      # Input/Output Files :-------------------------------------------
                                                                            input.ds =  paste(cel_files_path, "ExpressionSet.gct", sep ="/"),               # Input gene expression Affy dataset file in RES or GCT format
                                                                            input.cls = paste(cel_files_path, "phenotypes_GSEA.cls", sep ="/"),               # Input class vector (phenotype) file in CLS format
-                                                                           gs.db =     paste(cel_files_path, "c2.all.v5.1.symbols.gmt", sep ="/"),           # Gene set database in GMT format
+                                                                           gs.db =     c2.all.v5_gsea_file_path,           # Gene set database in GMT format
                                                                            output.directory      = gsea_output_path,            # Directory where to store output and results (default: "")
                                                                            #  Program parameters :----------------------------------------------------------------------------------------------------------------------------
-                                                                           doc.string            = "BA_vs_MS",     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
+                                                                           doc.string            = project_name,     # Documentation string used as a prefix to name result files (default: "GSEA.analysis")
                                                                            non.interactive.run   = F,               # Run in interactive (i.e. R GUI) or batch (R command line) mode (default: F)
                                                                            reshuffling.type      = "sample.labels", # Type of permutation reshuffling: "sample.labels" or "gene.labels" (default: "sample.labels" 
                                                                            nperm                 = 1000,            # Number of random permutations (default: 1000)
