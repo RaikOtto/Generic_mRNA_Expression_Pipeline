@@ -30,7 +30,7 @@ source("project_files.r")
 options( error = traceback )
 source( "Src/pipeline_structure.r" )
 
-use_gsea = FALSE
+#use_gsea = FALSE
 ### set run parameters
 
 var_filter = F
