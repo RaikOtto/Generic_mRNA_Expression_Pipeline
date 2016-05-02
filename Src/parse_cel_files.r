@@ -14,14 +14,9 @@ if ( chip_type == "HumanHT-12.v4" ){
     idx = 1
   raw_data = raw_data[[idx]]
   
-} else if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
+} else if ( chip_type %in% c( "hgu133plus2", "hgu133a", "drosophila2" ) ){
   
-  if ( zipped ){
-    celFiles = list.celfiles( cel_files_path, full =T, listGzipped = TRUE)
-  } else {
-    celFiles = list.celfiles( cel_files_path, full =T)
-  }
-  
+  celFiles = affy::list.celfiles( cel_files_path, full =T)
   raw_data = suppressWarnings(read.affybatch( filenames = celFiles ))
 
   #excluded_files = c()

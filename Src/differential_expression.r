@@ -1,9 +1,5 @@
 library("limma")
 
-if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
-  eset = eset[ ! startsWith( rownames(eset), "AFFX-" ), ]
-}
-
 #eset = raw_data
 eset = eset[ , which( colnames(eset) %in% phenodata$ID  ) ]
 index = which( colnames(phenodata) == cohorts_type )

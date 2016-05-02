@@ -777,7 +777,7 @@ random.seed = 123456,
 perm.type = 0, 
 fraction = 1.0, 
 replace = F,
-save.intermediate.results = F,
+save.intermediate.results = T,
 OLD.GSEA = F,
 use.fast.enrichment.routine = T) {
 
@@ -1188,6 +1188,19 @@ write(paste("replace =", replace, sep=" "), file=filename, append=T)
   for (r in 1:nperm) {
       obs.correl.matrix[, r] <- obs.correl.matrix[obs.order.matrix[,r], r]
   }
+
+  #### write ranked gene list to output directory #####
+  rankedList = data.frame(
+    "Gene_Symbol" = obs.gene.symbols,
+    "Score"       = obs.s2n
+  )
+  write.csv(rankedList, paste(output.directory, paste("ranked_gene_list_", doc.string, ".csv", sep = ""), sep = "/"), row.names = FALSE)
+
+  #### create heatmap for top scoring genes ######
+  top = obs.index[1:50]
+  bottom = obs.index[(length(obs.index)-49):length(obs.index)]
+  topGenes = as.matrix(dataset[c(top, bottom),])
+  heatmap(topGenes)
 
   gene.list2 <- obs.index
   for (i in 1:Ng) {

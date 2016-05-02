@@ -33,6 +33,10 @@ if ( chip_type == "hgu133plus2" ){
 } else if ( chip_type == "hgu133a" ) {
 
   library("hgu133a.db")
+  
+  index_probes = match( rownames( topall ), rownames(eset), nomatch = 0 )
+  exprs_case = rowMeans( exprs( eset )[ index_probes, index_case ] )
+  exprs_ctrl = rowMeans( exprs( eset )[ index_probes, index_ctrl ] )
 
   hgnc_genes  = as.character(mget( rownames( topall ) ,hgu133aSYMBOL))
   hgnc_names  = as.character(mget( rownames( topall ) ,hgu133aGENENAME))
@@ -42,13 +46,33 @@ if ( chip_type == "hgu133plus2" ){
   topall_res = data.frame(
 
     "logFC"               = topall$logFC,
+    "Exprs_Ctrl"          = exprs_ctrl,
+    "Exprs_Case"          = exprs_case,
+    "P_Value"             = topall$P.Val,
+    "HGNC_symb"           = hgnc_genes,
+    "HGNC_name"           = str_replace_all(hgnc_names,",",";"),
+    "entrez"              = entrez_genes,
+    "pathway"             = entrez_genes
+  )
+  topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
+
+} else if ( chip_type %in% c( "drosophila2" ) ){
+  library("drosophila2.db")
+  
+  hgnc_genes  = as.character(mget( rownames( topall ), drosophila2SYMBOL))
+  hgnc_names  = as.character(mget( rownames( topall ), drosophila2GENENAME))
+  entrez_genes= as.character(mget( rownames( topall ), drosophila2ENTREZID))
+  pathway     = as.character(mget( rownames( topall  ), drosophila2PATH))
+  
+  topall_res = data.frame(
+    
+    "logFC"               = topall$logFC,
     "P_Value"             = topall$P.Val,
     "HGNC_symb"           = hgnc_genes,
     "HGNC_name"           = str_replace_all(hgnc_names,",",";"),
     "entrez"              = entrez_genes,
     "pathway"             = pathway
   )
-
   topall_res = topall_res[ order(topall_res$logFC, decreasing = T)  ,]
 
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){

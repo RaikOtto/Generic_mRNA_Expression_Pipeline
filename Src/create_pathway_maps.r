@@ -9,15 +9,17 @@ if ( ! exists("eset")  )
 split_fun = function( entry,pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
 
 if ( chip_type %in% c( "hgu133plus2" ) ){
-  
   library("hgu133plus2.db")
   hgnc_symbols = as.character( unlist( mget( rownames(volc_all), hgu133plus2SYMBOL) ))
 
 } else if ( chip_type %in% c( "hgu133a" ) ){
-  
   library("hgu133a.db")
   hgnc_symbols = as.character( unlist( mget( rownames(volc_all), hgu133aSYMBOL) ) )
   
+} else if ( chip_type %in% c( "drosophila2" ) ){
+  library("drosophila2.db")
+  hgnc_symbols = as.character( unlist( mget( rownames(volc_all), drosophila2SYMBOL) ) )
+
 } else if ( chip_type %in% c( "HumanHT-12.v4") ){
   
   hgnc_symbols = unlist( mget( rownames( volc_all ), illuminaHumanv4SYMBOL ) ); hgnc_symbols[ is.na(hgnc_names)  ] = ""
@@ -47,7 +49,7 @@ library("biomaRt")
 
 ensembl     = useMart( "ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl", host = "www.ensembl.org" )
 
-entrez_ids  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique( hgnc_symbols ), filters = "hgnc_symbol" , mart = ensembl)
+entrez_ids  = getBM( attributes = c( "entrezgene", "hgnc_symbol" ), values = unique(hgnc_symbols ), filters = "hgnc_symbol" , mart = ensembl)
 hgnc_map    = match( hgnc_symbols, entrez_ids$hgnc_symbol  , nomatch = 0 )
 entrez      = rep( "", length( hgnc_symbols ) )
 entrez[ which( hgnc_map != 0 ) ] = entrez_ids$entrezgene[ hgnc_map ]

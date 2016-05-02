@@ -1,4 +1,4 @@
-if ( chip_type %in% c( "hgu133a", "hgu133plus2" ) ){
+if ( chip_type %in% c( "hgu133a", "hgu133plus2", "drosophila2" ) ){
   
   eset = threestep( raw_data, background.method = "GCRMA", normalize.method="quantile", summary.method="median.polish")
   #eset = threestep( raw_data, background.method = "RMA.2", normalize.method="quantile", summary.method="median.polish")

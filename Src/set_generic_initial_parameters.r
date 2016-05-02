@@ -81,7 +81,6 @@ if (  strEndsWith( kegg_file_path, ".csv" ) ){
 #keggdata$genes = cpdbdata$hgnc_symbol_ids[ mapping_kegg_cpdb  ]
 
 if ( chip_type == "hgu133plus2" ){
-  
   suppressMessages(library("hgu133plus2.db"))
   suppressMessages(library("affy"))
   suppressMessages(library("simpleaffy"))
@@ -91,7 +90,6 @@ if ( chip_type == "hgu133plus2" ){
   suppressMessages(library("annaffy"))
   
 } else if ( chip_type == "hgu133a" ){
-  
   suppressMessages(library("hgu133a.db"))
   suppressMessages(library("affy"))
   suppressMessages(library("simpleaffy"))
@@ -101,18 +99,24 @@ if ( chip_type == "hgu133plus2" ){
   suppressMessages(library("annaffy"))
   
 } else if ( chip_type %in% c( "pd.hugene.2.0.st", "pd.huex.1.0.st.v2" ) ){
-  
   suppressMessages(library("oligoData"))
   suppressMessages(library("pd.huex.1.0.st.v2"))
   
 } else if ( chip_type == "HumanHT-12.v4" ){
-  
   suppressMessages(library( "lumi" ) )
   suppressMessages(library( "GEOquery" ) )
   suppressMessages( library( "illuminaHumanv4.db" ) )
   
-} else {
-  
+} else if (chip_type == "drosophila2" ){
+  suppressMessages(library("drosophila2.db"))
+  suppressMessages(library("affy"))
+  suppressMessages(library("simpleaffy"))
+  suppressMessages(library("affyPLM"))
+  suppressMessages(library("affycoretools"))
+  suppressMessages(library("affyQCReport"))
+  suppressMessages(library("annaffy"))
+
+} else { 
   message(c("Unknown Chip Type: ",chip_type))
   stop()
 }

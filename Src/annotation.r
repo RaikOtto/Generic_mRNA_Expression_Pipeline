@@ -10,6 +10,10 @@ library("stringr")
 #interesting_pathways_mapping = match( str_trim( kegg_t$HSA_ID ), str_trim( cpdb_ident ) )
 #interesting_pathways_table = cpdb_t[ interesting_pathways_mapping ,]
 
+if ( chip_type %in% c( "hgu133plus2", "hgu133a" ) ){
+  eset = eset[ ! startsWith( rownames(eset), "AFFX-" ), ]
+}
+
 if ( chip_type == "hgu133plus2" ){
   
   if ( multi_probe ){
@@ -58,6 +62,7 @@ if ( chip_type == "hgu133plus2" ){
   } else {
     
     hgnc_genes = mget( rownames(eset), hgu133aSYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
+    hgnc_symbols = hgnc_genes
     entrez_genes = mget( rownames(eset), hgu133aENTREZID ); entrez_genes[ is.na(entrez_genes)  ] = ""
   }  
   
@@ -70,7 +75,18 @@ if ( chip_type == "hgu133plus2" ){
   omim = mget( rownames(eset), hgu133aOMIM ); go[ is.na(omim)  ] = ""
   enzyme = mget( rownames(eset), hgu133aENZYME ); enzyme[ is.na(enzyme)  ] = ""
   
-} else if ( chip_type %in% c( "pd.hugene.2.0.st") ){
+} else if ( chip_type %in% c( "drosophila2" ) ){
+  hgnc_genes = mget( rownames(eset), drosophila2SYMBOL ); hgnc_genes[ is.na(hgnc_genes)  ] = ""
+  hgnc_symbols = hgnc_genes
+  entrez_genes = mget( rownames(eset), drosophila2ENTREZID ); entrez_genes[ is.na(entrez_genes)  ] = "" 
+  ensembl_genes = mget( rownames(eset), drosophila2ENSEMBL ); ensembl_genes[ is.na(ensembl_genes)  ] = ""
+  hgnc_names = mget( rownames(eset), drosophila2GENENAME ); hgnc_names[ is.na(hgnc_names)  ] = ""
+  uniprot = mget( rownames(eset), drosophila2UNIPROT ); uniprot[ is.na(uniprot)  ] = ""
+  pathway = mget( rownames(eset), drosophila2PATH ); uniprot[ is.na(pathway)  ] = ""
+  go = mget( rownames(eset), drosophila2GO ); go[ is.na(go)  ] = ""
+  enzyme = mget( rownames(eset), drosophila2ENZYME ); enzyme[ is.na(enzyme)  ] = ""
+
+  } else if ( chip_type %in% c( "pd.hugene.2.0.st") ){
   
   featureData( eset  ) = getNetAffx( eset, type = "transcript" )
   split_fun = function( entry, pos ){ res = unlist( str_split( entry, " // " ) ); if (length(res) > 1){ return( res[pos] ) } else{ return( "" ) } }
