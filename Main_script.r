@@ -24,12 +24,13 @@ setwd( pipeline_loc ) # Set the path to where the pipeline is located
 #options(error=traceback)
 default_parameters = T
 
-which_project = "goldenSpike"
+which_project = "GSE20437"
 
 source("project_files.r")
 options( error = traceback )
 source( "Src/pipeline_structure.r" )
 
+# 
 #use_gsea = FALSE
 ### set run parameters
 
